@@ -25,7 +25,7 @@ export default function WelcomeComponent() {
             )}>
             FABLE
             </h1>
-            <p className="text-white text-lg">It's all about evoking the art of storytelling and the power of imagination</p>
+            <p className="text-white text-lg">It&apos;s all about evoking the art of storytelling and the power of imagination</p>
 
             <div>
             {/* <LoginButton>
@@ -34,7 +34,7 @@ export default function WelcomeComponent() {
                 </Button>
             </LoginButton> */}
             <Button onClick={moveToOptions} variant="secondary" size="lg">
-                Let's go!
+                Let&apos;s go!
             </Button>
             </div>
         </div>

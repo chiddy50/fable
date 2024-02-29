@@ -28,7 +28,11 @@ const NewChallenge = () => {
     const { questions, setStory, story, selectedChallenge, setSelectedChallenge } = useContext(AppContext)
 
     useEffect(() => {
-        fetchChallenge()
+        const fetchUserStories = async () => {
+            await fetchChallenge();
+        };
+
+        fetchUserStories();
     }, []);
 
     const fetchChallenge = async () => {        
@@ -176,7 +180,7 @@ const NewChallenge = () => {
 
     useEffect(() => {        
         showTab(currentTab);
-    }, [currentTab])
+    }, [currentTab, showTab])
 
     return (
         <main className="grid grid-cols-3 layout-width pt-7 gap-10">

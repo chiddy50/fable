@@ -39,7 +39,12 @@ const SubmissionSummary  = () => {
     const { questions, setStory, story, selectedChallenge, setSelectedChallenge } = useContext(AppContext)
 
     useEffect(() => {
-        fetchSubmission()
+
+        const fetchUserStories = async () => {
+            await fetchSubmission();
+        };
+
+        fetchUserStories();
     }, []);
 
 

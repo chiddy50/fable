@@ -13,7 +13,11 @@ const UserStories = () => {
     const [stories, setStories] = useState([])
 
     useEffect(() => {
-        getUserStories()
+        const fetchUserStories = async () => {
+            await getUserStories();
+        };
+
+        fetchUserStories();
     }, [])
 
     const getUserStories = async () => {

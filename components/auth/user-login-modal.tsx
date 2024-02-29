@@ -117,7 +117,7 @@ export default function UserLoginModal(){
                         <FormSuccess message={success} />
 
                         <p onClick={openRegisterModal} className="text-xs cursor-pointer my-4 text-center hover:underline">
-                            Don't have an account?
+                            Don&apos;t have an account?
                         </p>
                         <Button 
                         disabled={loading}
