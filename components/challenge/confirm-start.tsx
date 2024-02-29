@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { formatDistanceToNow } from 'date-fns';
 import { AppContext } from "@/context/StoryContext";
+import Image from "next/image";
 
 const ConfirmStartChallenge = ({ challenge }) => {
     const router = useRouter();
@@ -42,7 +43,7 @@ const ConfirmStartChallenge = ({ challenge }) => {
                 
                 <div className="flex gap-5">
                     <div className="rounded-xl" style={{ width: "190px", height: "190px" }}>
-                        <img
+                        <Image
                             src={challenge.image}
                             className='w-full h-auto rounded-xl'                     
                             alt="Picture of the image"

@@ -3,6 +3,7 @@
 import { useContext, useState } from "react";
 import { Button } from "../ui/button";
 import { AppContext } from "@/context/StoryContext"
+import Image from "next/image";
 
 const PreviewComponent = () => {
 
@@ -77,7 +78,7 @@ const PreviewComponent = () => {
 
                 { inPreview && 
                     <div id="preview-box" className="overflow-hidden" style={{ width: "300px", height: "300px" }}>
-                        <img src="/" 
+                        <Image src="/" 
                         alt="preview" 
                         id="preview" 
                         style={{ border: "5px solid #7c9bff", padding: "4px" }}

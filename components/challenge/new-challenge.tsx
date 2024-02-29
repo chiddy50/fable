@@ -16,6 +16,7 @@ import QuestionSeven from '@/components/question/question-seven';
 import QuestionEight from '@/components/question/question-eight';
 import axios from 'axios';
 import { Skeleton } from "@/components/ui/skeleton"
+import Image from 'next/image';
 
 
 const NewChallenge = () => {
@@ -173,9 +174,7 @@ const NewChallenge = () => {
         router.push('/user/summary')
     }
 
-    useEffect(() => {
-        // handleSave()
-        
+    useEffect(() => {        
         showTab(currentTab);
     }, [currentTab])
 
@@ -209,7 +208,7 @@ const NewChallenge = () => {
                 {
                     !loading &&
                     <>
-                        <img
+                        <Image
                             src={selectedChallenge?.image}
                             className='w-full h-full px-7 pt-5 object-cover'
                             style={{ borderRadius: `${50}px`}}

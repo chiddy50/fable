@@ -79,11 +79,6 @@ const UploadForm = () => {
         challengeCurrencySymbol, setChallengeCurrencySymbol
     } = useContext(AppContext)
 
-    useEffect(() => {
-        console.log({publicKey: wallet.publicKey, connected: wallet.connected});
-        
-    }, [wallet.publicKey])
-
     const updateDate = (e: ChangeEvent<HTMLInputElement>) => {
         setChallengeDate(e.target.value)
     }

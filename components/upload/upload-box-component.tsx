@@ -14,11 +14,6 @@ const UploadBoxComponent = () => {
         uploadedImage, setUploadedImage
     } = useContext(AppContext)
 
-    useEffect(() => {
-        console.log("uploading changed to: ", uploading);
-        
-    }, [uploading])
-
     const handleFileChange = async (event: any) => {
         const file = event.target.files[0];
         console.log({file});
@@ -67,11 +62,7 @@ const UploadBoxComponent = () => {
         }
 
     };
-    
-    useEffect(() => {
-        console.log("Uploaded changed to: ", uploaded);
-        
-    }, [uploaded])
+
 
     const uploadImage = async (file = null) => {
         const preset_key = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_KEY

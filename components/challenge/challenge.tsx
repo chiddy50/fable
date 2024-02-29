@@ -2,6 +2,7 @@ import { useRouter } from 'next/navigation';
 
 import CountdownComponent from "@/components/general/countdown-component"
 import { formatDistanceToNow } from 'date-fns';
+import Image from 'next/image';
 
 export default function Challenge({ challenge, clickEvent }){
     const router = useRouter();
@@ -20,7 +21,7 @@ export default function Challenge({ challenge, clickEvent }){
             
             <div className='flex h-full flex-col rounded-xl shadow-sm border-gray-200 border cursor-pointer transition-all hover:shadow-2xl'>
     
-                <img
+                <Image
                     src={challenge.image}
                     className='w-full rounded-t-xl h-1/2'                     
                     alt="Picture of the image"
