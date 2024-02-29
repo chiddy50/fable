@@ -61,7 +61,7 @@ export async function GET(request: NextRequest, context: any){
         return NextResponse.json({ data: response, error: false });
     } catch (error) {
         console.log(error); 
-        return NextResponse.json({ data: null, error: true, message: error?.message }, { status: 500 });        
+        return NextResponse.json({ data: null, error: true, message: "error" }, { status: 500 });        
     }
     
 }
@@ -92,6 +92,6 @@ export async function PUT(request: NextRequest, context: any){
         return NextResponse.json({ data: updatedStory, error: false });
     } catch (error) {
         console.log(error); 
-        return NextResponse.json({ data: null, error: true, message: error?.message }, { status: 500 });        
+        return NextResponse.json({ data: null, error: true, message: "error" }, { status: 500 });        
     }
 }

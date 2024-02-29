@@ -42,7 +42,7 @@ export async function POST(request: NextRequest, response: NextResponse){
         return NextResponse.json({ data: newStory, error: false });
     } catch (error) {
         console.log(error); 
-        return NextResponse.json({ data: null, error: true, message: error?.message }, { status: 500 });        
+        return NextResponse.json({ data: null, error: true, message: "error" }, { status: 500 });        
     }
     
 }
