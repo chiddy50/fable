@@ -1,15 +1,15 @@
 const QuestionEight = ({ updateAnswer }) => {
     return (
         <div className="tab">
-              <h1 className='mb-7 text-2xl font-bold'>Transformation Unveiled: Exploring the Character's Evolution and Resolutions</h1>
+              <h1 className='mb-7 text-2xl font-bold'>Transformation Unveiled: Exploring the Character&apos;s Evolution and Resolutions</h1>
               
               <div className='mb-3'>
-                <p className='text-xs mb-1'>How has the character's perspective or worldview evolved as a result of their journey and experiences?</p>
+                <p className='text-xs mb-1'>How has the character&apos;s perspective or worldview evolved as a result of their journey and experiences?</p>
                 <textarea rows={5} data-section={8} data-question={1} className='w-full border text-xs rounded-lg bg-gray-200 p-3 outline-none' onInput={(e) => updateAnswer(e)} ></textarea>
               </div>
 
               <div className='mb-3'>
-                <p className='text-xs mb-1'>In what ways have the character's goals or priorities shifted or been redefined throughout their journey?</p>
+                <p className='text-xs mb-1'>In what ways have the character&apos;s goals or priorities shifted or been redefined throughout their journey?</p>
                 <textarea rows={5} data-section={8} data-question={2} className='w-full border text-xs rounded-lg bg-gray-200 p-3 outline-none' onInput={(e) => updateAnswer(e)} ></textarea>
               </div>
 

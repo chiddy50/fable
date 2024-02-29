@@ -1,7 +1,7 @@
 const QuestionFour = ({ updateAnswer }) => {
   return (
       <div className="tab">
-        <h1 className='mb-7 text-2xl font-bold'>Exploring the Character's Problem-Solving Journey</h1>
+        <h1 className='mb-7 text-2xl font-bold'>Exploring the Character&apos;s Problem-Solving Journey</h1>
           <div className='mb-3'>
             <p className='text-xs mb-1'>What strategies or tactics does the character employ when faced with challenges or obstacles?</p>
             <textarea rows={5} data-section={4} data-question={1} className='w-full border text-xs rounded-lg bg-gray-200 p-3 outline-none' onInput={(e) => updateAnswer(e)} ></textarea>
