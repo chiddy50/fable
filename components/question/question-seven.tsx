@@ -1,7 +1,7 @@
 const QuestionSeven = ({ updateAnswer }) => {
     return (
         <div className="tab">
-              <h1 className='mb-7 text-2xl font-bold'>Resuming the Journey: Exploring the Character's Return to Action</h1>
+              <h1 className='mb-7 text-2xl font-bold'>Resuming the Journey: Exploring the Characters Return to Action</h1>
               
               <div className='mb-3'>
                 <p className='text-xs mb-1'>What newfound confidence or resolve does the character bring back with them after facing the challenges?</p>
@@ -9,7 +9,7 @@ const QuestionSeven = ({ updateAnswer }) => {
               </div>
 
               <div className='mb-3'>
-                <p className='text-xs mb-1'>How do other characters or the environment react to the character's return, and how does this impact their next steps?</p>
+                <p className='text-xs mb-1'>How do other characters or the environment react to the characters return, and how does this impact their next steps?</p>
                 <textarea rows={5} data-section={7} data-question={2} className='w-full border text-xs rounded-lg bg-gray-200 p-3 outline-none' onInput={(e) => updateAnswer(e)} ></textarea>
               </div>
 

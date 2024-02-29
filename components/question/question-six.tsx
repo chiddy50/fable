@@ -18,7 +18,7 @@ const QuestionSix = ({ updateAnswer }) => {
             </div>
 
             <div className='mb-3'>
-            <p className='text-xs mb-1'>In what ways did the character's relationships or connections change or evolve due to the sacrifices made for their solution?</p>
+            <p className='text-xs mb-1'>In what ways did the characters relationships or connections change or evolve due to the sacrifices made for their solution?</p>
             <textarea rows={5} data-section={6} data-question={4} className='w-full border text-xs rounded-lg bg-gray-200 p-3 outline-none' onInput={(e) => updateAnswer(e)} ></textarea>
             </div>
         </div>
