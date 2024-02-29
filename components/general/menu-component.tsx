@@ -21,14 +21,13 @@ const MenuComponent = () => {
 
     const [authUser, setAuthUser] =  useState(null)
     const { userLoggedIn, setUserLoggedIn, user } = useContext(AppContext)
-    console.log(user);
 
     useEffect(() => {
         if (userLoggedIn) {
             let auth = user ?? localStorage.getItem("user");
             setAuthUser(auth)
         }
-    }, [userLoggedIn])
+    }, [userLoggedIn, user])
 
     const bringUpAdminRegisterModal = () => {
         let adminRegisterModal = document.getElementById("admin-register-modal")

@@ -28,11 +28,7 @@ const NewChallenge = () => {
     const { questions, setStory, story, selectedChallenge, setSelectedChallenge } = useContext(AppContext)
 
     useEffect(() => {
-        const fetchUserStories = async () => {
-            await fetchChallenge();
-        };
-
-        fetchUserStories();
+        fetchChallenge();
     }, []);
 
     const fetchChallenge = async () => {        

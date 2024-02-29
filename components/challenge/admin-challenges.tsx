@@ -50,11 +50,8 @@ const AdminChallenges = () => {
     }
 
     useEffect(() => {
-        const fetchUserStories = async () => {
-            await fetchChallenges();
-        };
 
-        fetchUserStories();
+        fetchChallenges();
 
     }, [])
 

@@ -12,12 +12,8 @@ const UserStories = () => {
     const [loading, setLoading] = useState(false)
     const [stories, setStories] = useState([])
 
-    useEffect(() => {
-        const fetchUserStories = async () => {
-            await getUserStories();
-        };
-
-        fetchUserStories();
+    useEffect(() => {        
+        getUserStories();
     }, [])
 
     const getUserStories = async () => {

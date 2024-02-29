@@ -34,7 +34,7 @@ export default function CountdownComponent({ date }) {
 
     // Cleanup function to clear the interval when the component unmounts
     return () => clearInterval(intervalId);
-  }, []);
+  }, [date]);
 
   return (
     <span>{countdownText}</span>
