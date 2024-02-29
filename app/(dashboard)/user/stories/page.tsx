@@ -36,10 +36,10 @@ const UserStories = () => {
         }
     }
 
-    const viewStory = async (story) => {
-        console.log(story);
+    const viewStory =  () => {
+        // console.log(story);
         
-        await transferToUsers("7GbRUuFSD1idrwJgWqhBExrB7aSKrVgkKWYx6sb9fm2u", 0.2)
+        // await transferToUsers("7GbRUuFSD1idrwJgWqhBExrB7aSKrVgkKWYx6sb9fm2u", 0.2)
     }
     
     const loaderCount = [1,2,3,4,5,6];
@@ -67,7 +67,7 @@ const UserStories = () => {
                     <div className='gap-5'>
                         {
                             stories.map((story, index) => (
-                                <UserStory key={index} clickEvent={() => viewStory(story)} />
+                                <UserStory key={index} clickEvent={() => viewStory()} />
                             ))
                         }
                     
