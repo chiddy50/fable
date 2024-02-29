@@ -22,6 +22,9 @@ export default function Challenge({ challenge, clickEvent }){
             <div className='flex h-full flex-col rounded-xl shadow-sm border-gray-200 border cursor-pointer transition-all hover:shadow-2xl'>
     
                 <Image
+                    width="100"   
+                    height="100"  
+                    layout="fill" 
                     src={challenge.image}
                     className='w-full rounded-t-xl h-1/2'                     
                     alt="Picture of the image"

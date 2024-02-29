@@ -209,7 +209,10 @@ const NewChallenge = () => {
                     !loading &&
                     <>
                         <Image
+                            width="100"   
+                            height="100"  
                             src={selectedChallenge?.image}
+                            layout="fill"
                             className='w-full h-full px-7 pt-5 object-cover'
                             style={{ borderRadius: `${50}px`}}
                             alt="Picture of the image"
