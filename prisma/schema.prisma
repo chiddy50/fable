@@ -1,18 +1,99 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
 generator client {
   provider = "prisma-client-js"
 }
 
-model Todo {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  text      String
-  completed Boolean
+datasource db {
+  provider  = "postgresql"
+  url  	    = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+
+
+enum Award {
+  FIRST
+  SECOND
+  THIRD
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum TransactionStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+model Challenge {
+  id                    String  @id @default(cuid())
+  userId                String
+  projectMintAddress    String?
+  projectId             String?
+  projectTransactionId  String?
+  nftId                 String?
+  nftTransactionId      String?
+  title                 String
+  image                 String
+  date                  String
+  time                  String
+  price                 String
+  currency              String
+  symbol                String 
+  transactions          Transaction[]
+  stories               Story[]
+
+  createdAt          DateTime     @default(now()) // New column for storing creation date and time
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+}
+
+model Story {
+  id                    String  @id @default(cuid())
+  userId                String
+  challengeId           String
+  story                 Json
+  nftId                 String?
+  nftTransactionId      String?
+  projectId             String?
+  amountPaid            String?
+  paidAt                DateTime?
+  createdAt             DateTime     @default(now())
+  award                 Award?
+  user                  User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  challenge             Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+}
+
+model Transaction {
+  id                    String    @id @default(cuid())
+  userId                String
+  challengeId           String?
+  transactionFee        String
+  transactionFeeSol     String
+  totalCharge           String
+  totalChargeSol        String
+  status                TransactionStatus @default(PENDING)  
+  challenge             Challenge[]
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id                    String    @id @default(cuid())
+  name                  String?
+  password              String?
+  email                 String?   @unique
+  emailVerified         DateTime?
+  publicKey             String?
+
+  challenges            Challenge[]
+  transactions          Transaction[]
+  stories               Story[]
+  role                  UserRole @default(ADMIN)
 }

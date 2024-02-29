@@ -1,0 +1,62 @@
+.welcome__txt {
+    letter-spacing: 6px;
+    font-size: 8rem;
+    line-height: 0.9;
+    text-align: center;
+}
+
+#upload-progress-box {
+    width: 100%;
+    background-color: white;
+}
+
+#progress-bar{
+    width: 0%;
+    background-color: #122590;
+    transition: all ease-in;
+}
+
+.layout-width {
+    @apply w-5/6 mx-auto;
+}
+
+
+
+
+
+
+
+
+/* Make circles that indicate the steps of the form: */
+.step {
+    /* height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbbbbb;
+    border: none;  
+    border-radius: 50%;
+    display: inline-block; */
+    font-size: 2rem;
+    opacity: 0.3;
+    color: #04AA6D;
+}
+
+.step.active {
+    opacity: 1;
+}
+
+
+
+.stepper {
+    text-align: 'center';
+    margin-top: '40px';
+}
+
+
+.summary-item:not(:last-child) {
+    border-bottom: 1px solid #bfbfbf;
+}
+  
+textarea.invalid {
+    border: 1px solid #fca1a1;
+}
