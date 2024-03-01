@@ -50,7 +50,7 @@ export default function UserLoginModal(){
             }
         } catch (error) {
             console.log(error);
-            let error_msg = error?.response?.data?.message || "Something went wrong"
+            let error_msg = "Something went wrong"
             setError(error_msg)
         }finally{
             setLoading(false)
