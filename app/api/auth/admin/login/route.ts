@@ -24,7 +24,7 @@ export async function POST(request: NextRequest, response: NextResponse){
             return NextResponse.json({ data: null, error: true, message: "Invalid credentials" }, { status: 400 });        
         }
 
-        let secret = process.env.AUTH_SECRET ?? "096a32cf02e08862675462a54d922d0959efc826d817bbe81d551ac1054937fc"
+        let secret = process.env.NEXT_PUBLIC_AUTH_SECRET ?? "096a32cf02e08862675462a54d922d0959efc826d817bbe81d551ac1054937fc"
     
         const token = jwt.sign(
             {

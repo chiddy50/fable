@@ -4,7 +4,7 @@ import { getUserById } from "@/data/user";
 
 const fetchUser = async () => {
     try {
-        let secret = process.env.AUTH_SECRET ?? "096a32cf02e08862675462a54d922d0959efc826d817bbe81d551ac1054937fc"
+        let secret = process.env.NEXT_PUBLIC_AUTH_SECRET ?? "096a32cf02e08862675462a54d922d0959efc826d817bbe81d551ac1054937fc"
         
         const cookieStore = cookies()
         const userCookie = cookieStore.get('token');            
