@@ -23,6 +23,9 @@ export async function POST(request: NextRequest, response: NextResponse){
         if (!matched) {
             return NextResponse.json({ data: null, error: true, message: "Invalid credentials" }, { status: 400 });        
         }
+
+        let secret = process.env.AUTH_SECRET ?? "096a32cf02e08862675462a54d922d0959efc826d817bbe81d551ac1054937fc"
+
     
         const token = jwt.sign(
             {
@@ -30,7 +33,7 @@ export async function POST(request: NextRequest, response: NextResponse){
                 name: user.name,
                 role: user.role
             },
-            process.env.AUTH_SECRET
+            secret
         )
 
         cookieStore.set("token", token)

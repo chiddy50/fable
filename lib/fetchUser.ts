@@ -4,12 +4,13 @@ import { getUserById } from "@/data/user";
 
 const fetchUser = async () => {
     try {
+        let secret = process.env.AUTH_SECRET ?? "096a32cf02e08862675462a54d922d0959efc826d817bbe81d551ac1054937fc"
         
         const cookieStore = cookies()
         const userCookie = cookieStore.get('token');            
         if (!userCookie) return null;
         
-        const verified = jwt.verify(userCookie?.value, process.env.AUTH_SECRET)
+        const verified = jwt.verify(userCookie?.value, secret)
         if (!verified) return null;
         
         // const iat = verified.iat

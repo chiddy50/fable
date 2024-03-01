@@ -39,13 +39,15 @@ export async function POST(request: NextRequest, response: NextResponse){
             }
         })
 
+        let secret = process.env.AUTH_SECRET ?? "096a32cf02e08862675462a54d922d0959efc826d817bbe81d551ac1054937fc"
+
         const token = jwt.sign(
             {
                 userId: user.id,
                 name,
                 role: user.role
             },
-            process.env.AUTH_SECRET
+            secret
         )
         cookieStore.set("token", token)
         
