@@ -52,7 +52,7 @@ const AdminChallenges = () => {
     useEffect(() => {
 
         fetchChallenges();
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const fetchChallenges = async () => {

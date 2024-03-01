@@ -29,6 +29,7 @@ const NewChallenge = () => {
 
     useEffect(() => {
         fetchChallenge();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const fetchChallenge = async () => {        
@@ -176,7 +177,9 @@ const NewChallenge = () => {
 
     useEffect(() => {        
         showTab(currentTab);
-    }, [currentTab, showTab])
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentTab])
 
     return (
         <main className="grid grid-cols-3 layout-width pt-7 gap-10">

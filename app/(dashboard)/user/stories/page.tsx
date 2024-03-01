@@ -14,6 +14,7 @@ const UserStories = () => {
 
     useEffect(() => {        
         getUserStories();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const getUserStories = async () => {
