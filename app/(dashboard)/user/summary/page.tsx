@@ -46,7 +46,7 @@ const SummaryPage = () => {
         let auth_user = local_user ? JSON.parse(local_user) : user;
 
 
-        if (!user.publicKey && !userAddress) {
+        if (!user?.publicKey && !userAddress) {
             setError("Kindly provide your public key")
             return;
         }
