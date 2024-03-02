@@ -29,7 +29,7 @@ export default auth((request) => {
         return null;
     }
 
-    const token = request.cookies?.token?.value
+    // const token = request.cookies?.token?.value
     console.log({ user: !user, isAPublicRoute: isAPublicRoute(nextUrl.pathname) });
     
     if (!user && !isAPublicRoute(nextUrl.pathname)) {

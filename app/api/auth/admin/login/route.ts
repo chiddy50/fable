@@ -3,11 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 import bcrpyt from "bcrypt"
 import jwt from "jsonwebtoken"
-import { cookies } from "next/headers";
+// import { cookies } from "next/headers";
 
 export async function POST(request: NextRequest, response: NextResponse){
     try {
-        const cookieStore = cookies()
+        // const cookieStore = cookies()
         
         const { email, password } = await request.json();
         
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest, response: NextResponse){
             secret
         )
 
-        cookieStore.set("token", token)
+        // cookieStore.set("token", token)
 
         const { password: _, ...userWithoutPassword } = user;
                 
