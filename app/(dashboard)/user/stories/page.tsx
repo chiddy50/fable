@@ -12,10 +12,10 @@ const UserStories = () => {
     const [loading, setLoading] = useState(false)
     const [stories, setStories] = useState([])
 
-    useEffect(() => {        
-        getUserStories();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    // useEffect(() => {        
+    //     getUserStories();
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [])
 
     const getUserStories = async () => {
         const local_user = localStorage.getItem('user');

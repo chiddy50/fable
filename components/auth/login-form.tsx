@@ -19,7 +19,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { FormError } from "@/components/from-error"
 import { FormSuccess } from "@/components/from-success"
-import { login } from "@/actions/login"
+// import { login } from "@/actions/login"
 import { useContext, useEffect, useState, useTransition } from "react"
 
 import { useSearchParams } from 'next/navigation';
@@ -43,16 +43,16 @@ export const LoginForm = ()  => {
         setError("")
         setSuccess("")
         
-        startTransition(() => {
-            login(values)
-            .then((data) => {
-                setError(data?.error)
-                setSuccess(data?.success)
-            })
-            .catch(e => {
-                console.log(e);                
-            })
-        })
+        // startTransition(() => {
+        //     login(values)
+        //     .then((data) => {
+        //         setError(data?.error)
+        //         setSuccess(data?.success)
+        //     })
+        //     .catch(e => {
+        //         console.log(e);                
+        //     })
+        // })
     }
 
     return  (

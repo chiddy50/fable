@@ -27,10 +27,10 @@ const NewChallenge = () => {
     const params = useParams<{ id: string }>()    
     const { questions, setStory, story, selectedChallenge, setSelectedChallenge } = useContext(AppContext)
 
-    useEffect(() => {
-        fetchChallenge();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    // useEffect(() => {
+    //     fetchChallenge();
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, []);
 
     const fetchChallenge = async () => {        
         try {   
@@ -175,11 +175,11 @@ const NewChallenge = () => {
         router.push('/user/summary')
     }
 
-    useEffect(() => {        
-        showTab(currentTab);
+    // useEffect(() => {        
+    //     showTab(currentTab);
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentTab])
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [currentTab])
 
     return (
         <main className="grid grid-cols-3 layout-width pt-7 gap-10">

@@ -38,10 +38,10 @@ const SubmissionSummary  = () => {
     const params = useParams<{ id: string }>()    
     const { questions, setStory, story, selectedChallenge, setSelectedChallenge } = useContext(AppContext)
 
-    useEffect(() => {
-        fetchSubmission();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    // useEffect(() => {
+    //     fetchSubmission();
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, []);
 
 
     const openAwardUserModal = () => {

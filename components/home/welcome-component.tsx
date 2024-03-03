@@ -14,7 +14,7 @@ export default function WelcomeComponent() {
     const router = useRouter();
 
     const moveToOptions = () => {
-        router.push('/options')
+        router.push('/admin/options')
     }
 
     return (

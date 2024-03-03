@@ -14,7 +14,7 @@ import LoadingComponent from "@/components/upload/loading-compent";
 import SuccessfulUploadComponent from "@/components/upload/success-component";
 import { useToast } from "@/components/ui/use-toast"
 
-import { createChallenge } from "@/actions/create-challenge"
+// import { createChallenge } from "@/actions/create-challenge"
 
 import {
     AlertDialog,
@@ -28,7 +28,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
-import { auth } from "@/auth";
+// import { auth } from "@/auth";
 import { useRouter } from 'next/navigation';
 import { WalletButton } from "@/components/wallet/wallet-adapter";
 import { transfer } from "@/lib/transfer";

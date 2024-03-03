@@ -49,11 +49,11 @@ const AdminChallenges = () => {
         }        
     }
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        fetchChallenges();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    //     fetchChallenges();
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [])
 
     const fetchChallenges = async () => {
         const local_user = localStorage.getItem('user');

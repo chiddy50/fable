@@ -49,9 +49,9 @@ const UserChallenges = () => {
         return currentDate.getTime() > dateTime.getTime();
     }
 
-    useEffect(() => {
-        fetchChallenges()
-    }, [])
+    // useEffect(() => {
+    //     fetchChallenges()
+    // }, [])
 
     const fetchChallenges = async () => {        
         try {   

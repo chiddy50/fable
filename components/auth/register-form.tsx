@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from  "@hookform/resolvers/zod"
 import * as z from "zod"
 import { RegisterSchema } from "@/schemas"
-import { register } from "@/actions/register"
+// import { register } from "@/actions/register"
 
 import { CardWrapper } from "@/components/auth/card-wrapper"
 import { Input }from "@/components/ui/input"
@@ -44,20 +44,20 @@ export const RegisterForm = ()  => {
         setError("")
         setSuccess("")
         
-        startTransition(() => {
-            register(values)
-            .then((data) => {
-                console.log(data);
+        // startTransition(() => {
+        //     register(values)
+        //     .then((data) => {
+        //         console.log(data);
                 
-                setError(data?.error)
-                setSuccess(data?.success)
+        //         setError(data?.error)
+        //         setSuccess(data?.success)
 
-                push("/auth/login")
-            })
-            .catch(e => {
-                console.log(e);                
-            })
-        })
+        //         push("/auth/login")
+        //     })
+        //     .catch(e => {
+        //         console.log(e);                
+        //     })
+        // })
     }
 
     return (

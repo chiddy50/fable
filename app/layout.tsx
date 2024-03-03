@@ -10,8 +10,8 @@ import { StoryContext } from '@/context/StoryContext'
 import { Toaster } from "@/components/ui/toaster"
 import { WalletContextProvider } from "@/components/wallet/wallet-adapter";
 import MenuComponent from "@/components/general/menu-component";
-import { auth } from "@/auth";
-import fetchUser from "@/lib/fetchUser";
+// import { auth } from "@/auth";
+// import fetchUser from "@/lib/fetchUser";
 import AdminRegisterModal from "@/components/auth/admin-register-modal";
 import AdminLoginModal from "@/components/auth/admin-login-modal";
 import FullPageLoader from "@/components/general/full-page-loader";
@@ -34,7 +34,8 @@ export default async function RootLayout({
 }>) {
 
   // const session = await auth();
-  const user = await fetchUser()   
+  // const user = await fetchUser()   
+  const user = null;   
 
   return (
     <html lang="en">
