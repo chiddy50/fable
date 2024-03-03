@@ -10,11 +10,11 @@ const bangers = Bangers({
     weight: ["400"]
 })
 
-export default function WelcomeComponent() {
+export default function HomeComponent() {
     const router = useRouter();
 
     const moveToOptions = () => {
-        router.push('/admin/options')
+        router.push('/options')
     }
 
     return (

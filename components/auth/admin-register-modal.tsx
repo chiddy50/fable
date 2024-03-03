@@ -135,7 +135,7 @@ export default function AdminRegisterModal(){
                     <Button 
                     disabled={loading}
                     onClick={submitData}               
-                    className="mb-1  w-full text-sm text-white flex items-center justify-center">
+                    className="mb-1  w-full text-sm text-white bg-black flex items-center justify-center">
                         { loading ? <i className='bx bx-loader text-lg bx-spin bx-rotate-90' ></i> : 'Submit' }
                         
                     </Button>

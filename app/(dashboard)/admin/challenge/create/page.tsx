@@ -1,11 +1,6 @@
-import PreviewComponent from "@/components/upload/preview-component";
-import UploadComponent from "@/components/upload/upload-component";
-import UploadForm from "@/components/upload/upload-form";
-
-// import { auth, signOut } from "@/auth";
-import MenuComponent from "@/components/general/menu-component";
-import fetchUser from "@/lib/fetchUser";
-
+import PreviewComponent from "@/components/upload/preview-component"
+import UploadComponent from "@/components/upload/upload-component"
+import UploadForm from "@/components/upload/upload-form"
 
 const CreateChallengePage = async () => {
     // const session = await auth();

@@ -26,7 +26,7 @@ const AdminChallenges = () => {
             sideNav.style.width = "40%";
         }        
     }
-    const fetchSubmissions = async (challenge) => {
+    const fetchSubmissions = async (challenge: object) => {
         clickEvent()
         console.log(challenge);
         try {            

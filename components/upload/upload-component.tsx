@@ -3,12 +3,11 @@
 import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { AppContext } from "@/context/StoryContext"
-import UploadBoxComponent from "@/components/upload/upload-box-component";
+import UploadBoxComponent from "@/components/upload/upload-image-component";
 import axios from "axios"
 import SuccessfullyUploadComponent from "./success-component";
 
 const UploadComponent = () => {
-    // console.log("uploading: ",uploading);
     
     const preset = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_KEY;
 
@@ -16,7 +15,8 @@ const UploadComponent = () => {
         challengeImage,
         uploading, setUploading,
         uploaded, setUploaded,
-        uploadedImage, setUploadedImage
+        uploadedImage, setUploadedImage,
+        setChallengeImage, setInPreview
     } = useContext(AppContext)
 
 
@@ -30,7 +30,12 @@ const UploadComponent = () => {
             setInPreview(true)
 
             reader.onload = (e) => {
-                document.getElementById('preview').src = e.target.result;
+                const previewElement = document.getElementById('preview');
+                if (previewElement instanceof HTMLImageElement) {
+                    previewElement.src = e.target?.result as string;
+                } else {
+                    console.error("Element with ID 'preview' is not an image element.");
+                }
             };
             reader.readAsDataURL(file);
         }

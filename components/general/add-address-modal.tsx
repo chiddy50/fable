@@ -27,7 +27,7 @@ const AddAddressModal = ({ user, error, setUserAddress, confirmProcess, openConf
                 </AlertDialogHeader>
 
                 {
-                    !user.publicKey && <div>
+                    !user?.publicKey && <div>
                         <label htmlFor="address" className="text-xs">Address</label>
                         <Input type="text" name="address" className="mb-3" onChange={(e) => setUserAddress(e.target.value)}/>
                         <FormError message={error} />

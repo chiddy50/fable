@@ -56,17 +56,17 @@ const NewChallenge = () => {
         tabs[n].style.display = "block";
 
         if (n === 0) {
-        document.getElementById("prevBtn").style.display = "none";
+            document.getElementById("prevBtn").style.display = "none";
         } else {
-        document.getElementById("prevBtn").style.display = "inline";
+            document.getElementById("prevBtn").style.display = "inline";
         }
         
         if (n === (tabs.length - 1)) {
-        document.getElementById("nextBtn").style.display = "none";
-        document.getElementById("submitBtn").style.display = "inline";
+            document.getElementById("nextBtn").style.display = "none";
+            document.getElementById("submitBtn").style.display = "inline";
         } else {
-        document.getElementById("nextBtn").style.display = "inline";
-        document.getElementById("submitBtn").style.display = "none";
+            document.getElementById("nextBtn").style.display = "inline";
+            document.getElementById("submitBtn").style.display = "none";
         }
         
         fixStepIndicator(n);
@@ -175,11 +175,11 @@ const NewChallenge = () => {
         router.push('/user/summary')
     }
 
-    // useEffect(() => {        
-    //     showTab(currentTab);
+    useEffect(() => {        
+        showTab(currentTab);
 
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [currentTab])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentTab])
 
     return (
         <main className="grid grid-cols-3 layout-width pt-7 gap-10">
@@ -211,11 +211,8 @@ const NewChallenge = () => {
                 {
                     !loading &&
                     <>
-                        <Image
-                            width="100"   
-                            height="100"  
+                        {/* <img 
                             src={selectedChallenge?.image}
-                            layout="fill"
                             className='w-full h-full px-7 pt-5 object-cover'
                             style={{ borderRadius: `${50}px`}}
                             alt="Picture of the image"
@@ -230,7 +227,7 @@ const NewChallenge = () => {
 
                         <div className='text-gray-500'>
                             <Countdown date={`${selectedChallenge?.date} ${selectedChallenge?.time}`}/> 
-                        </div>
+                        </div> */}
                     
                     </>
                 }

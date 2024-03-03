@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { AppContext } from "@/context/StoryContext"
 import axios from "axios"
 
-const UploadBoxComponent = () => {
+const UploadImageComponent = () => {
     const { 
         challengeImage,
         setInPreview, setChallengeImage,
@@ -159,4 +159,4 @@ const UploadBoxComponent = () => {
     )
 }
 
-export default UploadBoxComponent;
+export default UploadImageComponent;

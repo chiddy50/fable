@@ -78,10 +78,9 @@ const PreviewComponent = () => {
 
                 { inPreview && 
                     <div id="preview-box" className="overflow-hidden" style={{ width: "300px", height: "300px" }}>
-                        <Image src="/" 
-                        width="100"   
-                        height="100"  
-                        layout="fill"
+                        <img src="/" 
+                        // width="100"   
+                        // height="100"  
                         alt="preview" 
                         id="preview" 
                         style={{ border: "5px solid #7c9bff", padding: "4px" }}

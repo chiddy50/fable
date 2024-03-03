@@ -1,16 +1,13 @@
 "use client"
 
 import { Button } from "@/components/ui/button";
-import PreviewComponent from "@/components/upload/preview-component";
-import UploadComponent from "@/components/upload/upload-component";
-import UploadBoxComponent from "@/components/upload/upload-box-component";
 import { AppContext } from "@/context/StoryContext"
 import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input"
 import axios from "axios"
 
 import { createUnderdogNft, createUnderdogProject, currencies, umi } from "@/lib/data"
-import LoadingComponent from "@/components/upload/loading-compent";
+import LoadingComponent from "@/components/upload/loading-component";
 import SuccessfulUploadComponent from "@/components/upload/success-component";
 import { useToast } from "@/components/ui/use-toast"
 
@@ -33,15 +30,9 @@ import { useRouter } from 'next/navigation';
 import { WalletButton } from "@/components/wallet/wallet-adapter";
 import { transfer } from "@/lib/transfer";
 import { useWallet } from "@solana/wallet-adapter-react";
-import AdminLoginModal from "@/components/auth/admin-login-modal";
-import AdminRegisterModal from "@/components/auth/admin-register-modal";
-import { createMerkleTree } from "@/lib/merkelTree";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 import ConfirmModalComponent from "@/components/general/confirm-modal-component";
-import { createNftCollection } from "@/lib/createNftCollection";
-import { mintCnft } from "@/lib/mintCNFT";
-import { getMetadataUrl } from "@/lib/getMetaDataUrl";
 import { hideTransferLoader, showTransferLoader } from "@/lib/helper";
 
 const UploadForm = () => {
@@ -56,10 +47,10 @@ const UploadForm = () => {
     const [transferring, setTransferring] = useState(false);
     
 
-    const [transactionFee, setTransactionFee] = useState(null);
-    const [transactionFeeSol, setTransactionFeeSol] = useState(null);
-    const [totalCharge, setTotalCharge] = useState(null);
-    const [totalChargeSol, setTotalChargeSol] = useState(null);
+    const [transactionFee, setTransactionFee] = useState<null|number>(null);
+    const [transactionFeeSol, setTransactionFeeSol] = useState<null|number>(null);
+    const [totalCharge, setTotalCharge] = useState<null|number>(null);
+    const [totalChargeSol, setTotalChargeSol] = useState<null|number>(null);
 
     
     const { toast } = useToast()
@@ -84,6 +75,8 @@ const UploadForm = () => {
     }
 
     const updateTitle = (e: ChangeEvent<HTMLInputElement>) => {
+        console.log(e);
+        
         setChallengeTitle(e.target.value)
     }
 
@@ -103,7 +96,7 @@ const UploadForm = () => {
         }        
     }
 
-    const transferFunds = async (charges) => {
+    const transferFunds = async (charges: any) => {
         try {            
             let response = await transfer(wallet, charges);
             return true;
@@ -154,7 +147,7 @@ const UploadForm = () => {
         setOpenConfirmModal(true);
     }
 
-    const createTransaction = async (userId) => {
+    const createTransaction = async (userId: any) => {
         let payload = {
             userId,
             transactionFee,
@@ -272,41 +265,41 @@ const UploadForm = () => {
         }
     }
 
-    const mintCnft = async () => {
-        try {
-            showTransferLoader()
+    // const mintCnft = async () => {
+    //     try {
+    //         showTransferLoader()
             
-            const payload = {
-                userId: user.id,
-                title: challengeTitle,
-                image: uploadedImage,
-                date: challengeDate,
-                time: challengeTime,
-                currency: challengeCurrency,
-                symbol: challengeCurrencySymbol,
-                price: challengePrice,
-                type: "challenge",
-                projectId: projectId,
-                projectTransactionId: transactionId,
-                projectMintAddress: mintAddress
-            }
+    //         const payload = {
+    //             userId: user.id,
+    //             title: challengeTitle,
+    //             image: uploadedImage,
+    //             date: challengeDate,
+    //             time: challengeTime,
+    //             currency: challengeCurrency,
+    //             symbol: challengeCurrencySymbol,
+    //             price: challengePrice,
+    //             type: "challenge",
+    //             projectId: projectId,
+    //             projectTransactionId: transactionId,
+    //             projectMintAddress: mintAddress
+    //         }
     
-            // USE PROJECT TO CREATE NFT
-            const underdogNft = await createUnderdogNft(payload, projectId, wallet.publicKey)
-            if (!underdogNft) {
-                toast({
-                    title: "Could not create NFT challenge",
-                    description: "Could not create NFT challenge",
-                })
-                return;
-            }
-            console.log(underdogNft);
-        } catch (error) {
-            console.log(error);            
-        }finally{
-            hideTransferLoader()
-        }
-    }
+    //         // USE PROJECT TO CREATE NFT
+    //         const underdogNft = await createUnderdogNft(payload, projectId, wallet.publicKey)
+    //         if (!underdogNft) {
+    //             toast({
+    //                 title: "Could not create NFT challenge",
+    //                 description: "Could not create NFT challenge",
+    //             })
+    //             return;
+    //         }
+    //         console.log(underdogNft);
+    //     } catch (error) {
+    //         console.log(error);            
+    //     }finally{
+    //         hideTransferLoader()
+    //     }
+    // }
     
     const collectPayment = async () => {
         if (!currentRate) {
@@ -359,9 +352,9 @@ const UploadForm = () => {
             })
             return false
         }
-    }
+    };
 
-    const saveChallengeToDatabase = async (payload, projectId) => {
+    const saveChallengeToDatabase = async (payload: object, projectId: string) => {
         try {
             const local_user = localStorage.getItem('user');
             let auth_user = local_user ? JSON.parse(local_user) : user;
@@ -383,7 +376,7 @@ const UploadForm = () => {
         }
     }
 
-    const updateChallenge = async (payload, projectId) => {
+    const updateChallenge = async (payload: object, projectId: string) => {
         try {
             const local_user = localStorage.getItem('user');
             let auth_user = local_user ? JSON.parse(local_user) : user;
@@ -524,17 +517,17 @@ const UploadForm = () => {
         <>
             <div className="mb-4">
                 <label htmlFor="date" className='text-sm text-white'>Title</label>
-                <Input type="text" onChange={updateTitle} className=' rounded-xl mt-1 w-full bg-white  border-none outline-none text-xs' />
+                <Input type="text" onChange={updateTitle} className=' rounded-xl mt-1 w-full bg-white text-black  border-none outline-none text-xs' />
             </div>
 
             <div className='mb-4 grid grid-cols-2 gap-5'>
                 <div>
                     <label htmlFor="date" className='text-sm text-white'>Date</label>
-                    <Input type="date" onChange={updateDate} className=' rounded-xl mt-1 w-full bg-white  border-none outline-none text-xs' />
+                    <Input type="date" onChange={updateDate} className=' rounded-xl mt-1 w-full bg-white text-black border-none outline-none text-xs' />
                 </div>
                 <div>
                     <label htmlFor="time" className='text-sm text-white'>Time</label>
-                    <Input type="time" onChange={updateTime} className=' rounded-xl mt-1 w-full bg-white  border-none outline-none text-xs' />
+                    <Input type="time" onChange={updateTime} className=' rounded-xl mt-1 w-full bg-white text-black border-none outline-none text-xs' />
                 </div>
             </div>
 
@@ -543,7 +536,7 @@ const UploadForm = () => {
                 <div className="">
                     <label htmlFor="currency" className='text-sm text-white'>Currency</label>
                     <div className="mt-1 px-3 py-1 bg-white rounded-lg">
-                        <select name="currency" onChange={updateCurrency} className="w-full text-xs outline-none" id="">
+                        {/* <select name="currency" onChange={updateCurrency} className="w-full text-black text-xs outline-none" id="">
                             <option disabled defaultValue={currencies[0].symbol}>Currency</option>
                             { 
                                 currencies.map((currency, key) => (
@@ -553,20 +546,31 @@ const UploadForm = () => {
                                 ))
                             }
                         
+                        </select> */}
+
+                        <select name="currency" onChange={updateCurrency} className="w-full text-black text-xs outline-none" id="">
+                            <option disabled selected value="">Currency</option>
+                            {currencies.map((currency, key) => (
+                                <option key={key} value={currency.symbol}>
+                                    {currency.name} - {currency.symbol}
+                                </option>
+                            ))}
                         </select>
+
+
                     </div>
                 </div>
 
-                <div>
+                <div className="text-black">
                     <label htmlFor="bounty" className='text-sm text-white'>Bounty Price</label>
-                    <Input type="number" onKeyUp={(e) => setChallengePrice(e.target.value)} className='bg-white p-3 rounded-xl mt-1 w-full outline-none text-xs'/>
+                    <Input type="number" onKeyUp={(e) => setChallengePrice(e.target.value)} className='bg-white p-3 text-black rounded-xl mt-1 w-full outline-none text-xs'/>
 
                 </div>
             </div>
 
             {
                 wallet?.connected && 
-                <Button onClick={submitMetaData}>
+                <Button onClick={submitMetaData} className="bg-black text-white">
                     { (challengeCurrency && challengePrice) && `${challengeCurrencySymbol} ${challengePrice} - `} Pay & Post
                 </Button>
             }
@@ -583,14 +587,14 @@ const UploadForm = () => {
             subtitle="Disclaimer: We would never share your credentials with anyone"
             buttonText="Pay"
             />
-            <ConfirmModalComponent 
+            {/* <ConfirmModalComponent 
             confirmProcess={mintCnft} 
             openConfirmModal={openConfirmMintModal} 
             setOpenConfirmModal={setOpenConfirmMintModal}
             title="Confirm Mint" 
             subtitle="Mint your NFT"
             buttonText="Mint"
-            />
+            /> */}
 
             <AlertDialog open={openPromptConnectWallet} onOpenChange={setOpenPromptConnectWallet}>
                 {/* <AlertDialogTrigger className="w-full bg-black p-3 text-white rounded-xl">Create</AlertDialogTrigger> */}

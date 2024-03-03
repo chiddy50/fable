@@ -1,11 +1,6 @@
 "use client"
 
-import { ChangeEvent, useContext, useState } from "react";
-import { AppContext } from "@/context/StoryContext"
-
 const LoadingComponent = () => {
-
-    const { setInPreview, setChallengeImage } = useContext(AppContext)
 
     
     return (

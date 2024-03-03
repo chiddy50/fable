@@ -34,7 +34,7 @@ const UserChallenges = () => {
         }
     }
 
-    function isDateTimePast(dateString, timeString) {
+    function isDateTimePast(dateString: string, timeString: string) {
         // Parse the date and time strings
         const [year, month, day] = dateString.split("-");
         const [hours, minutes] = timeString.split(":");
