@@ -15,6 +15,7 @@ import AdminLoginModal from "@/components/auth/admin-login-modal";
 import FullPageLoader from "@/components/general/full-page-loader";
 import UserRegisterModal from "@/components/auth/user-register.modal";
 import UserLoginModal from "@/components/auth/user-login-modal";
+import MenuComponent from "@/components/general/menu-component";
 
 const poppins = Poppins({ 
   subsets: ["latin"], 
@@ -40,6 +41,7 @@ export default function RootLayout({
           <StoryContext user={null}>
             {children}
             
+            <MenuComponent />
 
             <AdminRegisterModal />
             <AdminLoginModal />
