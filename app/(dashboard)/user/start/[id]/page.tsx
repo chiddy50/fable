@@ -1,5 +1,5 @@
 import NewChallenge from '@/components/challenge/new-challenge'
-import NewChallenge2 from '@/components/challenge/new-challenge2'
+import NewStory from '@/components/challenge/new-story'
 import fetchUser from '@/lib/fetchUser'
 
 export default async function StartChallenge() {
@@ -8,7 +8,7 @@ export default async function StartChallenge() {
     <div className='layout-width '>
       
       {/* <NewChallenge /> */}
-      <NewChallenge2 />
+      <NewStory />
       {/* <StoryForm questions={questions}/> */}
     </div>
   )

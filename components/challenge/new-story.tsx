@@ -16,7 +16,7 @@ import { Button } from '../ui/button';
 import { hideTransferLoader, showTransferLoader } from '@/lib/helper';
 
 
-const  NewChallenge2 = () => {
+const NewStory = () => {
 
     interface Question {
         index: number;
@@ -192,6 +192,9 @@ const  NewChallenge2 = () => {
                                 <div className=" top_description flex justify-between w-[320px] mx-auto mt-4">
                                     <p className="text-clip uppercase text-sm tracking-wide font-bold text-gray-500">{question?.title}</p>                                                
                                 </div>
+                                <div className="my-7">
+                                   { question && <p>{ question?.answer }</p> } 
+                                </div>
                                 <textarea 
                                 id={`card_${question.index}`}
                                 placeholder=" Type here..." 
@@ -233,4 +236,4 @@ const  NewChallenge2 = () => {
     )
 }
 
-export default NewChallenge2
+export default NewStory
