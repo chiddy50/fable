@@ -184,7 +184,7 @@ const  NewChallenge2 = () => {
                         }
                     </div>
 
-                    <div className=" overflow-x-auto flex space-x-5 w-full justify-start px-7 py-4">
+                    <div className=" overflow-x-auto flex space-x-5 w-full justify-start py-4">
         
                         {allQuestions.map((question, index) => (
 

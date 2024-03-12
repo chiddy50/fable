@@ -54,9 +54,9 @@ export default function ChallengesPage() {
                 <div>
                     <div className='bg-white rounded-2xl p-5 mb-10'>
                         <h1 className='font-semibold text-center text-lg mb-3 text-gray-600'>Past 7 days Winners</h1>
-                        <div className="p-4 flex items-center justify-between border rounded-xl">
+                        <div className="p-4 flex items-center justify-between border rounded-xl xs:gap-4 sm:gap-4 xs:flex-col sm:flex-row">
 
-                            <div className="flex items-center">
+                            <div className="flex items-center xs:gap-4 sm:gap-4 xs:flex-col sm:flex-row">
                                 <h2 className="font-bold text-4xl mr-10">#1</h2>
                                 <div className=" h-10 w-10 flex items-center justify-center bg-black rounded-full mr-2">
                                     <i className='bx bxs-user text-white text-xl'></i>
