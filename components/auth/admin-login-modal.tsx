@@ -7,6 +7,7 @@ import { FormError } from "@/components/from-error";
 import { FormSuccess } from "@/components/from-success";
 import axios from "axios";
 import { AppContext } from "@/context/StoryContext";
+import { setCookie } from 'cookies-next';
 
 export default function AdminLoginModal(){
     const { push } = useRouter();
@@ -32,6 +33,7 @@ export default function AdminLoginModal(){
             if (!validateCredentials()) {
                 return;    
             }
+
     
             const payload = {
                 email: adminEmail,
@@ -39,21 +41,26 @@ export default function AdminLoginModal(){
             }
     
             setLoading(true)
+            let api_url = process.env.NEXT_PUBLIC_BASE_URL;
 
-            const response = await axios.post("/api/auth/admin/login", payload)
+            const response = await axios.post(`${api_url}/login`, payload)
             console.log(response);
             setUserLoggedIn(true)
+            setCookie('token', response?.data?.token);
+
             closeModal()
 
             setAuthUserData(response?.data?.data)
-            if (localStorage) {
 
+            if (localStorage) {
                 localStorage.setItem("user", JSON.stringify(response?.data?.data))
             }
         } catch (error) {
             console.log(error);
-            let error_msg = "Something went wrong"
-            setError(error_msg)
+            
+            let message = error?.response?.data?.message ?? "Something went wrong"
+            setError(message)
+
         }finally{
             setLoading(false)
         }

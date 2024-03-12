@@ -3,8 +3,9 @@ import { useRouter } from 'next/navigation';
 import CountdownComponent from "@/components/general/countdown-component"
 import { formatDistanceToNow } from 'date-fns';
 import Image from 'next/image';
+import { Button } from '../ui/button';
 
-export default function Challenge({ challenge, clickEvent }){
+export default function Challenge({ challenge, clickEvent, type }){
     const router = useRouter();
 
     const moveToChooseChallenge = () => {
@@ -15,25 +16,38 @@ export default function Challenge({ challenge, clickEvent }){
         let format = formatDistanceToNow(new Date(targetDate), { addSuffix: true })
         return format ?? '';        
     }
+
+    function challengeExpired(dateString: string, timeString:string) {
+        // Combine date and time strings into a single string
+        const dateTimeString = dateString + 'T' + timeString + ':00';
+    
+        // Create a Date object for the provided date and time
+        const challengeDateTime = new Date(dateTimeString);
+    
+        // Get the current date and time
+        const currentDateTime = new Date();
+    
+        // Check if the challenge date and time is less than the current date and time
+        return challengeDateTime < currentDateTime;
+    }
+    
     
     return (
-        <div className="responsive" onClick={clickEvent}>
+        <div className="responsive h-full " >
             
-            <div className='flex h-full flex-col rounded-xl shadow-sm border-gray-200 border cursor-pointer transition-all hover:shadow-2xl'>
+            {/* <div className='flex h-full flex-col rounded-xl bg-white border-none shadow-sm border-gray-200 border cursor-pointer transition-all hover:shadow-2xl'> */}
+            <div className='flex h-full flex-col rounded-xl bg-white border-none border-gray-200 border cursor-pointer transition-all shadow drop-shadow-md'>
     
-                <Image
-                    width="100"   
-                    height="100"  
-                    layout="fill" 
+                <img
                     src={challenge.image}
                     className='w-full rounded-t-xl h-1/2'                     
                     alt="Picture of the image"
                 />
-                 <div className="h-1/2 p-4">
-                    <h2 className='font-bold text-md'>{challenge.title}</h2>
-                    <p className='text-xs mt-3'>Bounty: {challenge.symbol}{challenge.price}</p>
-                    <p className='text-xs mt-1'>Posted: { formatDate(challenge.createdAt) }</p>
-                    <p className='text-xs mt-3 text-blue-600'>
+                 <div className="h-1/2 p-4 flex flex-col justify-between">
+                    <h2 className='font-semibold text-md mb-2'>{challenge.title}</h2>
+                    <p className='text-xs mb-1'>Bounty: {challenge.symbol}{challenge.price}</p>
+                    <p className='text-xs mb-2'>Posted: { formatDate(challenge.createdAt) }</p>
+                    <p className='text-xs  '>
                         <CountdownComponent date={`${challenge.date} ${challenge.time}`} />
                     </p>
                     <div className="flex justify-end">
@@ -42,6 +56,19 @@ export default function Challenge({ challenge, clickEvent }){
                             <span className='text-xs'>{challenge.stories.length ? challenge.stories.length : 0}</span>
                         </p>
                     </div>
+
+                    {  type === 'user' && challengeExpired(challenge.date, challenge.time) && 
+                        <Button className='bg-red-600 w-full mt-4'>Expired</Button>
+                    }
+                    
+                    { type === 'user' && !challengeExpired(challenge.date, challenge.time) && 
+                    <Button onClick={clickEvent} className='bg-green-600 w-full mt-4'>Start</Button>
+                    }
+
+                    {  type === 'admin' && 
+                        <Button onClick={clickEvent} className='bg-blue-600 w-full mt-4'>Submissions</Button>
+                    }
+
                  </div>
              </div>
         </div>

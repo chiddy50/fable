@@ -37,6 +37,6 @@ export default function CountdownComponent({ date }) {
   }, [date]);
 
   return (
-    <span>{countdownText}</span>
+    <span className={ countdownText === "EXPIRED" ? "text-red-500" : "text-blue-500" }>{countdownText}</span>
   );
 }

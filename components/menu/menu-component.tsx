@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "@/context/StoryContext";
 import axios from "axios";
+import { deleteCookie } from 'cookies-next';
 
 const MenuComponent = () => {
     const { refresh, push } = useRouter()
@@ -44,24 +45,24 @@ const MenuComponent = () => {
     }
 
     const logout = async () => {
-        try {            
-            const res = await axios.post("/api/auth/admin/logout", { data: "" })
-            console.log(res);
-            localStorage.removeItem("user") 
-            localStorage.removeItem("question") 
-            setUserLoggedIn(false)
-            refresh()
-            push("/")
-        } catch (error) {
-            console.log(error);
-            
-        }
+
+        await deleteCookie('token')
+        await localStorage.removeItem("user") 
+        await localStorage.removeItem("question") 
+        setUserLoggedIn(false)
+        // refresh()
+        // push("/")       
     }
     
     return (
-        <div className="absolute top-2 right-4">
+        <div className="">
+        {/* <div className="absolute top-2 right-4"> */}
             <DropdownMenu>
-                <DropdownMenuTrigger className="px-4 py-1 bg-gray-800 text-white outline-none rounded-lg text-sm">Menu</DropdownMenuTrigger>
+                <DropdownMenuTrigger className="px-4 py-1 text-white outline-none rounded-lg text-sm">
+                    <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center">
+                        <i className='bx bx-menu-alt-right text-2xl '></i>
+                    </div>
+                </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <DropdownMenuLabel className="text-center">
                         { (userLoggedIn && user) && `Hi, ${user?.name}`}

@@ -2,12 +2,13 @@
 
 import { useContext, useRef, useState, useTransition } from "react";
 import { useRouter } from 'next/navigation';
-import { Button } from "../ui/button";
-import { FormError } from "../from-error";
-import { FormSuccess } from "../from-success";
+import { Button } from "@/components/ui/button";
+import { FormError } from "@/components/from-error";
+import { FormSuccess } from "@/components/from-success";
 // import { login } from "@/actions/login";
 import axios from "axios";
 import { AppContext } from "@/context/StoryContext";
+import { setCookie } from 'cookies-next';
 
 export default function AdminRegisterModal(){
     const { push } = useRouter();
@@ -41,13 +42,18 @@ export default function AdminRegisterModal(){
                 password: adminPassword,
             }
 
+            let api_url = process.env.NEXT_PUBLIC_BASE_URL;
+            
             setLoading(true)
     
-            const response = await axios.post("/api/auth/admin/register", payload)
+            const response = await axios.post(`${api_url}/register`, payload)
+            console.log(response);
+            setCookie('token', response?.data?.token);
+
             setUserLoggedIn(true)
             closeModal()
 
-            setAuthUserData(response?.data?.data)
+            setAuthUserData(response)
 
             if (localStorage) {
                 localStorage.setItem("user", JSON.stringify(response?.data?.data))
@@ -55,8 +61,8 @@ export default function AdminRegisterModal(){
          
         } catch (error) {
             console.log(error);
-            let error_msg = "Something went wrong"
-            setError(error_msg)
+            let message = error?.response?.data?.message ?? "Something went wrong"
+            setError(message)
         }finally{
             setLoading(false)
         }

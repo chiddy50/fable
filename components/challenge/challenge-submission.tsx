@@ -16,7 +16,7 @@ const ChallengeSubmission = ({ moveToSummary, submission }) => {
         transition-all cursor-pointer rounded-xl 
         hover:border 
         hover:border-gray-400
-        hover:bg-gray-200
+
         mb-3
         ">
             <div className='rounded-full w-10 h-10 bg-gray-700 flex justify-center text-white items-center'>

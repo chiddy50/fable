@@ -26,6 +26,8 @@ import { Button } from "@/components/ui/button";
 import { AppContext } from "@/context/StoryContext"
 import { openAwardModal } from "@/lib/helper";
 import AwardModal from "@/components/challenge/award-modal";
+import axiosInterceptorInstance from '@/axiosInterceptorInstance';
+import { getCookie } from 'cookies-next';
 
 const SubmissionSummary  = () => {
     const [loading, setLoading] = useState(false)
@@ -37,11 +39,12 @@ const SubmissionSummary  = () => {
     const { push } = useRouter()
     const params = useParams<{ id: string }>()    
     const { questions, setStory, story, selectedChallenge, setSelectedChallenge } = useContext(AppContext)
+    let token = getCookie('token');
 
-    // useEffect(() => {
-    //     fetchSubmission();
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []);
+    useEffect(() => {
+        fetchSubmission();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
 
     const openAwardUserModal = () => {
@@ -51,13 +54,17 @@ const SubmissionSummary  = () => {
     const fetchSubmission = async () => {        
         try {   
             setLoading(true)         
-            let response = await axios.get(`/api/auth/admin/story/${params.id}`)
+            let response = await axiosInterceptorInstance.get(`/stories/id/${params.id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
             console.log(response);
 
-            setSubmission(response?.data?.data?.submission)
-            setFirstPlace(response?.data?.data?.first_place_story)
-            setSecondPlace(response?.data?.data?.second_place_story)
-            setThirdPlace(response?.data?.data?.third_place_story)
+            setSubmission(response?.data?.response?.submission)
+            setFirstPlace(response?.data?.response?.first_place_story)
+            setSecondPlace(response?.data?.response?.second_place_story)
+            setThirdPlace(response?.data?.response?.third_place_story)
 
             console.log({firstPlace, secondPlace, thirdPlace});
             
@@ -71,7 +78,7 @@ const SubmissionSummary  = () => {
 
     return (
         <div className="layout-width">
-            <div className="mt-7">
+            <div className="mt-32">
                 <i onClick={() => push("/admin/challenges")} className='bx bx-arrow-back text-4xl cursor-pointer hover:text-gray-600'></i>
             </div>
 
@@ -79,7 +86,21 @@ const SubmissionSummary  = () => {
                 <h1 className="text-center text-4xl font-bold mb-10">
                     Summary
                 </h1>
-                <Button onClick={openAwardUserModal} variant="destructive" size="lg">Award</Button>    
+
+                {
+                submission && !submission?.award && 
+                    <Button onClick={openAwardUserModal} variant="secondary" size="lg">
+                        <span className='mr-3'>Award</span>
+                        <i className='bx bx-medal text-xl'></i>
+                    </Button>    
+                }
+                {
+                submission && submission?.award && 
+                    <Button variant="outline" size="lg">
+                        <span className='mr-3'>{submission?.award} Place</span>
+                        <i className='bx bx-medal text-xl'></i>
+                    </Button>    
+                }
             </div>
 
 
@@ -102,7 +123,7 @@ const SubmissionSummary  = () => {
                 (!loading && submission) &&
                 <>
                     <div className='mb-3 text-xs font-bold'>Author: <span className='font-light capitalize'>{submission?.user?.name}</span></div>
-                    <div className='mb-5 text-xs font-bold'>Email: <span className='font-light'>{submission?.user?.email}</span></div>
+                    <div className='mb-10 text-xs font-bold'>Email: <span className='font-light'>{submission?.user?.email}</span></div>
                     <div className="mb-4">
 
                         {
@@ -114,10 +135,10 @@ const SubmissionSummary  = () => {
                                     {questionGroup.questions.map((question: any, questionIndex: number) => (
 
                                         <AccordionItem key={questionIndex} value={`item-${questionIndex}`} 
-                                        className="bg-gray-100 py-1 px-5 mt-2 rounded-xl"
+                                        className="bg-gray-200 py-1 px-5 mt-2 rounded-xl"
                                         >
                                             <AccordionTrigger>
-                                                <span className="font-semibold text-md">{question.name}</span>
+                                                <span className="font-semibold text-sm">{question.name}</span>
                                             </AccordionTrigger>
                                             <AccordionContent>{question.answer}</AccordionContent>
                                         </AccordionItem>
@@ -134,8 +155,15 @@ const SubmissionSummary  = () => {
 
 
             <ScrollToTopBottom />
+
             {
-                submission && <AwardModal submission={submission} firstPlace={firstPlace} secondPlace={secondPlace} thirdPlace={thirdPlace}/>
+                submission && 
+                <AwardModal 
+                submission={submission} 
+                firstPlace={firstPlace} 
+                secondPlace={secondPlace} 
+                thirdPlace={thirdPlace}
+                />
             }
         </div>
     )

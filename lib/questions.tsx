@@ -1,6 +1,7 @@
 const questions = [
     {
         index: 1,
+        answer: "",
         title: "Let's Focus On The Character",
         slug: stringToSlug("Let's Focus On The Character"),
         questions: [
@@ -32,6 +33,7 @@ const questions = [
     },
     {
         index: 2,
+        answer: "",
         title: "Let's simplify the character",
         slug: stringToSlug("Let's simplify the character"),
         questions: [
@@ -63,6 +65,7 @@ const questions = [
     },
     {
         index: 3,
+        answer: "",
         title: "Exploring Character Motivations: Uncovering Triggers and Driving Forces",
         slug: stringToSlug("Exploring Character Motivations: Uncovering Triggers and Driving Forces"),
         questions: [
@@ -80,8 +83,8 @@ const questions = [
             },
             // {
             //     index: 3,
-            //     name: "What external factors or pressures push the character to take action?",
-            //     slug: stringToSlug("What external factors or pressures push the character to take action?"),
+            //     name: "How does the character navigate challenges, considering underlying factors, while balancing competing goals and conflicts?",
+            //     slug: stringToSlug("How does the character navigate challenges, considering underlying factors, while balancing competing goals and conflicts?"),
             //     answer: "",
             // },
             {
@@ -94,6 +97,7 @@ const questions = [
     },
     {
         index: 4,
+        answer: "",
         title: "Exploring the Character's Problem-Solving Journey",
         slug: stringToSlug("Exploring the Character's Problem-Solving Journey"),
         questions: [
@@ -119,6 +123,7 @@ const questions = [
     },
     {
         index: 5,
+        answer: "",
         title: "Unveiling the Solution: Tracing the Character's Path to Resolution",
         slug: stringToSlug("Unveiling the Solution: Tracing the Character's Path to Resolution"),
         questions: [
@@ -144,6 +149,7 @@ const questions = [
     },
     {
         index: 6,
+        answer: "",
         title: "Counting the Costs: Delving into the Sacrifices for the Solution",
         slug: stringToSlug("Counting the Costs: Delving into the Sacrifices for the Solution"),
         questions: [
@@ -175,6 +181,7 @@ const questions = [
     },
     {
         index: 7,
+        answer: "",
         title: "Resuming the Journey: Exploring the Character's Return to Action",
         slug: stringToSlug("Resuming the Journey: Exploring the Character's Return to Action"),
         questions: [
@@ -206,6 +213,7 @@ const questions = [
     },
     {
         index: 8,
+        answer: "",
         title: "Transformation Unveiled: Exploring the Character's Evolution and Resolutions",
         slug: stringToSlug("Transformation Unveiled: Exploring the Character's Evolution and Resolutions"),
         questions: [
@@ -237,11 +245,31 @@ const questions = [
     }
 ];
 
+let all_questions: object[] = [];
+
+// Loop through the array of items
+questions.forEach(item => {
+
+    item.questions.forEach(question => {
+        all_questions.push({
+            index: question.index,
+            name: question.name,
+            slug: question.slug,
+            parent_title: item.title,
+            parent_slug: item.slug,
+            parent_index: item.index,
+            answer: ""
+        });
+    });
+});
+
+
 function stringToSlug(str: string) {
     return str.toLowerCase().replace(/[^a-z0-9 -]/g, '').replace(/\s+/g, '-');
 }
 
 export {
     questions,
+    all_questions,
     stringToSlug
 }

@@ -74,7 +74,7 @@ const getKeypair = () => {
 const umi = createUmi("https://api.devnet.solana.com");
 
 
-const createUnderdogProject = async (data) => {
+const createUnderdogProject = async (data: object) => {
     try {
         const config = {
             headers: {
@@ -172,8 +172,10 @@ const createUnderdogNftUsers = async (data, projectId, pubKey) => {
             upsert: true
         };
         
+        let project_id = Number(projectId);
+
         const createNftResponse = await axios.post(
-            `${underdogApiEndpoint}/v2/projects/${projectId}/nfts`, 
+            `${underdogApiEndpoint}/v2/projects/${project_id}/nfts`, 
             nftData,
             config,
         ); 

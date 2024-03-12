@@ -43,11 +43,9 @@ const ConfirmStartChallenge = ({ challenge }) => {
                 
                 <div className="flex gap-5">
                     <div className="rounded-xl" style={{ width: "190px", height: "190px" }}>
-                        <Image
-                            width="100"   
-                            height="100"  
+                        <img
+    
                             src={challenge.image}
-                            layout="fill"
                             className='w-full h-auto rounded-xl'                     
                             alt="Picture of the image"
                         />    

@@ -4,7 +4,7 @@ import React, { useEffect, useState, useContext } from 'react';
 
 import { useRouter, useParams } from 'next/navigation';
 
-import Countdown from '@/components/general/countdown-component'
+import CountdownComponent from '@/components/general/countdown-component'
 import { AppContext } from "@/context/StoryContext"
 import QuestionOne from '@/components/question/question-one';
 import QuestionTwo from '@/components/question/question-two';
@@ -17,6 +17,7 @@ import QuestionEight from '@/components/question/question-eight';
 import axios from 'axios';
 import { Skeleton } from "@/components/ui/skeleton"
 import Image from 'next/image';
+import axiosInterceptorInstance from '@/axiosInterceptorInstance';
 
 
 const NewChallenge = () => {
@@ -27,16 +28,16 @@ const NewChallenge = () => {
     const params = useParams<{ id: string }>()    
     const { questions, setStory, story, selectedChallenge, setSelectedChallenge } = useContext(AppContext)
 
-    // useEffect(() => {
-    //     fetchChallenge();
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []);
+    useEffect(() => {
+        fetchChallenge();
+
+    }, []);
 
     const fetchChallenge = async () => {        
         try {   
             setLoading(true)         
-            let response = await axios.get(`/api/auth/admin/challenge/${params.id}`)
-            setSelectedChallenge(response?.data?.data)
+            let response = await axiosInterceptorInstance.get(`/challenges/id/${params.id}`)
+            setSelectedChallenge(response?.data?.challenge)
             console.log(response);
             
         } catch (error) {
@@ -51,7 +52,7 @@ const NewChallenge = () => {
         const tabs = document.getElementsByClassName("tab");
 
         for (let i = 0; i < tabs.length; i++) {
-        tabs[i].style.display = "none";
+            tabs[i].style.display = "none";
         }
         tabs[n].style.display = "block";
 
@@ -183,7 +184,7 @@ const NewChallenge = () => {
 
     return (
         <main className="grid grid-cols-3 layout-width pt-7 gap-10">
-            <div className="bg-white flex flex-col items-center pt-7 gap-2">
+            <div className="flex flex-col items-center pt-7 gap-2">
 
                 {
                     loading &&
@@ -211,7 +212,7 @@ const NewChallenge = () => {
                 {
                     !loading &&
                     <>
-                        {/* <img 
+                        <img 
                             src={selectedChallenge?.image}
                             className='w-full h-full px-7 pt-5 object-cover'
                             style={{ borderRadius: `${50}px`}}
@@ -226,8 +227,8 @@ const NewChallenge = () => {
                         </div>
 
                         <div className='text-gray-500'>
-                            <Countdown date={`${selectedChallenge?.date} ${selectedChallenge?.time}`}/> 
-                        </div> */}
+                            <CountdownComponent date={`${selectedChallenge?.date} ${selectedChallenge?.time}`}/> 
+                        </div>
                     
                     </>
                 }

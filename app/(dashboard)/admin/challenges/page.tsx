@@ -11,12 +11,13 @@ export default function ChallengesPage() {
 
     return (
         <div className='layout-width '>
-            <div className="p-10">
-                <h1 className='text-3xl text-center mb-7 font-bold'>Here are your challenges:</h1>
-                
-                <AdminChallenges />
-
+            <div className=""  style={{ marginTop: "10rem" }}>
+                <h1 className='text-3xl text-center mb-7 font-bold'>Here are your challenges</h1>
             </div>
+            <div className='bg-white rounded-2xl p-5 mb-10'>
+                <AdminChallenges />
+            </div>
+
             
         </div>
     )

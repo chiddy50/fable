@@ -20,12 +20,12 @@ export default function HomeComponent() {
     return (
         <div className="space-y-6 text-center">
             <h1 className={cn(
-                "welcome__txt text-white drop-shadow-md",
+                "welcome__txt text-black drop-shadow-md",
                 bangers.className
             )}>
             FABLE
             </h1>
-            <p className="text-white text-lg">It&apos;s all about evoking the art of storytelling and the power of imagination</p>
+            <p className="text-gray-800 text-lg">It&apos;s all about evoking the art of storytelling and the power of imagination</p>
 
             <div>
             {/* <LoginButton>
@@ -33,7 +33,7 @@ export default function HomeComponent() {
                 Let's go!
                 </Button>
             </LoginButton> */}
-            <Button onClick={moveToOptions} variant="secondary" size="lg">
+            <Button onClick={moveToOptions} variant="default" size="lg">
                 Let&apos;s go!
             </Button>
             </div>

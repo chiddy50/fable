@@ -19,6 +19,8 @@ import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import ConfirmModalComponent from "@/components/general/confirm-modal-component";
 import axios from "axios";
 import AddAddressModal from "@/components/general/add-address-modal";
+import axiosInterceptorInstance from "@/axiosInterceptorInstance";
+import { getCookie } from 'cookies-next';
 
 
 const UserSummary = () => {
@@ -29,6 +31,7 @@ const UserSummary = () => {
     const [loading, setLoading] = useState(false);
     const [userAddress, setUserAddress] = useState(null);
     const [error, setError] = useState("");
+    let token = getCookie('token');
 
     const submitStoryData = () => {
         // console.log(user);
@@ -64,7 +67,11 @@ const UserSummary = () => {
 
         showTransferLoader()
         try {
-            let res = await axios.post("/api/auth/admin/story", payload)
+            let res = await axiosInterceptorInstance.post("/stories/create", payload, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
             console.log(res);
             localStorage.removeItem("question") 
             push(`/user/stories`)

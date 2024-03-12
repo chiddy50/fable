@@ -34,6 +34,8 @@ import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 import ConfirmModalComponent from "@/components/general/confirm-modal-component";
 import { hideTransferLoader, showTransferLoader } from "@/lib/helper";
+import axiosInterceptorInstance from "@/axiosInterceptorInstance";
+import { getCookie } from 'cookies-next';
 
 const UploadForm = () => {
     const [openConfirmModal, setOpenConfirmModal] = useState(false);
@@ -58,6 +60,7 @@ const UploadForm = () => {
     const router = useRouter();
 
     const { setVisible } = useWalletModal();
+    let token = getCookie('token');
 
     const { 
         user, userLoggedIn,
@@ -84,7 +87,7 @@ const UploadForm = () => {
         setChallengeTime(e.target.value)
     }
 
-    const updateCurrency = (e: ChangeEvent<HTMLInputElement>) => {        
+    const updateCurrency = (e: ChangeEvent<HTMLSelectElement>) => {        
         let symbol = e.target.value;
         setChallengeCurrencySymbol(symbol)
 
@@ -149,7 +152,7 @@ const UploadForm = () => {
 
     const createTransaction = async (userId: any) => {
         let payload = {
-            userId,
+            // userId,
             transactionFee,
             transactionFeeSol,
             totalCharge,
@@ -158,7 +161,12 @@ const UploadForm = () => {
         }
 
         try {
-            let res = await axios.post("/api/auth/admin/transaction", payload)
+            let res = await axiosInterceptorInstance.post("/transaction/create", payload, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
             console.log(res);
             
         } catch (error) {
@@ -172,9 +180,6 @@ const UploadForm = () => {
             return;
         }
         
-        const local_user = localStorage.getItem('user');
-        let auth_user = local_user ? JSON.parse(local_user) : user;
-
         try {
             showTransferLoader()
 
@@ -198,7 +203,7 @@ const UploadForm = () => {
                 symbol: "FB",
             });
 
-            // let projectId = "3";
+            // let projectId = "19";
             let projectId = underdogProject?.data?.projectId.toString();
             if (!projectId) {
                 toast({
@@ -210,7 +215,6 @@ const UploadForm = () => {
 
 
             const payload = {
-                userId: auth_user.id,
                 title: challengeTitle,
                 image: uploadedImage,
                 date: `${challengeDate}`,
@@ -218,7 +222,6 @@ const UploadForm = () => {
                 currency: challengeCurrency,
                 symbol: challengeCurrencySymbol,
                 price: challengePrice,
-                type: "challenge",
                 projectId: projectId,
                 projectTransactionId: underdogProject?.data.transactionId,
                 projectMintAddress: underdogProject?.data.mintAddress,
@@ -356,15 +359,17 @@ const UploadForm = () => {
 
     const saveChallengeToDatabase = async (payload: object, projectId: string) => {
         try {
-            const local_user = localStorage.getItem('user');
-            let auth_user = local_user ? JSON.parse(local_user) : user;
-                
+
             console.log(payload);
-        
-            const response = await axios.post("/api/auth/admin/challenge", payload)
+             
+            const response = await axiosInterceptorInstance.post(`/challenges/create`, payload, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
             console.log(response);
             
-            resetForm()
+            // resetForm()
             return response;
         } catch (error) {
             console.log(error)
@@ -383,7 +388,11 @@ const UploadForm = () => {
                 
             console.log(payload, projectId);
             
-            const response = await axios.put(`/api/auth/admin/challenge/${projectId}`, payload)
+            const response = await axiosInterceptorInstance.put(`/challenge/${projectId}`, payload, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
             console.log(response);
             // resetForm()
             return response;
@@ -549,7 +558,7 @@ const UploadForm = () => {
                         </select> */}
 
                         <select name="currency" onChange={updateCurrency} className="w-full text-black text-xs outline-none" id="">
-                            <option disabled selected value="">Currency</option>
+                            <option disabled value="">Currency</option>
                             {currencies.map((currency, key) => (
                                 <option key={key} value={currency.symbol}>
                                     {currency.name} - {currency.symbol}

@@ -74,7 +74,7 @@ export default function AwardModal({ submission, firstPlace, secondPlace, thirdP
     }
 
 
-    const award = async (percentage: number, position) => {
+    const award = async (percentage: number, position: string) => {
         let reward = calculateAmounts(submission?.challenge?.price, percentage)
         let payload = { 
             story: JSON.stringify(submission.story), 
@@ -83,9 +83,10 @@ export default function AwardModal({ submission, firstPlace, secondPlace, thirdP
             email: submission.user.email,
         }
 
+
         try {
             setLoading(true)
-            let newNft = await createUnderdogNftUsers(payload, submission?.projectId, submission?.user?.publicKey);
+            let newNft = await createUnderdogNftUsers(payload, submission?.challenge?.projectId, submission?.user?.publicKey);
             console.log(newNft);
 
             if (!newNft) {
@@ -149,17 +150,17 @@ export default function AwardModal({ submission, firstPlace, secondPlace, thirdP
                         {!submission?.award && 
                             <div className="flex flex-col gap-3">     
                                 <Button onClick={()  => award(0.5, "FIRST")} disabled={firstPlace} className="flex bg-green-600 items-center gap-2">
-                                    <i className='bx bxs-award text-lg'></i>
+                                    <i className='bx bx-medal text-lg'></i>
                                     <span>1st Place {firstPlace ? 'has already awarded' : ''}</span>
                                 </Button>
                                 
                                 <Button onClick={()  => award(0.3, "SECOND")} disabled={secondPlace} className="flex bg-blue-600 items-center gap-2">                        
-                                    <i className='bx bxs-award text-lg'></i>
+                                    <i className='bx bx-medal text-lg'></i>
                                     <span>2nd Place {secondPlace ? 'has already awarded' : ''}</span>
                                 </Button>
 
                                 <Button onClick={()  => award(0.2, "THIRD")} disabled={thirdPlace} className="flex bg-orange-600 items-center gap-2">                        
-                                    <i className='bx bxs-award text-lg'></i>
+                                    <i className='bx bx-medal text-lg'></i>
                                     <span>3rd Place {thirdPlace ? 'has already awarded' : ''}</span>
                                 </Button>
                             </div>  

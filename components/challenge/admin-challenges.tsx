@@ -10,7 +10,18 @@ import { AppContext } from '@/context/StoryContext';
 
 import { Skeleton } from "@/components/ui/skeleton"
 import ChallengeSubmission from './challenge-submission';
-
+import { getCookie } from 'cookies-next';
+import axiosInterceptorInstance from '@/axiosInterceptorInstance';
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from "@/components/ui/pagination"
+  
 
 const AdminChallenges = () => {
     const { push } = useRouter()
@@ -19,11 +30,13 @@ const AdminChallenges = () => {
     const [loadingSubmission, setLoadingSubmission] = useState(false)
     const [submissions, setSubmissions] = useState([])
     const { user } = useContext(AppContext)
-    
+    let token = getCookie('token');
+
     const clickEvent = () => {
-        let sideNav = document.getElementById("mySidenav")
+        let sideNav = document.getElementById("submissions-modal")
         if (sideNav) {
-            sideNav.style.width = "40%";
+            // sideNav.style.width = "40%";
+            sideNav.style.display = "block";
         }        
     }
     const fetchSubmissions = async (challenge: object) => {
@@ -31,8 +44,12 @@ const AdminChallenges = () => {
         console.log(challenge);
         try {            
             setLoadingSubmission(true)
-            let res = await axios.get(`/api/auth/admin/stories/${challenge.id}`)
-            setSubmissions(res.data.data)
+            let res = await axiosInterceptorInstance.get(`/stories?challengeId=${challenge.id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            setSubmissions(res?.data?.stories)
             console.log(res);
         } catch (error) {
             console.log(error);
@@ -43,27 +60,32 @@ const AdminChallenges = () => {
     }
 
     const hideModal = () => {
-        let sideNav = document.getElementById("mySidenav")
+        let sideNav = document.getElementById("submissions-modal")
         if (sideNav) {
-            sideNav.style.width = "0";
+            sideNav.style.display = "none";
+            // sideNav.style.width = "0";
         }        
     }
 
-    // useEffect(() => {
+    useEffect(() => {
 
-    //     fetchChallenges();
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [])
+        fetchChallenges();
+    }, [])
 
     const fetchChallenges = async () => {
         const local_user = localStorage.getItem('user');
         let auth_user = local_user ? JSON.parse(local_user) : user;
 
         try {   
-            setLoading(true)         
-            const response = await axios.get(`/api/auth/admin/challenges?id=${auth_user.id}`)
-            console.log(response?.data?.data);
-            setChallengesData(response?.data?.data);
+            setLoading(true)                     
+
+            let response = await axiosInterceptorInstance.get(`/challenges`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            console.log(response);
+            setChallengesData(response?.data?.challenges.slice(0, 4));
         } catch (error) {
             console.log(error);            
         }finally{
@@ -76,7 +98,7 @@ const AdminChallenges = () => {
         hideModal()
     }
 
-    const loaderCount = [1,2,3,4,5,6,7,8];
+    const loaderCount = [1,2,3,4];
 
     return (
         <>
@@ -97,69 +119,106 @@ const AdminChallenges = () => {
             
             {
                 !loading && 
-                <div className='grid grid-cols-4 gap-5'>
+                <div className='grid grid-cols-4 gap-5 mb-10'>
                     {
                         challengesData.map((challenge, index) => (
 
-                            <Challenge key={index} clickEvent={() => fetchSubmissions(challenge)} challenge={challenge} />
+                            <Challenge key={index} 
+                            clickEvent={() => fetchSubmissions(challenge)} 
+                            challenge={challenge} 
+                            type="admin"
+                            />
                         ))
                     }
+
                 
                 </div>
             }
 
+            <Pagination className='mt-7'>
+                <PaginationContent>
+                    <PaginationItem>
+                        <PaginationPrevious href="#" />
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationLink href="#">1</PaginationLink>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationLink href="#" isActive>
+                            2
+                        </PaginationLink>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationLink href="#">3</PaginationLink>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationEllipsis />
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationNext href="#" />
+                    </PaginationItem>
+                </PaginationContent>
+            </Pagination>
+
             
+            <div id="submissions-modal" className="sidenav-background">
+                <div className="sidenav bg-gray-200 shadow-xl z-20 p-7">
+                    <div onClick={hideModal} className="flex items-center gap-2 cursor-pointer">
+                        <i className='bx bx-arrow-back text-2xl' ></i>
+                        <p className='text-xs'>Back to your challenges</p>
+                    </div>
+                    <h1 className="text-2xl text-center font-bold my-5">Submissions</h1>
+                    <div className="">                        
 
-            <div id="mySidenav" className="sidenav bg-gray-200 shadow-xl">
-                <div className="flex justify-between items-center py-5 px-10">
-                    <h1 className="text-2xl text-center font-bold ">Submissions</h1>
-
-                    <a href="#" className="closebtn text-3xl"  onClick={hideModal}>&times;</a>
-                </div>
-                <div className="px-7">
-
-                    {   (submissions.length < 1 && !loadingSubmission)  &&
-                        <div className="flex flex-col text-center mt-10 justify-center">
-                            <i className='bx bxs-user-x text-6xl'></i>
-                            <p className="text-center text-xs font-semibold">No submissions yet</p>
-                        </div>
-                    }
-
-                    {
-                        loadingSubmission && <div>
-                            {
-                                loaderCount.map((item, index) => (
-                                    <div key={index} className="flex items-center space-x-4 mb-4">
-                                        <Skeleton className="h-12 w-12 rounded-full" />
-                                        <div className="space-y-2">
-                                            <Skeleton className="h-4 w-[250px]" />
-                                            <Skeleton className="h-4 w-[200px]" />
+                        {
+                            loadingSubmission && 
+                            <div>
+                                {
+                                    loaderCount.map((item, index) => (
+                                        <div key={index} className="flex items-center space-x-4 mb-4">
+                                            <Skeleton className="h-12 w-12 rounded-full" />
+                                            <div className="space-y-2 w-full">
+                                                <Skeleton className="h-10 w-full" />
+                                            </div>
                                         </div>
-                                    </div>
-                                ))
-                            }
-                        </div>
-                        
-                    }
+                                    ))
+                                }
+                            </div>
+                            
+                        }
 
-                    {
-                        (!loadingSubmission && submissions.length) &&
-                        <div>
-                            {
-                                submissions.map((submission, index) => (
-                                    <ChallengeSubmission key={index} submission={submission} moveToSummary={moveToSummary} />
+                        {   (submissions.length < 1 && !loadingSubmission)  &&
+                            <div className="flex flex-col text-center mt-10 justify-center">
+                                <i className='bx bxs-user-x text-6xl'></i>
+                                <p className="text-center text-xs font-semibold">No submissions yet</p>
+                            </div>
+                        }
 
-                                ))
-                            }
-                        </div>
-                    }
+                        {
+                            (!loadingSubmission) &&
+                            <div>
+                                {
+                                    submissions.map((submission, index) => (
+                                        <ChallengeSubmission key={index} submission={submission} moveToSummary={moveToSummary} />
+
+                                    ))
+                                }
+                            </div>
+                        }
+
+
+                    </div>
+
 
 
                 </div>
-
-
 
             </div>
+
+
+                    
+            
+
         </>
     )
 }

@@ -64,3 +64,11 @@ body, html{
 textarea.invalid {
     border: 1px solid #fca1a1;
 }
+
+.main_content{
+    margin-top: 80px;
+    height: calc(100vh - 80px);
+    min-height: 100vh; 
+    min-height: 100svh
+}
+

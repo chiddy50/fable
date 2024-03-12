@@ -2,10 +2,13 @@
 
 import { createContext, useContext, useState, useEffect } from "react";
 import { questions } from '@/lib/questions';
+import { getCookie } from 'cookies-next';
 
 export const AppContext = createContext();
 
 export function StoryContext({ children, user }) {
+    let token = getCookie('token');
+
     const [allQuestions, setAllQuestions] = useState([]);
     const [inPreview, setInPreview] = useState(false)
     const [challengeTitle, setChallengeTitle] = useState("")
@@ -45,6 +48,10 @@ export function StoryContext({ children, user }) {
             if (user_auth_data) {                
                 setAuthUserData(user_auth_data)
             }
+        }
+
+        if (token) {
+            setUserLoggedIn(true)
         }
     }, [])
 
