@@ -81,7 +81,7 @@ const UserChallenges = () => {
             let response = await axiosInterceptorInstance.get(`challenges/all`)
             console.log(response);
             
-            setChallengesData(response?.data?.challenges.slice(0, 4));
+            setChallengesData(response?.data?.challenges.slice(0, 6));
         } catch (error) {
             console.log(error);            
             let message = error?.response?.data?.message
@@ -118,11 +118,12 @@ const UserChallenges = () => {
 
             </div>}
 
+            
+
             {
                 !loading && 
                 <>
-                    <div className='grid  gap-5 mb-10 xs:grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-                    {/* <div className='grid gap-5 mb-10 grid-cols-4'> */}
+                    {/* <div className='grid  gap-5 mb-10 xs:grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
 
                         {
                             challengesData.map((challenge, index) => (
@@ -136,31 +137,45 @@ const UserChallenges = () => {
                         }
 
                     
+                    </div> */}
+                    <Carousel
+                    opts={{
+                        align: "start",
+                    }}
+                    className="w-full"
+                    >
+                        <CarouselContent>
+                            {   
+                                challengesData.map((challenge, index) => (
+                                    <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+
+                                    <Challenge 
+                                    clickEvent={() => promptStartChallenge(challenge)} 
+                                    challenge={challenge} 
+                                    type="user"                                
+                                    />
+                                    </CarouselItem>
+
+                                ))
+                            }
+
+                        </CarouselContent>
+                        <CarouselPrevious />
+                        <CarouselNext />
+                    </Carousel>
+                    <div className='mt-5'>
+                        <Pagination>
+                            <PaginationContent>
+                                <PaginationItem>
+                                    <PaginationPrevious href="#" />
+                                </PaginationItem>
+                                                              
+                                <PaginationItem>
+                                    <PaginationNext href="#" />
+                                </PaginationItem>
+                            </PaginationContent>
+                        </Pagination>
                     </div>
-                    <Pagination>
-                        <PaginationContent>
-                            <PaginationItem>
-                                <PaginationPrevious href="#" />
-                            </PaginationItem>
-                            <PaginationItem>
-                                <PaginationLink href="#">1</PaginationLink>
-                            </PaginationItem>
-                            <PaginationItem>
-                                <PaginationLink href="#" isActive>
-                                    2
-                                </PaginationLink>
-                            </PaginationItem>
-                            <PaginationItem>
-                                <PaginationLink href="#">3</PaginationLink>
-                            </PaginationItem>
-                            <PaginationItem>
-                                <PaginationEllipsis />
-                            </PaginationItem>
-                            <PaginationItem>
-                                <PaginationNext href="#" />
-                            </PaginationItem>
-                        </PaginationContent>
-                    </Pagination>
                 </>
             }
 

@@ -16,9 +16,9 @@ export default function ChallengesPage() {
         <div className='layout-width '>
 
             <div className=" mb-10" style={{ marginTop: "10rem" }}>
-                <h1 className='xs:text-xl sm:text-xl md:text-xl lg:text-3xl xl:text-3xl text-center font-semibold '>Choose Your Challenge</h1>
+                <h1 className='xs:text-2xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-3xl text-center font-bold '>Choose Your Challenge</h1>
             </div>
-            <div className='bg-white rounded-2xl p-5 mb-40'>
+            <div className=' rounded-2xl p-5 mb-40'>
                 <UserChallenges />
             </div>
             
@@ -32,7 +32,7 @@ export default function ChallengesPage() {
                             count.map((item, index) => (
                         
                                 <div key={index} className={cn(
-                                    "p-4 flex items-center gap-10 border rounded-xl mb-3",
+                                    "p-4 flex items-center border rounded-xl mb-3 xs:gap-4 sm:gap-10 xs:flex-col sm:flex-row",
                                     item == 1 ? "border-orange-400  border-2" : ""
                                     )}>
                                     <h2 className="font-bold text-4xl">#{item}</h2>

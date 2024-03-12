@@ -36,7 +36,7 @@ export default function Challenge({ challenge, clickEvent, type }){
         <div className="responsive h-full " >
             
             {/* <div className='flex h-full flex-col rounded-xl bg-white border-none shadow-sm border-gray-200 border cursor-pointer transition-all hover:shadow-2xl'> */}
-            <div className='flex h-full flex-col rounded-xl bg-white border-none border-gray-200 border cursor-pointer transition-all shadow drop-shadow-md'>
+            <div className='flex h-full flex-col rounded-xl bg-white border-none border-gray-200 border'>
     
                 <img
                     src={challenge.image}
