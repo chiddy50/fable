@@ -42,7 +42,10 @@ const NewStory = () => {
         fetchChallenge();
     }, []);
 
-    const fetchChallenge = async () => {        
+    const fetchChallenge = async () => {  
+
+        resetForm()
+
         try {   
             showTransferLoader()
             setLoading(true)         
@@ -80,6 +83,7 @@ const NewStory = () => {
                 return section;
             });
             setAllQuestions(allQuestions)
+            fixCompletionRate()
 
         }
     }
@@ -87,9 +91,12 @@ const NewStory = () => {
     function moveToSummaryPage(){
         
         if(!validateForm()){
-            return false;
+            // return false;
         }
-        // router.push('/user/summary')
+        console.log(allQuestions);
+        
+        setStory(allQuestions)
+        router.push('/user/summary')
     }
 
     const fixCompletionRate = () => {
@@ -106,6 +113,7 @@ const NewStory = () => {
     const validateForm = () => {
         let story_inputs = document.getElementsByClassName('story-input');
 
+        let error = 0;
         if (story_inputs.length) {
             for (let i = 0; i < story_inputs.length; i++) {
                 const story_input = story_inputs[i];
@@ -113,16 +121,49 @@ const NewStory = () => {
                 if (!story_input?.value) {
                     story_input.classList.add("invalid")
                     story_input.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    return false;
                 }else{
+                    error += 1;
+                    
                     story_input.classList.remove("invalid")
                 }                
             }
+
+            fixCompletionRate()
+            if (error > 0) {
+                return false;
+            }
+
 
             return true;
         }
 
         return false;
+    }
+
+    const resetForm = () => {
+        allQuestions.map(section => {
+            section.answer = ""
+            return section
+        })
+        
+        fixCompletionRate()
+    }
+
+    const clearSingleForm = (id, question) => {
+        let textarea = document.getElementById(id);
+        if (textarea) {            
+            textarea.value = ""
+        } 
+
+        allQuestions.map(section => {
+            if (section.index === question.index) {                
+                section.answer = ""
+            }
+            return section
+        })
+        console.log(allQuestions);
+        
+        setAllQuestions(allQuestions)
     }
 
     
@@ -152,9 +193,11 @@ const NewStory = () => {
                                 <p key={index} className=" font-mono text-xs mb-1 font-semibold tracking-widest text-gray-400  ">- {question?.name}</p>
                             ))
                         }
-                        <p className=" w-full text-xs mt-7 font-mono text-gray-800 tracking-widest leading-4">
+                        
+                        {/* <p className=" w-full text-xs mt-7 font-mono text-gray-800 tracking-widest leading-4">
                             { focusedQuestion?.answer }
-                        </p>
+                        </p> */}
+
                         {/* <div className=" flex w-full justify-between mt-6">
                             <div>
                                 <button>
@@ -188,12 +231,12 @@ const NewStory = () => {
         
                         {allQuestions.map((question, index) => (
 
-                            <div key={index}  className=" ideaCard bg-white p-5 rounded-xl shadow-sm drop-shadow-sm">
+                            <div key={index}  className="flex flex-col justify-between ideaCard bg-white p-5 rounded-xl shadow-sm drop-shadow-sm">
                                 <div className=" top_description flex justify-between w-[320px] mx-auto mt-4">
                                     <p className="text-clip uppercase text-sm tracking-wide font-bold text-gray-500">{question?.title}</p>                                                
                                 </div>
-                                <div className="my-7">
-                                   { question && <p>{ question?.answer }</p> } 
+                                <div className="my-7 h-28 overflow-y-scroll">
+                                   { question && <p className='text-xs'>{ question?.answer }</p> } 
                                 </div>
                                 <textarea 
                                 id={`card_${question.index}`}
@@ -205,11 +248,11 @@ const NewStory = () => {
                                 </textarea>
 
 
-                                <div className=" bg-white w-full h-12 flex justify-between px-2 items-end mt-2 ">                                            
+                                {/* <div className=" bg-white w-full h-12 flex justify-end px-2 items-end mt-2 ">                                            
 
                                     <div className=" space-x-6 relative overflow-hidden">
                                         
-                                        <button>
+                                        <button onClick={() => clearSingleForm(`card_${question.index}`, question)}>
                                             <svg className=" w-4 h-4 fill-current text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M135.2 17.69C140.6 6.848 151.7 0 163.8 0H284.2C296.3 0 307.4 6.848 312.8 17.69L320 32H416C433.7 32 448 46.33 448 64C448 81.67 433.7 96 416 96H32C14.33 96 0 81.67 0 64C0 46.33 14.33 32 32 32H128L135.2 17.69zM31.1 128H416V448C416 483.3 387.3 512 352 512H95.1C60.65 512 31.1 483.3 31.1 448V128zM111.1 208V432C111.1 440.8 119.2 448 127.1 448C136.8 448 143.1 440.8 143.1 432V208C143.1 199.2 136.8 192 127.1 192C119.2 192 111.1 199.2 111.1 208zM207.1 208V432C207.1 440.8 215.2 448 223.1 448C232.8 448 240 440.8 240 432V208C240 199.2 232.8 192 223.1 192C215.2 192 207.1 199.2 207.1 208zM304 208V432C304 440.8 311.2 448 320 448C328.8 448 336 440.8 336 432V208C336 199.2 328.8 192 320 192C311.2 192 304 199.2 304 208z"/></svg>
                                         </button>
                                     
@@ -220,7 +263,7 @@ const NewStory = () => {
                                         </button>
                                     </div>
 
-                                </div>
+                                </div> */}
                                 {/* <button className=" save_action w-[320px] bg-green-500 h-12 uppercase rounded-md shadow-md mx-auto flex items-center justify-center tracking-widest font-semibold text-gray-100 mt-7">Save</button> */}
                             </div>
                         ))}

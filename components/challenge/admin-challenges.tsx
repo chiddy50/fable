@@ -21,7 +21,13 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination"
-  
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+  } from "@/components/ui/carousel"
 
 const AdminChallenges = () => {
     const { push } = useRouter()
@@ -85,7 +91,7 @@ const AdminChallenges = () => {
                 }
             });
             console.log(response);
-            setChallengesData(response?.data?.challenges.slice(0, 4));
+            setChallengesData(response?.data?.challenges);
         } catch (error) {
             console.log(error);            
         }finally{
@@ -119,20 +125,45 @@ const AdminChallenges = () => {
             
             {
                 !loading && 
-                <div className='grid grid-cols-4 gap-5 mb-10'>
-                    {
-                        challengesData.map((challenge, index) => (
+                // <div className='grid grid-cols-4 gap-5 mb-10'>
+                //     {
+                //         challengesData.map((challenge, index) => (
 
-                            <Challenge key={index} 
-                            clickEvent={() => fetchSubmissions(challenge)} 
-                            challenge={challenge} 
-                            type="admin"
-                            />
-                        ))
-                    }
+                //             <Challenge key={index} 
+                //             clickEvent={() => fetchSubmissions(challenge)} 
+                //             challenge={challenge} 
+                //             type="admin"
+                //             />
+                //         ))
+                //     }
 
                 
-                </div>
+                // </div>
+                <Carousel
+                    opts={{
+                        align: "start",
+                    }}
+                    className="w-full"
+                    >
+                        <CarouselContent>
+                            {   
+                                challengesData.map((challenge, index) => (
+                                    <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+
+                                        <Challenge key={index} 
+                                        clickEvent={() => fetchSubmissions(challenge)} 
+                                        challenge={challenge} 
+                                        type="admin"
+                                        />
+                                    </CarouselItem>
+
+                                ))
+                            }
+
+                        </CarouselContent>
+                        <CarouselPrevious />
+                        <CarouselNext />
+                    </Carousel>
             }
 
             <Pagination className='mt-7'>
@@ -176,9 +207,8 @@ const AdminChallenges = () => {
                                 {
                                     loaderCount.map((item, index) => (
                                         <div key={index} className="flex items-center space-x-4 mb-4">
-                                            <Skeleton className="h-12 w-12 rounded-full" />
                                             <div className="space-y-2 w-full">
-                                                <Skeleton className="h-10 w-full" />
+                                                <Skeleton className="h-16 w-full bg-white" />
                                             </div>
                                         </div>
                                     ))

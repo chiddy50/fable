@@ -4,7 +4,6 @@ body, html{
 
 .welcome__txt {
     letter-spacing: 6px;
-    font-size: 8rem;
     line-height: 0.9;
     text-align: center;
 }

@@ -89,7 +89,7 @@ const SubmissionSummary  = () => {
 
                 {
                 submission && !submission?.award && 
-                    <Button onClick={openAwardUserModal} variant="secondary" size="lg">
+                    <Button onClick={openAwardUserModal} className='bg-green-600' size="lg">
                         <span className='mr-3'>Award</span>
                         <i className='bx bx-medal text-xl'></i>
                     </Button>    

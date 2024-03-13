@@ -33,6 +33,8 @@ const UserSummary = () => {
     const [error, setError] = useState("");
     let token = getCookie('token');
 
+    console.log({story});
+    
     const submitStoryData = () => {
         // console.log(user);
         

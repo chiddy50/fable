@@ -99,15 +99,17 @@ const UserChallenges = () => {
         
     }
 
-    const buttonLabels = [1,2,3,4];
+    const buttonLabels = [1,2,3];
 
     return (
         <>        
-            { loading && <div className='grid grid-cols-4 gap-5'>
+            { 
+            loading && 
+            <div className='grid md:grid-cols-1 lg:grid-cols-3 gap-5'>
                 {
                     buttonLabels.map((label, index) => (
                         <div key={index} className="flex flex-col space-y-3">
-                            <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+                            <Skeleton className="h-[300px] w-[full] rounded-xl" />
                             <div className="space-y-2">
                                 <Skeleton className="h-4 w-[250px]" />
                                 <Skeleton className="h-4 w-[200px]" />
