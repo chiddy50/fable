@@ -6,26 +6,38 @@ import { useContext, useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton"
 import UserStory from "@/components/challenge/user-story";
 import { transferToUsers } from "@/lib/transferToUsers";
+import { getCookie } from 'cookies-next';
+import axiosInterceptorInstance from "@/axiosInterceptorInstance";
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationNext,
+    PaginationPrevious,
+} from "@/components/ui/pagination"
 
 const UserStories = () => {
     const { user } = useContext(AppContext)
     const [loading, setLoading] = useState(false)
     const [stories, setStories] = useState([])
+    let token = getCookie('token');
 
-    // useEffect(() => {        
-    //     getUserStories();
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [])
+    useEffect(() => {        
+        getUserStories();
+
+    }, [])
 
     const getUserStories = async () => {
-        const local_user = localStorage.getItem('user');
-        let auth_user = local_user ? JSON.parse(local_user) : user;
 
         try {   
             setLoading(true)         
-            const response = await axios.get(`/api/auth/admin/user-stories/${auth_user.id}`)
-            console.log(response?.data?.data);
-            setStories(response?.data?.data);
+            const response = await axiosInterceptorInstance.get(`/stories`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            console.log(response);
+            setStories(response?.data?.stories);
         } catch (error) {
             console.log(error);            
         }finally{
@@ -64,10 +76,22 @@ const UserStories = () => {
                     <div className='gap-5'>
                         {
                             stories.map((story, index) => (
-                                <UserStory key={index} clickEvent={() => viewStory()} />
+                                <UserStory key={index} story={story} clickEvent={() => viewStory()} />
                             ))
                         }
-                    
+                        <div className='mt-5'>
+                        <Pagination>
+                            <PaginationContent>
+                                <PaginationItem>
+                                    <PaginationPrevious href="#" />
+                                </PaginationItem>
+                                                              
+                                <PaginationItem>
+                                    <PaginationNext href="#" />
+                                </PaginationItem>
+                            </PaginationContent>
+                        </Pagination>
+                    </div>
                     </div>
                 }
                 </>

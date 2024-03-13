@@ -72,16 +72,16 @@ const MobileMenuComponent = () => {
                         <Button onClick={() => push('/')} className="w-full h-full text-xs uppercase">Home</Button>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                        <Button onClick={() => push('/')} className="w-full h-full text-xs uppercase">Create challenge</Button>
+                        <Button onClick={() => push('/admin/challenge/create')} className="w-full h-full text-xs uppercase">Create challenge</Button>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                        <Button onClick={() => push('/')} className="w-full h-full text-xs uppercase">My challenges</Button>
+                        <Button onClick={() => push('/admin/challenges')} className="w-full h-full text-xs uppercase">My challenges</Button>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                        <Button onClick={() => push('/')} className="w-full h-full text-xs uppercase">My Stories</Button>
+                        <Button onClick={() => push('/user/stories')} className="w-full h-full text-xs uppercase">My Stories</Button>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                        <Button onClick={() => push('/')} className="w-full h-full text-xs uppercase">Tell a story</Button>
+                        <Button onClick={() => push('/user/challenges')} className="w-full h-full text-xs uppercase">Tell a story</Button>
                     </DropdownMenuItem>
 
                     { userLoggedIn && 

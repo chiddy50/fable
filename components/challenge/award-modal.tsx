@@ -10,6 +10,8 @@ import axios from "axios";
 import { AppContext } from "@/context/StoryContext";
 import { createUnderdogNft, createUnderdogNftUsers } from "@/lib/data";
 import { toast } from "@/components/ui/use-toast";
+import axiosInterceptorInstance from "@/axiosInterceptorInstance";
+import { getCookie } from 'cookies-next'; 
 
 export default function AwardModal({ submission, firstPlace, secondPlace, thirdPlace }){
     const { push } = useRouter();
@@ -18,6 +20,7 @@ export default function AwardModal({ submission, firstPlace, secondPlace, thirdP
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
 
+    let token = getCookie('token');
     
     const modalRef = useRef(null);
     const { setUserLoggedIn, authUserData, setAuthUserData } = useContext(AppContext)
@@ -110,12 +113,14 @@ export default function AwardModal({ submission, firstPlace, secondPlace, thirdP
 
     const updateStory = async (payload, storyId) => {
         try {
-            const local_user = localStorage.getItem('user');
-            let auth_user = local_user ? JSON.parse(local_user) : user;
-                
+
             console.log(payload);
             
-            const response = await axios.put(`/api/auth/admin/story/${storyId}`, payload)
+            const response = await axiosInterceptorInstance.put(`/stories/id/${storyId}`, payload, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
             console.log(response);
 
             return response;

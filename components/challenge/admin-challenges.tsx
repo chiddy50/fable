@@ -10,7 +10,7 @@ import { AppContext } from '@/context/StoryContext';
 
 import { Skeleton } from "@/components/ui/skeleton"
 import ChallengeSubmission from './challenge-submission';
-import { getCookie } from 'cookies-next';
+import { getCookie } from 'cookies-next'; 
 import axiosInterceptorInstance from '@/axiosInterceptorInstance';
 import {
     Pagination,
@@ -50,7 +50,7 @@ const AdminChallenges = () => {
         console.log(challenge);
         try {            
             setLoadingSubmission(true)
-            let res = await axiosInterceptorInstance.get(`/stories?challengeId=${challenge.id}`, {
+            let res = await axiosInterceptorInstance.get(`/stories/all?challengeId=${challenge.id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

@@ -235,16 +235,19 @@ const NewStory = () => {
                                 <div className=" top_description flex justify-between w-[320px] mx-auto mt-4">
                                     <p className="text-clip uppercase text-sm tracking-wide font-bold text-gray-500">{question?.title}</p>                                                
                                 </div>
+                                
                                 <div className="my-7 h-28 overflow-y-scroll">
                                    { question && <p className='text-xs'>{ question?.answer }</p> } 
                                 </div>
+                                
                                 <textarea 
                                 id={`card_${question.index}`}
                                 placeholder=" Type here..." 
+                                rows={1}                               
                                 onFocus={() => textAreaFocused(question)} 
                                 onBlur={() => textAreaBlured(question)}  
                                 onKeyUp={(e) => updateAnswer(e, question)}
-                                className="story-input mt-4 w-full h-28 pb-9 px-3 pt-4 text-xs appearance-none outline-none rounded-xl bg-gray-50 flex items-center justify-center">                                
+                                className="story-input resize-none mt-4 w-full pb-9 px-3 pt-4 text-xs appearance-none outline-none rounded-xl bg-gray-100 flex items-center justify-center">                                
                                 </textarea>
 
 

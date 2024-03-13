@@ -1,3 +1,6 @@
+import { formatDistanceToNow } from "date-fns";
+
+
 export const showTransferLoader = () => {
     let fullPageLoader = document.getElementById("full-page-loader")
     if (fullPageLoader) {            
@@ -31,4 +34,9 @@ export const openAwardModal = () => {
     if (awardModal) {            
         awardModal.style.display = "block";    
     }
+}
+
+export const formatDate = (targetDate: string) => {
+    let format = formatDistanceToNow(new Date(targetDate), { addSuffix: true })
+    return format ?? '';        
 }

@@ -30,6 +30,7 @@ import {
   
 
 const UserChallenges = () => {
+    const router = useRouter();
 
     const [challengesData, setChallengesData] = useState([])
     const [loading, setLoading] = useState(false)
@@ -49,10 +50,12 @@ const UserChallenges = () => {
         }
 
         setSelectedChallenge(challenge)
-        const confirmStartModal = document.getElementById("confirm-start-modal");
-        if (confirmStartModal) {            
-            confirmStartModal.style.display = "block";
-        }
+        router.push(`/user/start/${challenge.id}`)
+
+        // const confirmStartModal = document.getElementById("confirm-start-modal");
+        // if (confirmStartModal) {            
+        //     confirmStartModal.style.display = "block";
+        // }
     }
 
     function isDateTimePast(dateString: string, timeString: string) {
