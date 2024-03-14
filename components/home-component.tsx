@@ -28,12 +28,12 @@ export default function HomeComponent() {
     return (
         <div className="space-y-6 text-center">
             <h1 className={cn(
-                "welcome__txt text-black text-[8rem]",
+                "welcome__txt text-black xs:text-[7rem] sm:text-[7rem] md:text-[8rem]",
                 bangers.className
             )}>
             FABLE
             </h1>
-            <p className="text-gray-800 font-bold text-lg">
+            <p className="text-gray-800 font-bold xs:text-sm sm:text-sm md:text-lg">
                 {/* It&apos;s all about evoking the art of storytelling and the power of imagination */}
                 Empowering Storytellers with cNFT's
             </p>
@@ -55,11 +55,11 @@ export default function HomeComponent() {
                     <p className='text-sm text-gray-800'>Select how you want to participate</p>
                 </div>
                 <div>
-                    <button onClick={navigateToChooseChallengePage} className="font-semibold text-sm shadow-sm rounded-2xl outline-none w-full bg-gray-700 text-white text-center p-4 hover:bg-slate-500 mb-3">
+                    <button onClick={navigateToChooseChallengePage} className="font-semibold text-sm shadow-sm rounded-2xl outline-none w-full bg-gray-700 text-white text-center py-3 px-4 hover:bg-slate-500 mb-3">
                         Tell a story
                     </button>
 
-                    <button onClick={navigateToCreateChallengePage} className="font-semibold shadow-sm text-sm rounded-2xl outline-none w-full bg-gray-700 text-white text-center p-4 mb-4 hover:bg-slate-500">
+                    <button onClick={navigateToCreateChallengePage} className="font-semibold shadow-sm text-sm rounded-2xl outline-none w-full bg-gray-700 text-white text-center py-3 px-4 hover:bg-slate-500">
                         Add a Challenge
                     </button>
                 </div>
