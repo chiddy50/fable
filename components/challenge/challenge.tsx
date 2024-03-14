@@ -87,12 +87,12 @@ export default function Challenge({ challenge, clickEvent, type }){
                         <CountdownComponent date={`${challenge.date} ${challenge.time}`} />
                     </p>
                     <div className="flex justify-between mt-3">
-                        <div className='flex items-center gap-2'>
+                        <div className='flex items-center '>
                             { hasFirst && 
 
                             <TooltipComponent>
                                 <TooltipTrigger asChild>
-                                <i className='bx bxs-medal text- text-yellow-600'></i>
+                                <i className='bx bxs-medal bx-tada text-3xl text-yellow-600'></i>
                                 </TooltipTrigger>
                                 <TooltipContent>
                                     <p>First place awarded</p>
@@ -103,7 +103,7 @@ export default function Challenge({ challenge, clickEvent, type }){
                             { hasSecond && 
                                 <TooltipComponent>
                                     <TooltipTrigger asChild>
-                                    <i className='bx bxs-medal text- text-gray-600'></i> 
+                                    <i className='bx bxs-medal bx-tada text-3xl text-gray-600'></i> 
                                     </TooltipTrigger>
                                     <TooltipContent>
                                         <p>Second place awarded</p>
@@ -115,7 +115,7 @@ export default function Challenge({ challenge, clickEvent, type }){
                             { hasThird && 
                             <TooltipComponent>
                                 <TooltipTrigger asChild>
-                                <i className='bx bxs-medal text- text-orange-600'></i> 
+                                <i className='bx bxs-medal bx-tada text-3xl text-orange-600'></i> 
                                 </TooltipTrigger>
                                 <TooltipContent>
                                     <p>Third place awarded</p>
