@@ -172,11 +172,11 @@ const UserChallenges = () => {
                     <div className='mt-5'>
                         <Pagination>
                             <PaginationContent>
-                                <PaginationItem>
+                                <PaginationItem className='bg-white rounded-md'>
                                     <PaginationPrevious href="#" />
                                 </PaginationItem>
                                                               
-                                <PaginationItem>
+                                <PaginationItem className='bg-white rounded-md'>
                                     <PaginationNext href="#" />
                                 </PaginationItem>
                             </PaginationContent>

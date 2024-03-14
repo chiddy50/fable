@@ -44,7 +44,7 @@ export default function RootLayout({
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet' />
       </head>
       <body className={cn(
-        "bg-gray-100 h-screen font-mono",
+        "bg-[#2f3d47] h-screen font-mono",
         // poppins.className
         )}>
       <WalletContextProvider>
@@ -57,7 +57,7 @@ export default function RootLayout({
             <NavbarComponent />
             {/* <div className="w-full" >
             </div> */}
-            <div className="main_content bg-gray-100">
+            <div className="main_content bg-[#2f3d47]">
               {children}
             </div>
 

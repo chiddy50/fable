@@ -16,7 +16,7 @@ export default function ChallengesPage() {
         <div className='layout-width '>
 
             <div className=" mb-10" style={{ marginTop: "10rem" }}>
-                <h1 className='xs:text-2xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-3xl text-center font-bold '>Choose Your Challenge</h1>
+                <h1 className='text-white xs:text-2xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-3xl text-center font-bold '>Choose Your Challenge</h1>
             </div>
             <div className=' rounded-2xl p-5 mb-40'>
                 <UserChallenges />

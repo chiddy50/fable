@@ -15,11 +15,13 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination"
+import UserSubmissionSummary from "@/components/modal/user-submission-summary";
 
 const UserStories = () => {
     const { user } = useContext(AppContext)
     const [loading, setLoading] = useState(false)
     const [stories, setStories] = useState([])
+    const [selectedStory, setSelectedStory] = useState(null)
     let token = getCookie('token');
 
     useEffect(() => {        
@@ -45,18 +47,20 @@ const UserStories = () => {
         }
     }
 
-    const viewStory =  () => {
+    const viewStory = (story) => {
+
+        setSelectedStory(story)
         // console.log(story);
-        
+        document.getElementById('submission-summary-modal').style.display = 'block'
         // await transferToUsers("7GbRUuFSD1idrwJgWqhBExrB7aSKrVgkKWYx6sb9fm2u", 0.2)
     }
     
-    const loaderCount = [1,2,3,4,5,6];
+    const loaderCount = [1,2,3];
 
     return (
         <div className='layout-width '>
-            <div className="py-10">
-                <h1 className='xs:text-lg sm:text-lg md:text-3xl text-center mb-7 font-bold'>Here are your stories:</h1>
+            <div className="py-10 ">
+                <h1 className='text-white xs:text-lg sm:text-lg md:text-3xl text-center mb-7 font-bold'>Here are your stories:</h1>
                 
                 <>
                 { loading && <div className=''>
@@ -76,22 +80,24 @@ const UserStories = () => {
                     <div className='gap-5'>
                         {
                             stories.map((story, index) => (
-                                <UserStory key={index} story={story} clickEvent={() => viewStory()} />
+                                <UserStory key={index} story={story} clickEvent={() => viewStory(story)} />
                             ))
                         }
                         <div className='mt-5'>
-                        <Pagination>
-                            <PaginationContent>
-                                <PaginationItem>
-                                    <PaginationPrevious href="#" />
-                                </PaginationItem>
-                                                              
-                                <PaginationItem>
-                                    <PaginationNext href="#" />
-                                </PaginationItem>
-                            </PaginationContent>
-                        </Pagination>
-                    </div>
+                            <Pagination>
+                                <PaginationContent>
+                                    <PaginationItem className='bg-white rounded-md'>
+                                        <PaginationPrevious href="#" />
+                                    </PaginationItem>
+                                                                
+                                    <PaginationItem className='bg-white rounded-md'>
+                                        <PaginationNext href="#" />
+                                    </PaginationItem>
+                                </PaginationContent>
+                            </Pagination>
+                        </div>
+
+                        <UserSubmissionSummary selectedStory={selectedStory}/>
                     </div>
                 }
                 </>

@@ -79,11 +79,11 @@ const SubmissionSummary  = () => {
     return (
         <div className="layout-width">
             <div className="mt-32">
-                <i onClick={() => push("/admin/challenges")} className='bx bx-arrow-back text-4xl cursor-pointer hover:text-gray-600'></i>
+                <i onClick={() => push("/admin/challenges")} className='bx bx-arrow-back text-4xl cursor-pointer text-white'></i>
             </div>
 
             <div className="flex justify-between my-10">
-                <h1 className="text-center text-4xl font-bold mb-10">
+                <h1 className="text-center text-white text-4xl font-bold mb-10">
                     Summary
                 </h1>
 
@@ -122,27 +122,32 @@ const SubmissionSummary  = () => {
             {
                 (!loading && submission) &&
                 <>
-                    <div className='mb-3 text-xs font-bold'>Author: <span className='font-light capitalize'>{submission?.user?.name}</span></div>
-                    <div className='mb-10 text-xs font-bold'>Email: <span className='font-light'>{submission?.user?.email}</span></div>
+                    <div className='mb-3 text-xs text-white font-bold'>Author: <span className='font-light capitalize'>{submission?.user?.name}</span></div>
+                    <div className='mb-10 text-xs text-white font-bold'>Email: <span className='font-light'>{submission?.user?.email}</span></div>
                     <div className="mb-4">
 
                         {
                             submission?.story.map((questionGroup: any, index: number) => (
 
-                                <Accordion type="single" collapsible className="w-full mb-10" key={index}>
-                                    <h1 className="text-xl font-semibold text-gray-400">{questionGroup.title}</h1>
-
-                                    {questionGroup.questions.map((question: any, questionIndex: number) => (
-
-                                        <AccordionItem key={questionIndex} value={`item-${questionIndex}`} 
-                                        className="bg-gray-200 py-1 px-5 mt-2 rounded-xl"
-                                        >
-                                            <AccordionTrigger>
-                                                <span className="font-semibold text-sm">{question.name}</span>
-                                            </AccordionTrigger>
-                                            <AccordionContent>{question.answer}</AccordionContent>
-                                        </AccordionItem>
-                                    ))}
+                                <Accordion type="single" collapsible className="w-full mb-10 relative" key={index}>
+                                    
+                                    <AccordionItem value={`item-${1}`} 
+                                    className="bg-gray-200 py-1 px-5 mt-2 rounded-xl"
+                                    >
+                                        <AccordionTrigger className='pb-2'>
+                                            <span className="font-semibold text-lg">{questionGroup.title}</span>
+                                        </AccordionTrigger>
+                                        <div  className='mb-2'>
+                                            {questionGroup.questions.map((question: any, questionIndex: number) => (
+                                                <p className=" text-[10px]"> - {question.name}</p>
+                                            ))}
+                                        </div>
+                                        
+                                        <AccordionContent className="text-xs mt-7">
+                                            <p className="font-bold mb-2 text-md">Answer</p>
+                                            {questionGroup.answer}
+                                        </AccordionContent>
+                                    </AccordionItem>
                                     
                                 </Accordion>
                             ))

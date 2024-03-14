@@ -12,6 +12,7 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 import TooltipComponent from '@/components/TooltipComponent';
+import axios from 'axios';
 
 export default function Challenge({ challenge, clickEvent, type }){
     const router = useRouter();
@@ -67,7 +68,36 @@ export default function Challenge({ challenge, clickEvent, type }){
         });
     }
     
+    const burn = async (nftId,projectId) => {
+
+        if (!nftId || !projectId) {
+            console.log({nftId,projectId});
+            // return
+        }
+        try {
+            const config = {
+                headers: {
+                  Authorization: `Bearer ${process.env.NEXT_PUBLIC_UNDERDOG_API_KEY}`,
+                },
+            }
     
+            const underdogApiEndpoint = process.env.NEXT_PUBLIC_UNDERDOG_API_URL
+            
+            const response = await axios.post(
+                `${underdogApiEndpoint}/v2/projects/10/nfts/1/burn`, 
+                {},
+                config,
+            ); 
+            console.log(response);
+            
+            
+            return response;
+        } catch (error) {
+            console.log(error);   
+            return null; 
+        }
+    } 
+
     return (
         <div className="responsive h-full " >
             
@@ -141,6 +171,9 @@ export default function Challenge({ challenge, clickEvent, type }){
                     {  type === 'admin' && 
                         <Button onClick={clickEvent} className='bg-blue-600 w-full mt-4'>Submissions</Button>
                     }
+
+                    {/* <Button onClick={() => burn(challenge.nftId, challenge.projectId)} className='bg-purple-600 w-full mt-4'>Burn</Button> */}
+
 
                  </div>
              </div>

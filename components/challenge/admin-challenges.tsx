@@ -157,24 +157,11 @@ const AdminChallenges = () => {
                         </Carousel>
                         <Pagination className='mt-7'>
                             <PaginationContent>
-                                <PaginationItem>
+                                <PaginationItem className='bg-white rounded-md'>
                                     <PaginationPrevious href="#" />
                                 </PaginationItem>
-                                <PaginationItem>
-                                    <PaginationLink href="#">1</PaginationLink>
-                                </PaginationItem>
-                                <PaginationItem>
-                                    <PaginationLink href="#" isActive>
-                                        2
-                                    </PaginationLink>
-                                </PaginationItem>
-                                <PaginationItem>
-                                    <PaginationLink href="#">3</PaginationLink>
-                                </PaginationItem>
-                                <PaginationItem>
-                                    <PaginationEllipsis />
-                                </PaginationItem>
-                                <PaginationItem>
+                               
+                                <PaginationItem className='bg-white rounded-md'>
                                     <PaginationNext href="#" />
                                 </PaginationItem>
                             </PaginationContent>
@@ -187,15 +174,15 @@ const AdminChallenges = () => {
             {
                 !loading && (
                     (challengesData.length < 1) &&
-                    <div className='flex flex-col items-center gap-3 justify-center'>
+                    <div className='flex flex-col text-white items-center gap-3 justify-center'>
                         <i className="bx bx-data text-[6rem]"></i>
-                        <p className='text-xs text-gray-600'>No Stories told yet...</p>
+                        <p className='text-xs '>No Stories told yet...</p>
                     </div>
                 )
             }
             
             <div id="submissions-modal" className="sidenav-background">
-                <div className="sidenav bg-gray-200 shadow-xl z-20 p-7">
+                <div className="sidenav bg-gray-200 shadow-xl z-20 p-7 xs:w-[100%] sm:w-[95%] md:w-[70%] lg:w-[40%]">
                     <div onClick={hideModal} className="flex items-center gap-2 cursor-pointer">
                         <i className='bx bx-arrow-back text-2xl' ></i>
                         <p className='text-xs'>Back to your challenges</p>
@@ -240,8 +227,6 @@ const AdminChallenges = () => {
 
 
                     </div>
-
-
 
                 </div>
 

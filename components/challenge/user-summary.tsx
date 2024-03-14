@@ -96,9 +96,9 @@ const UserSummary = () => {
     return (
         <div className="layout-width">
             <div className="mt-[7rem]">
-                <i onClick={() => push(`/user/start/${selectedChallenge.id}`)} className='bx bx-arrow-back text-4xl cursor-pointer hover:text-gray-600'></i>
+                <i onClick={() => push(`/user/start/${selectedChallenge.id}`)} className='bx bx-arrow-back text-4xl cursor-pointer text-white '></i>
             </div>
-            <h1 className="text-center text-4xl font-bold mb-10">
+            <h1 className="text-center text-4xl text-white font-bold mb-10">
                 Summary
             </h1>
 
@@ -107,28 +107,25 @@ const UserSummary = () => {
                 {
                     story.map((questionGroup: any, index: number) => (
 
-                        <Accordion type="single" collapsible className="w-full mb-10" key={index}>
-                            {/* <h1 className="text-xl font-semibold text-gray-400">{questionGroup.title}</h1> */}
-
+                        <Accordion type="single" collapsible className="w-full mb-10 relative" key={index}>
+                                    
                             <AccordionItem value={`item-${1}`} 
                             className="bg-gray-200 py-1 px-5 mt-2 rounded-xl"
                             >
-                                <AccordionTrigger>
-                                    <span className="font-semibold text-md">{questionGroup.title}</span>
+                                <AccordionTrigger className='pb-2'>
+                                    <span className="font-semibold text-lg">{questionGroup.title}</span>
                                 </AccordionTrigger>
-                                <AccordionContent className="text-xs">{questionGroup.answer}</AccordionContent>
+                                <div  className='mb-2'>
+                                    {questionGroup.questions.map((question: any, questionIndex: number) => (
+                                        <p className=" text-[10px]"> - {question.name}</p>
+                                    ))}
+                                </div>
+                                
+                                <AccordionContent className="text-xs mt-7">
+                                    <p className="font-bold mb-2 text-md">Answer</p>
+                                    {questionGroup.answer}
+                                </AccordionContent>
                             </AccordionItem>
-                            {/* {questionGroup.questions.map((question: any, questionIndex: number) => (
-
-                                <AccordionItem key={questionIndex} value={`item-${questionIndex}`} 
-                                className="bg-gray-100 py-1 px-5 mt-2 rounded-xl"
-                                >
-                                    <AccordionTrigger>
-                                        <span className="font-semibold text-md">{question.name}</span>
-                                    </AccordionTrigger>
-                                    <AccordionContent className="text-xs">{question.answer}</AccordionContent>
-                                </AccordionItem>
-                            ))} */}
                             
                         </Accordion>
                     ))
