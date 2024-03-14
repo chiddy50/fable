@@ -35,7 +35,7 @@ const UserSummary = () => {
 
     console.log({story});
     
-    const submitStoryData = () => {
+    const submitStoryData = async () => {
         // console.log(user);
         
         if (!userLoggedIn) {
@@ -43,7 +43,13 @@ const UserSummary = () => {
             return           
         }
 
-        setOpenConfirmModal(true);
+        const local_user = JSON.parse(localStorage.getItem('user'));
+
+        if (!local_user.publicKey) {            
+            setOpenConfirmModal(true);
+        }     
+        
+        await continueStorySubmission()
     }
 
     const continueStorySubmission = async () => {
@@ -89,7 +95,7 @@ const UserSummary = () => {
     
     return (
         <div className="layout-width">
-            <div className="mt-7">
+            <div className="mt-[7rem]">
                 <i onClick={() => push(`/user/start/${selectedChallenge.id}`)} className='bx bx-arrow-back text-4xl cursor-pointer hover:text-gray-600'></i>
             </div>
             <h1 className="text-center text-4xl font-bold mb-10">
@@ -102,9 +108,17 @@ const UserSummary = () => {
                     story.map((questionGroup: any, index: number) => (
 
                         <Accordion type="single" collapsible className="w-full mb-10" key={index}>
-                            <h1 className="text-xl font-semibold text-gray-400">{questionGroup.title}</h1>
+                            {/* <h1 className="text-xl font-semibold text-gray-400">{questionGroup.title}</h1> */}
 
-                            {questionGroup.questions.map((question: any, questionIndex: number) => (
+                            <AccordionItem value={`item-${1}`} 
+                            className="bg-gray-200 py-1 px-5 mt-2 rounded-xl"
+                            >
+                                <AccordionTrigger>
+                                    <span className="font-semibold text-md">{questionGroup.title}</span>
+                                </AccordionTrigger>
+                                <AccordionContent className="text-xs">{questionGroup.answer}</AccordionContent>
+                            </AccordionItem>
+                            {/* {questionGroup.questions.map((question: any, questionIndex: number) => (
 
                                 <AccordionItem key={questionIndex} value={`item-${questionIndex}`} 
                                 className="bg-gray-100 py-1 px-5 mt-2 rounded-xl"
@@ -114,7 +128,7 @@ const UserSummary = () => {
                                     </AccordionTrigger>
                                     <AccordionContent className="text-xs">{question.answer}</AccordionContent>
                                 </AccordionItem>
-                            ))}
+                            ))} */}
                             
                         </Accordion>
                     ))

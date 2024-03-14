@@ -26,7 +26,7 @@ export default function ChallengesPage() {
                 <div>
                     
                     <div className='bg-white rounded-2xl p-5 mb-10'>
-                        <h1 className='font-semibold text-center text-lg mb-3 text-gray-600'>Rankings</h1>
+                        <h1 className='font-semibold text-center mb-3 text-gray-600 text-2xl'>Rankings</h1>
                     
                         {
                             count.map((item, index) => (

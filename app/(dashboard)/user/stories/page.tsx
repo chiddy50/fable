@@ -55,15 +55,15 @@ const UserStories = () => {
 
     return (
         <div className='layout-width '>
-            <div className="p-10">
-                <h1 className='text-3xl text-center mb-7 font-bold'>Here are your stories:</h1>
+            <div className="py-10">
+                <h1 className='xs:text-lg sm:text-lg md:text-3xl text-center mb-7 font-bold'>Here are your stories:</h1>
                 
                 <>
                 { loading && <div className=''>
                     {
                         loaderCount.map((label, index) => (
                             <div key={index} className="flex flex-col mb-3 space-y-3">
-                                <Skeleton className="h-[80px] w-[full] rounded-xl" />
+                                <Skeleton className="h-[120px] w-[full] rounded-xl" />
                             </div>
                         ))
                     }

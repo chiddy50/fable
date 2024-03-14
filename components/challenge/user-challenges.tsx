@@ -121,7 +121,8 @@ const UserChallenges = () => {
                     ))
                 }
 
-            </div>}
+            </div>
+            }
 
             
 

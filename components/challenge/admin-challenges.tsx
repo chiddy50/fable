@@ -108,11 +108,13 @@ const AdminChallenges = () => {
 
     return (
         <>
-            { loading && <div className='grid grid-cols-4 gap-5'>
+            { 
+            loading && 
+            <div className='grid md:grid-cols-1 lg:grid-cols-3 gap-5'>
                 {
                     loaderCount.map((label, index) => (
                         <div key={index} className="flex flex-col space-y-3">
-                            <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+                            <Skeleton className="h-[300px] w-[full] rounded-xl" />
                             <div className="space-y-2">
                                 <Skeleton className="h-4 w-[250px]" />
                                 <Skeleton className="h-4 w-[200px]" />
@@ -121,76 +123,76 @@ const AdminChallenges = () => {
                     ))
                 }
 
-            </div>}
+            </div>
+            }
             
             {
-                !loading && 
-                // <div className='grid grid-cols-4 gap-5 mb-10'>
-                //     {
-                //         challengesData.map((challenge, index) => (
+                !loading && (
+                    (challengesData.length > 0) &&
+                    <>
+                    <Carousel
+                        opts={{
+                            align: "start",
+                        }}
+                        className="w-full"
+                        >
+                            <CarouselContent>
+                                {   
+                                    challengesData.map((challenge, index) => (
+                                        <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
 
-                //             <Challenge key={index} 
-                //             clickEvent={() => fetchSubmissions(challenge)} 
-                //             challenge={challenge} 
-                //             type="admin"
-                //             />
-                //         ))
-                //     }
+                                            <Challenge key={index} 
+                                            clickEvent={() => fetchSubmissions(challenge)} 
+                                            challenge={challenge} 
+                                            type="admin"
+                                            />
+                                        </CarouselItem>
 
-                
-                // </div>
-                <Carousel
-                    opts={{
-                        align: "start",
-                    }}
-                    className="w-full"
-                    >
-                        <CarouselContent>
-                            {   
-                                challengesData.map((challenge, index) => (
-                                    <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                                    ))
+                                }
 
-                                        <Challenge key={index} 
-                                        clickEvent={() => fetchSubmissions(challenge)} 
-                                        challenge={challenge} 
-                                        type="admin"
-                                        />
-                                    </CarouselItem>
-
-                                ))
-                            }
-
-                        </CarouselContent>
-                        <CarouselPrevious />
-                        <CarouselNext />
-                    </Carousel>
+                            </CarouselContent>
+                            <CarouselPrevious />
+                            <CarouselNext />
+                        </Carousel>
+                        <Pagination className='mt-7'>
+                            <PaginationContent>
+                                <PaginationItem>
+                                    <PaginationPrevious href="#" />
+                                </PaginationItem>
+                                <PaginationItem>
+                                    <PaginationLink href="#">1</PaginationLink>
+                                </PaginationItem>
+                                <PaginationItem>
+                                    <PaginationLink href="#" isActive>
+                                        2
+                                    </PaginationLink>
+                                </PaginationItem>
+                                <PaginationItem>
+                                    <PaginationLink href="#">3</PaginationLink>
+                                </PaginationItem>
+                                <PaginationItem>
+                                    <PaginationEllipsis />
+                                </PaginationItem>
+                                <PaginationItem>
+                                    <PaginationNext href="#" />
+                                </PaginationItem>
+                            </PaginationContent>
+                        </Pagination>
+                    </>
+                )
+ 
             }
 
-            <Pagination className='mt-7'>
-                <PaginationContent>
-                    <PaginationItem>
-                        <PaginationPrevious href="#" />
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationLink href="#">1</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationLink href="#" isActive>
-                            2
-                        </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationLink href="#">3</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationEllipsis />
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationNext href="#" />
-                    </PaginationItem>
-                </PaginationContent>
-            </Pagination>
-
+            {
+                !loading && (
+                    (challengesData.length < 1) &&
+                    <div className='flex flex-col items-center gap-3 justify-center'>
+                        <i className="bx bx-data text-[6rem]"></i>
+                        <p className='text-xs text-gray-600'>No Stories told yet...</p>
+                    </div>
+                )
+            }
             
             <div id="submissions-modal" className="sidenav-background">
                 <div className="sidenav bg-gray-200 shadow-xl z-20 p-7">

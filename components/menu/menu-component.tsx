@@ -23,10 +23,15 @@ const MenuComponent = () => {
     const [authUser, setAuthUser] =  useState(null)
     const { userLoggedIn, setUserLoggedIn, user } = useContext(AppContext)
 
+    // let auth = localStorage.getItem("user");
+    // let local_user = JSON.parse(auth)
     useEffect(() => {
         if (userLoggedIn) {
-            let auth = user ?? localStorage.getItem("user");
-            setAuthUser(auth)
+            // let auth = localStorage.getItem("user");
+            // let local_user = JSON.parse(auth)
+            // setAuthUser(local_user)
+            // console.log({authUser});
+            
         }
     }, [userLoggedIn, user])
 
@@ -65,7 +70,7 @@ const MenuComponent = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <DropdownMenuLabel className="text-center">
-                        { (userLoggedIn && user) && `Hi, ${user?.name}`}
+                        { (userLoggedIn) && `Hi, `}
                         { !userLoggedIn && `Menu`}
                     </DropdownMenuLabel>
                     

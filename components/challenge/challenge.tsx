@@ -4,13 +4,29 @@ import CountdownComponent from "@/components/general/countdown-component"
 import { formatDistanceToNow } from 'date-fns';
 import Image from 'next/image';
 import { Button } from '../ui/button';
+import { useEffect, useState } from 'react';
+import {
+    // Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
+import TooltipComponent from '@/components/TooltipComponent';
 
 export default function Challenge({ challenge, clickEvent, type }){
     const router = useRouter();
 
+    const [hasFirst, setHasFirst] = useState(false);
+    const [hasSecond, setHasSecond] = useState(false);
+    const [hasThird, setHasThird] = useState(false);
+
     const moveToChooseChallenge = () => {
         router.push('/start')
     }
+
+    useEffect(() => {
+        checkAwards(challenge.stories)
+    }, [])
 
     const formatDate = (targetDate: string) => {
         let format = formatDistanceToNow(new Date(targetDate), { addSuffix: true })
@@ -29,6 +45,26 @@ export default function Challenge({ challenge, clickEvent, type }){
     
         // Check if the challenge date and time is less than the current date and time
         return challengeDateTime < currentDateTime;
+    }
+
+    const checkAwards = (stories) => {
+        if (!stories.length) {
+            return null;
+        }
+        
+        stories.forEach(story => {
+            console.log({story});
+            
+            if (story.award === 'FIRST') {
+                setHasFirst(true)
+            }
+            if (story.award === 'SECOND') {
+                setHasSecond(true)
+            }
+            if (story.award === 'THIRD') {
+                setHasThird(true)
+            }
+        });
     }
     
     
@@ -50,7 +86,44 @@ export default function Challenge({ challenge, clickEvent, type }){
                     <p className='text-xs  '>
                         <CountdownComponent date={`${challenge.date} ${challenge.time}`} />
                     </p>
-                    <div className="flex justify-end">
+                    <div className="flex justify-between mt-3">
+                        <div className='flex items-center gap-2'>
+                            { hasFirst && 
+
+                            <TooltipComponent>
+                                <TooltipTrigger asChild>
+                                <i className='bx bxs-medal text- text-yellow-600'></i>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>First place awarded</p>
+                                </TooltipContent>
+                            </TooltipComponent>
+
+                            }
+                            { hasSecond && 
+                                <TooltipComponent>
+                                    <TooltipTrigger asChild>
+                                    <i className='bx bxs-medal text- text-gray-600'></i> 
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>Second place awarded</p>
+                                    </TooltipContent>
+                                </TooltipComponent>
+                            }
+
+
+                            { hasThird && 
+                            <TooltipComponent>
+                                <TooltipTrigger asChild>
+                                <i className='bx bxs-medal text- text-orange-600'></i> 
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>Third place awarded</p>
+                                </TooltipContent>
+                            </TooltipComponent>
+                            }
+                            
+                        </div>
                         <p className='flex items-center gap-2'>
                             <i className="bx bx-heart"></i>
                             <span className='text-xs'>{challenge.stories.length ? challenge.stories.length : 0}</span>
