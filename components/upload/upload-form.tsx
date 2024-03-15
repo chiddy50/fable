@@ -66,6 +66,7 @@ const UploadForm = () => {
     const { 
         user, userLoggedIn,
         setChallengeTitle, challengeTitle,
+        setChallengeDescription,
         challengeTime, setChallengeTime, 
         challengeDate, setChallengeDate, 
         challengePrice, setChallengePrice, 
@@ -78,12 +79,14 @@ const UploadForm = () => {
         setChallengeDate(e.target.value)
     }
 
-    const updateTitle = (e: ChangeEvent<HTMLInputElement>) => {
-        console.log(e);
-        
+    const updateTitle = (e: ChangeEvent<HTMLInputElement>) => {        
         setChallengeTitle(e.target.value)
     }
 
+    const updateDescription = (e: ChangeEvent<HTMLTextAreaElement>) => {        
+        setChallengeDescription(e.target.value)
+    }
+    
     const updateTime = (e: ChangeEvent<HTMLInputElement>) => {
         setChallengeTime(e.target.value)
     }
@@ -532,10 +535,10 @@ const UploadForm = () => {
 
             <div className="mb-4">
                 <label htmlFor="date" className='text-sm text-white'>Description</label>
-                <textarea cols={2} rows={2} className='resize-none rounded-xl p-4 mt-1 w-full bg-white text-black  border-none outline-none text-xs'></textarea>
+                <textarea onChange={updateDescription} cols={2} rows={2} className='resize-none rounded-xl p-4 mt-1 w-full bg-white text-black  border-none outline-none text-xs'></textarea>
             </div>
 
-            <div className='mb-4 grid grid-cols-2 gap-5'>
+            <div className='mb-4 grid gap-5 xs:grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2'>
                 <div>
                     <label htmlFor="date" className='text-sm text-white'>Date</label>
                     <Input type="date" onChange={updateDate} className=' rounded-xl mt-1 w-full bg-white text-black border-none outline-none text-xs' />
@@ -546,22 +549,11 @@ const UploadForm = () => {
                 </div>
             </div>
 
-            <div className='mb-4 grid grid-cols-2 gap-5'>
+            <div className='mb-4 grid gap-5 xs:grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2'>
 
                 <div className="">
                     <label htmlFor="currency" className='text-sm text-white'>Currency</label>
                     <div className="mt-1 px-3 py-1 bg-white rounded-lg">
-                        {/* <select name="currency" onChange={updateCurrency} className="w-full text-black text-xs outline-none" id="">
-                            <option disabled defaultValue={currencies[0].symbol}>Currency</option>
-                            { 
-                                currencies.map((currency, key) => (
-                                    <option key={key} value={currency.symbol}>
-                                        {currency.name} - {currency.symbol}
-                                    </option>
-                                ))
-                            }
-                        
-                        </select> */}
 
                         <select name="currency" onChange={updateCurrency} className="w-full text-black text-xs outline-none" id="">
                             <option disabled value="">Currency</option>
@@ -583,7 +575,7 @@ const UploadForm = () => {
                 </div>
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-10">
                 {
                     wallet?.connected && 
                     <Button onClick={submitMetaData} className="bg-blue-600 text-white">
@@ -652,6 +644,7 @@ const UploadForm = () => {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
+
 
             <ChallengePreviewComponentModal />
             {/* <AdminLoginModal /> */}

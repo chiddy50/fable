@@ -12,6 +12,7 @@ export function StoryContext({ children, user }) {
     const [allQuestions, setAllQuestions] = useState([]);
     const [inPreview, setInPreview] = useState(false)
     const [challengeTitle, setChallengeTitle] = useState("")
+    const [challengeDescription, setChallengeDescription] = useState("")
     const [challengeDate, setChallengeDate] = useState("")    
     const [challengeTime, setChallengeTime] = useState("")
     const [challengePrice, setChallengePrice] = useState("")
@@ -61,6 +62,7 @@ export function StoryContext({ children, user }) {
             inPreview, setInPreview,
             challengeDate, setChallengeDate,
             challengeTitle, setChallengeTitle,
+            challengeDescription, setChallengeDescription,
             challengeTime, setChallengeTime,
             challengePrice, setChallengePrice,
             challengeCurrency, setChallengeCurrency,

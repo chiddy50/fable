@@ -22,7 +22,9 @@ const CreateChallengePage = async () => {
 
                 <div className="xs:hidden sm:hidden md:hidden lg:block">                
                     {/* <PreviewComponent /> */}
-                    <ChallengePreviewComponent/>
+                    <div className="flex justify-center" >
+                        <ChallengePreviewComponent/>
+                    </div>
                 </div>
             </div>
         </div>
