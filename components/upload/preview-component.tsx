@@ -69,7 +69,7 @@ const PreviewComponent = () => {
 
     return (
         <>
-            <div className="flex justify-center">
+            <div className="flex justify-center text-white">
                 { !inPreview && 
                     <div className="flex items-center justify-center bg-gray-400 rounded-full" style={{ width: "300px", height: "300px" }}>
                         <p className="text-xs text-white">Preview</p> 
@@ -78,9 +78,7 @@ const PreviewComponent = () => {
 
                 { inPreview && 
                     <div id="preview-box" className="overflow-hidden" style={{ width: "300px", height: "300px" }}>
-                        <img src="/" 
-                        // width="100"   
-                        // height="100"  
+                        <img src="/"  
                         alt="preview" 
                         id="preview" 
                         style={{ border: "5px solid #7c9bff", padding: "4px" }}
@@ -91,14 +89,15 @@ const PreviewComponent = () => {
                 }   
 
             </div>
+            
             <div className="mt-5">
-                <p className="text-xl font-bold text-center">{challengeTitle}</p>
+                <p className="text-xl text-white font-bold text-center">{challengeTitle}</p>
             </div>
-            <div>
+
+            <div className="text-white">
                 {
                     (challengeDate || challengeTime) &&
                     <div className="my-7">
-                        {/* <p className="mb-1 text-sm text-gray-600">This challenge will expire on:</p> */}
                         <h2 className="text-center text-lg p-3  ">
                             {formatDate(challengeDate, challengeTime)}
                         </h2>

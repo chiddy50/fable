@@ -33,9 +33,10 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 import ConfirmModalComponent from "@/components/general/confirm-modal-component";
-import { hideTransferLoader, showTransferLoader } from "@/lib/helper";
+import { hideTransferLoader, openPreviewModal, showTransferLoader } from "@/lib/helper";
 import axiosInterceptorInstance from "@/axiosInterceptorInstance";
 import { getCookie } from 'cookies-next';
+import ChallengePreviewComponentModal from "@/components/modal/challenge-preview-component-modal";
 
 const UploadForm = () => {
     const [openConfirmModal, setOpenConfirmModal] = useState(false);
@@ -529,6 +530,11 @@ const UploadForm = () => {
                 <Input type="text" onChange={updateTitle} className=' rounded-xl mt-1 w-full bg-white text-black  border-none outline-none text-xs' />
             </div>
 
+            <div className="mb-4">
+                <label htmlFor="date" className='text-sm text-white'>Description</label>
+                <textarea cols={2} rows={2} className='resize-none rounded-xl p-4 mt-1 w-full bg-white text-black  border-none outline-none text-xs'></textarea>
+            </div>
+
             <div className='mb-4 grid grid-cols-2 gap-5'>
                 <div>
                     <label htmlFor="date" className='text-sm text-white'>Date</label>
@@ -577,15 +583,21 @@ const UploadForm = () => {
                 </div>
             </div>
 
-            {
-                wallet?.connected && 
-                <Button onClick={submitMetaData} className="bg-black text-white">
-                    { (challengeCurrency && challengePrice) && `${challengeCurrencySymbol} ${challengePrice} - `} Pay & Post
+            <div className="flex items-center justify-between">
+                {
+                    wallet?.connected && 
+                    <Button onClick={submitMetaData} className="bg-blue-600 text-white">
+                        { (challengeCurrency && challengePrice) && `${challengeCurrencySymbol} ${challengePrice} - `} Pay & Post
+                    </Button>
+                }
+
+                { !wallet?.connected && <Button className="bg-blue-600 text-white" onClick={submitMetaData}>Proceed</Button> }
+
+                <Button variant="outline" onClick={openPreviewModal} className="flex items-center bg-red-500 gap-1 text-white ">
+                    <i className='bx bxs-show'></i>
+                    <span className="text-xs">Preview</span>
                 </Button>
-            }
-
-            { !wallet?.connected && <Button onClick={submitMetaData}>Proceed</Button> }
-
+            </div>
             {/* MODALS HERE */}
 
             <ConfirmModalComponent 
@@ -641,7 +653,7 @@ const UploadForm = () => {
                 </AlertDialogContent>
             </AlertDialog>
 
-            
+            <ChallengePreviewComponentModal />
             {/* <AdminLoginModal /> */}
             {/* <AdminRegisterModal /> */}
             {/* <FullPageLoader /> */}

@@ -176,7 +176,7 @@ const AdminChallenges = () => {
                     (challengesData.length < 1) &&
                     <div className='flex flex-col text-white items-center gap-3 justify-center'>
                         <i className="bx bx-data text-[6rem]"></i>
-                        <p className='text-xs '>No Stories told yet...</p>
+                        <p className='text-xs '>No challenge created yet...</p>
                     </div>
                 )
             }

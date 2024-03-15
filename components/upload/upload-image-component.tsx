@@ -111,7 +111,7 @@ const UploadImageComponent = () => {
     
     return (
         <>
-            <div className="bg-white p-3 rounded-2xl w-full border-blue-400 border-dashed border-2">
+            <div className="bg-white p-3 rounded-2xl w-full border-gray-400 border-dashed border-2">
                 <label htmlFor="image">
                     <div className='text-center cursor-pointer text-blue-500'>
 
@@ -124,7 +124,7 @@ const UploadImageComponent = () => {
                         {   
                             !uploading && 
                             <div className=''>
-                                <i className='bx bx-cloud-upload' style={{ fontSize: `${5}rem` }}></i>
+                                <i className='bx bx-cloud-upload text-[4rem]' ></i>
                                 <p className='text-sm mb-3'>Click to upload</p>
                                 <p className='text-xs text-gray-400'>Files supported: JPEG, JPG, PNG</p>
                             </div>
@@ -133,7 +133,7 @@ const UploadImageComponent = () => {
                         {   
                             uploading && 
                             <div className=''>
-                                <i className='bx bx-loader bx-spin bx-rotate-270' style={{ fontSize: `${4}rem` }}></i>
+                                <i className='bx bx-loader bx-spin bx-rotate-270 text-[4rem]'></i>
                                 <p className='text-xs text-gray-600 mb-3'>Uploading...</p>
                             </div>
                         }

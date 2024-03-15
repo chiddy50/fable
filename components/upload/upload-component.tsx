@@ -104,7 +104,7 @@ const UploadComponent = () => {
     
     return (
         <div className="mb-7">
-            <div className='flex justify-center mb-3 bg-white p-5 rounded-2xl'>                
+            <div className='flex justify-center mb-3 bg-white p-3 rounded-2xl'>                
                 { (!uploaded) && <UploadBoxComponent />}
                 { (uploaded) && <SuccessfullyUploadComponent />}
             </div>

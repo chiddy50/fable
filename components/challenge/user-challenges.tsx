@@ -124,26 +124,19 @@ const UserChallenges = () => {
             </div>
             }
 
-            
+            {
+                !loading && (
+                    (challengesData.length < 1) &&
+                    <div className='flex flex-col text-white items-center gap-3 justify-center'>
+                        <i className="bx bx-data text-[6rem]"></i>
+                        <p className='text-xs '>No challenge created yet...</p>
+                    </div>
+                )
+            }
 
             {
                 !loading && 
                 <>
-                    {/* <div className='grid  gap-5 mb-10 xs:grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-
-                        {
-                            challengesData.map((challenge, index) => (
-
-                                <Challenge key={index} 
-                                clickEvent={() => promptStartChallenge(challenge)} 
-                                challenge={challenge} 
-                                type="user"                                
-                                />
-                            ))
-                        }
-
-                    
-                    </div> */}
                     <Carousel
                     opts={{
                         align: "start",

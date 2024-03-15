@@ -40,3 +40,7 @@ export const formatDate = (targetDate: string) => {
     let format = formatDistanceToNow(new Date(targetDate), { addSuffix: true })
     return format ?? '';        
 }
+
+export const openPreviewModal = ()  => {
+    document.getElementById('challenge-preview-component-modal').style.display = 'block'
+}
