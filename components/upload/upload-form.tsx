@@ -585,7 +585,7 @@ const UploadForm = () => {
 
                 { !wallet?.connected && <Button className="bg-blue-600 text-white" onClick={submitMetaData}>Proceed</Button> }
 
-                <Button variant="outline" onClick={openPreviewModal} className="flex items-center bg-red-500 gap-1 text-white ">
+                <Button onClick={openPreviewModal} className="flex items-center bg-red-500 gap-1 text-white ">
                     <i className='bx bxs-show'></i>
                     <span className="text-xs">Preview</span>
                 </Button>
