@@ -27,7 +27,7 @@ const MenuComponent = () => {
     const [authUser, setAuthUser] =  useState(null)
     const { userLoggedIn, setUserLoggedIn } = useContext(AppContext)
 
-    const { updateUserWithModal,  } = useUserUpdateRequest();
+    const { updateUserWithModal } = useUserUpdateRequest();
     const dynamicJwtToken = getAuthToken();
     
     // let auth = localStorage.getItem("user");
