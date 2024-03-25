@@ -1,6 +1,6 @@
 import { Keypair, publicKey } from "@metaplex-foundation/umi";
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
-import { Connection } from "@solana/web3.js";
+import { Connection, PublicKey } from "@solana/web3.js";
 import axios from "axios";
 
 const currencies = [
@@ -124,7 +124,8 @@ const createUnderdogNft = async (data, projectId, pubKey) => {
                 namespace: "superteam",
                 identifier: data.email
             },
-            receiverAddress: publicKey(pubKey.toBase58()),
+            // receiverAddress: pubKey, // publicKey(pubKey.toBase58()),
+            receiverAddress: new PublicKey(pubKey).toBase58(),
             delegated: true,
             upsert: true
         };

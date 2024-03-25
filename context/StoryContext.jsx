@@ -17,8 +17,9 @@ export function StoryContext({ children, user }) {
     const [challengeTime, setChallengeTime] = useState("")
     const [challengePrice, setChallengePrice] = useState("")
     const [challengeCurrency, setChallengeCurrency] = useState("")
-    const [challengeCurrencySymbol, setChallengeCurrencySymbol] = useState("")
+    const [challengeCurrencySymbol, setChallengeCurrencySymbol] = useState("$")
     const [challengeImage, setChallengeImage] = useState(null)
+    const [imagePlaceholder, setImagePlaceholder] = useState(null)
     const [loading, setLoading] = useState(false)
     const [uploading, setUploading] = useState(false)
     const [uploaded, setUploaded] = useState(false)
@@ -29,7 +30,7 @@ export function StoryContext({ children, user }) {
     const [authUserData, setAuthUserData] = useState(user)
     const [selectedChallenge, setSelectedChallenge] = useState(null)
     
-    console.log({user});
+    // console.log({user});
     // const handleFileChange = (event) => {
     //     const file = event.target.files[0];
     //     if (file) {
@@ -71,6 +72,7 @@ export function StoryContext({ children, user }) {
             uploading, setUploading,
             uploaded, setUploaded,
             uploadedImage, setUploadedImage,
+            imagePlaceholder, setImagePlaceholder,
             loginRedirectPage, setLoginRedirectPage,
             challengeCurrencySymbol, setChallengeCurrencySymbol,
             story, setStory,

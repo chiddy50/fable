@@ -27,6 +27,8 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination"
+import { Button } from '../ui/button';
+import PaginationComponent from '../general/pagination-component';
   
 
 const UserChallenges = () => {
@@ -34,6 +36,12 @@ const UserChallenges = () => {
 
     const [challengesData, setChallengesData] = useState([])
     const [loading, setLoading] = useState(false)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [limit, setLimit] = useState(6)
+    const [hasNextPage, setHasNextPage] = useState(false)
+    const [hasPrevPage, setHasPrevPage] = useState(false)
+    const [totalPages, setTotalPages] = useState(false)
+
     const [selectedChallenge, setSelectedChallenge] = useState(false)
     const { setUserLoggedIn } = useContext(AppContext)
     
@@ -77,14 +85,30 @@ const UserChallenges = () => {
         fetchChallenges()
     }, [])
 
-    const fetchChallenges = async () => {        
+    const filterChallenges = (page: number) => {
+        let set_next_page = currentPage + page
+        setCurrentPage(set_next_page)
+                   
+        fetchChallenges(set_next_page)
+    }
+
+    const fetchChallenges = async (page = 1) => {        
         try {   
-            setLoading(true)      
-                        
-            let response = await axiosInterceptorInstance.get(`challenges/all`)
-            console.log(response);
+            setLoading(true)     
             
-            setChallengesData(response?.data?.challenges.slice(0, 6));
+            let response = await axiosInterceptorInstance.get(`challenges/all`, {
+                params: {
+                    page: page,
+                    limit: limit
+                }
+            })
+            console.log(response);
+
+            setChallengesData(response?.data?.challenges);
+            setHasNextPage(response?.data?.hasNextPage)
+            setHasPrevPage(response?.data?.hasPrevPage)
+            setTotalPages(response?.data?.totalPages)            
+            
         } catch (error) {
             console.log(error);            
             let message = error?.response?.data?.message
@@ -112,11 +136,7 @@ const UserChallenges = () => {
                 {
                     buttonLabels.map((label, index) => (
                         <div key={index} className="flex flex-col space-y-3">
-                            <Skeleton className="h-[300px] w-[full] rounded-xl" />
-                            <div className="space-y-2">
-                                <Skeleton className="h-4 w-[250px]" />
-                                <Skeleton className="h-4 w-[200px]" />
-                            </div>
+                            <Skeleton className="h-[420px] w-[full] rounded-xl" />                            
                         </div>
                     ))
                 }
@@ -135,47 +155,48 @@ const UserChallenges = () => {
             }
 
             {
-                !loading && 
-                <>
-                    <Carousel
-                    opts={{
-                        align: "start",
-                    }}
-                    className="w-full"
-                    >
-                        <CarouselContent>
-                            {   
-                                challengesData.map((challenge, index) => (
-                                    <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                !loading && (
+                    (challengesData.length > 0) &&
+                    <>
+                        <Carousel
+                        opts={{
+                            align: "start",
+                        }}
+                        className="w-full"
+                        >
+                            <CarouselContent>
+                                {   
+                                    challengesData.map((challenge, index) => (
+                                        <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
 
-                                    <Challenge 
-                                    clickEvent={() => promptStartChallenge(challenge)} 
-                                    challenge={challenge} 
-                                    type="user"                                
-                                    />
-                                    </CarouselItem>
+                                        <Challenge 
+                                        clickEvent={() => promptStartChallenge(challenge)} 
+                                        challenge={challenge} 
+                                        type="user"                                
+                                        />
+                                        </CarouselItem>
 
-                                ))
-                            }
+                                    ))
+                                }
 
-                        </CarouselContent>
-                        <CarouselPrevious />
-                        <CarouselNext />
-                    </Carousel>
-                    <div className='mt-5'>
-                        <Pagination>
-                            <PaginationContent>
-                                <PaginationItem className='bg-white rounded-md'>
-                                    <PaginationPrevious href="#" />
-                                </PaginationItem>
-                                                              
-                                <PaginationItem className='bg-white rounded-md'>
-                                    <PaginationNext href="#" />
-                                </PaginationItem>
-                            </PaginationContent>
-                        </Pagination>
-                    </div>
-                </>
+                            </CarouselContent>
+                            <CarouselPrevious />
+                            <CarouselNext />
+                        </Carousel>
+
+                        <PaginationComponent 
+                            hasPrevPage={hasPrevPage} 
+                            hasNextPage={hasNextPage} 
+                            triggerPagination={filterChallenges} 
+                            currentPage={currentPage} 
+                            totalPages={totalPages}
+                            textColor="text-black"
+                            bgColor="bg-white"
+                            descColor="text-white"
+                        />
+        
+                    </>
+                )
             }
 
             <ConfirmStartChallenge challenge={selectedChallenge}/>

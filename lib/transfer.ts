@@ -38,3 +38,47 @@ export const transfer = async (wallet: WalletContextState, amount: any)  => {
     
     await CONNECTION.confirmTransaction(signature, 'finalized');
 }
+
+export const transfer2 = async (wallet, amount: any)  => {
+    // if (!wallet || !wallet.connected || !wallet.publicKey) {
+    //     throw new Error("Wallet not found...");
+    // }
+
+    const public_account = process.env.NEXT_PUBLIC_ACCOUNT_ADDRESS;
+    if (!public_account) {
+        throw new Error("Could not identify the receiver account");
+    }
+
+    
+    const transaction = new Transaction().add(
+        SystemProgram.transfer({
+            fromPubkey: wallet.address,
+            toPubkey: new PublicKey(public_account),
+            lamports: Math.round(amount * LAMPORTS_PER_SOL)
+        })
+    );
+
+    let connection = await wallet?.connector.getWalletClient()
+
+    transaction.feePayer = wallet.address;
+    
+    const { blockhash } = await connection.getRecentBlockhash();
+    transaction.recentBlockhash = blockhash;
+    // return {signTransaction:  wallet.signTransaction, blockhash, transaction, connection}
+    
+    let tran = await connection.sendTransaction(transaction)
+    console.log(tran);
+    
+    
+    // if (!wallet.signTransaction) {
+    //     throw new Error("Wallet does not support signing transactions");
+    // }
+    
+    // const signedTransaction = await wallet.signTransaction(transaction);
+    // console.log({signedTransaction});
+
+    // const signature = await CONNECTION.sendRawTransaction(signedTransaction.serialize());
+    // console.log({signature});
+    
+    // await CONNECTION.confirmTransaction(signature, 'finalized');
+}

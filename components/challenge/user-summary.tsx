@@ -21,33 +21,34 @@ import axios from "axios";
 import AddAddressModal from "@/components/general/add-address-modal";
 import axiosInterceptorInstance from "@/axiosInterceptorInstance";
 import { getCookie } from 'cookies-next';
+import { getAuthToken } from '@dynamic-labs/sdk-react-core';
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
 
 
 const UserSummary = () => {
     const { push } = useRouter()
-    const { story, userLoggedIn, user, selectedChallenge } = useContext(AppContext)
+    const { story, userLoggedIn, selectedChallenge } = useContext(AppContext)
+    const { user, setShowAuthFlow } = useDynamicContext()
 
     const [openConfirmModal, setOpenConfirmModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [userAddress, setUserAddress] = useState(null);
     const [error, setError] = useState("");
     let token = getCookie('token');
+    const dynamicJwtToken = getAuthToken();
 
     console.log({story});
     
     const submitStoryData = async () => {
         // console.log(user);
         
-        if (!userLoggedIn) {
-            bringUpAdminLoginModal()
+        if (!user) {
+            setShowAuthFlow(true)
             return           
         }
-
-        const local_user = JSON.parse(localStorage.getItem('user'));
-
-        if (!local_user.publicKey) {            
-            setOpenConfirmModal(true);
-        }     
+         
+        // setOpenConfirmModal(true);
+        // return
         
         await continueStorySubmission()
     }
@@ -77,7 +78,7 @@ const UserSummary = () => {
         try {
             let res = await axiosInterceptorInstance.post("/stories/create", payload, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${dynamicJwtToken}`
                 }
             })
             console.log(res);
@@ -95,12 +96,12 @@ const UserSummary = () => {
     
     return (
         <div className="layout-width">
-            <div className="mt-[7rem]">
+            <div className="mt-[7rem] mb-10 flex items-center gap-10">
                 <i onClick={() => push(`/user/start/${selectedChallenge.id}`)} className='bx bx-arrow-back text-4xl cursor-pointer text-white '></i>
+                <h1 className="text-center text-4xl text-white font-bold ">
+                    Summary
+                </h1>
             </div>
-            <h1 className="text-center text-4xl text-white font-bold mb-10">
-                Summary
-            </h1>
 
             <div className="mb-4">
 
@@ -110,7 +111,7 @@ const UserSummary = () => {
                         <Accordion type="single" collapsible className="w-full mb-10 relative" key={index}>
                                     
                             <AccordionItem value={`item-${1}`} 
-                            className="bg-gray-200 py-1 px-5 mt-2 rounded-xl"
+                            className="bg-gray-200 pt-1 pb-5 px-5 mt-2 rounded-xl"
                             >
                                 <AccordionTrigger className='pb-2'>
                                     <span className="font-semibold text-lg">{questionGroup.title}</span>
@@ -121,7 +122,7 @@ const UserSummary = () => {
                                     ))}
                                 </div>
                                 
-                                <AccordionContent className="text-xs mt-7">
+                                <AccordionContent className="py-4 px-5 text-xs mt-7 bg-white rounded-xl">
                                     <p className="font-bold mb-2 text-md">Answer</p>
                                     {questionGroup.answer}
                                 </AccordionContent>
@@ -134,7 +135,7 @@ const UserSummary = () => {
             </div>
 
             <div className="pb-10" onClick={submitStoryData}>
-                <Button>Proceed</Button>
+                <Button variant="secondary">Proceed</Button>
             </div>
 
             <ScrollToTopBottom />

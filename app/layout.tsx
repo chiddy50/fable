@@ -13,11 +13,12 @@ import { Toaster } from "@/components/ui/toaster"
 import AdminRegisterModal from "@/components/auth/admin-register-modal";
 import AdminLoginModal from "@/components/auth/admin-login-modal";
 import FullPageLoader from "@/components/general/full-page-loader";
-import UserRegisterModal from "@/components/auth/user-register.modal";
-import UserLoginModal from "@/components/auth/user-login-modal"
+import NavbarComponent from "@/components/general/navbar-component";
 
 import { cn } from "@/lib/utils"
-import NavbarComponent from "@/components/general/navbar-component";
+import { DynamicContextProvider, DynamicWidget } from '@dynamic-labs/sdk-react-core';
+import { SolanaWalletConnectors } from "@dynamic-labs/solana";
+import CustomContext from "@/context/CustomContext";
 
 const poppins = Poppins({ 
   subsets: ["latin"], 
@@ -37,41 +38,50 @@ export default function RootLayout({
  
 
   return (
-
+    
 
     <html lang="en" className=" h-svh">
       <head>
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet' />
       </head>
       <body className={cn(
-        "bg-[#2f3d47] h-screen font-mono",
+        "bg-[#151515] h-screen font-mono",
         // poppins.className
         )}>
-      <WalletContextProvider>
-          <StoryContext user={null}>
-            {/* #7c2bff */}
-            {/* #b688ff */}
+          {/* 2f3d47 */}
+          {/* 553c9a */}
+        <CustomContext>
 
-            
+          <NavbarComponent />
 
-            <NavbarComponent />
-            {/* <div className="w-full" >
-            </div> */}
-            <div className="main_content bg-[#2f3d47]">
-              {children}
-            </div>
+              <div className="main_content bg-[#151515]">
+                {children}
+              </div>
 
+          <AdminRegisterModal />
+          <AdminLoginModal />
 
+        </CustomContext>
 
+        {/* <DynamicContextProvider 
+          settings={{ 
+            environmentId: process.env.NEXT_PUBLIC_DYNAMIC_ENVIRONMENT_ID ?? "",
+            walletConnectors: [ SolanaWalletConnectors ],
+          }}
+        > 
+          <WalletContextProvider>
+            <StoryContext user={null}>
+              <NavbarComponent />
+              <div className="main_content bg-[#2f3d47]">
+                {children}
+              </div>
 
-            <AdminRegisterModal />
-            <AdminLoginModal />
-            
-            <UserRegisterModal />
-            <UserLoginModal />
-
-          </StoryContext>  
-        </WalletContextProvider>
+              <AdminRegisterModal />
+              <AdminLoginModal />
+              
+            </StoryContext>  
+          </WalletContextProvider>
+        </DynamicContextProvider> */}
 
         <Toaster />
         <FullPageLoader />

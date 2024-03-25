@@ -28,6 +28,7 @@ import { openAwardModal } from "@/lib/helper";
 import AwardModal from "@/components/challenge/award-modal";
 import axiosInterceptorInstance from '@/axiosInterceptorInstance';
 import { getCookie } from 'cookies-next';
+import { getAuthToken } from '@dynamic-labs/sdk-react-core';
 
 const SubmissionSummary  = () => {
     const [loading, setLoading] = useState(false)
@@ -40,6 +41,7 @@ const SubmissionSummary  = () => {
     const params = useParams<{ id: string }>()    
     const { questions, setStory, story, selectedChallenge, setSelectedChallenge } = useContext(AppContext)
     let token = getCookie('token');
+    const dynamicJwtToken = getAuthToken();
 
     useEffect(() => {
         fetchSubmission();
@@ -56,7 +58,7 @@ const SubmissionSummary  = () => {
             setLoading(true)         
             let response = await axiosInterceptorInstance.get(`/stories/id/${params.id}`, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${dynamicJwtToken}`
                 }
             })
             console.log(response);
@@ -132,20 +134,22 @@ const SubmissionSummary  = () => {
                                 <Accordion type="single" collapsible className="w-full mb-10 relative" key={index}>
                                     
                                     <AccordionItem value={`item-${1}`} 
-                                    className="bg-gray-200 py-1 px-5 mt-2 rounded-xl"
+                                    className="bg-gray-800 text-gray-200 py-1 px-5 mt-2 rounded-xl"
                                     >
                                         <AccordionTrigger className='pb-2'>
                                             <span className="font-semibold text-lg">{questionGroup.title}</span>
                                         </AccordionTrigger>
                                         <div  className='mb-2'>
                                             {questionGroup.questions.map((question: any, questionIndex: number) => (
-                                                <p className=" text-[10px]"> - {question.name}</p>
+                                                <p key={questionIndex} className=" text-[10px]"> - {question.name}</p>
                                             ))}
                                         </div>
                                         
                                         <AccordionContent className="text-xs mt-7">
                                             <p className="font-bold mb-2 text-md">Answer</p>
-                                            {questionGroup.answer}
+                                            <p className='bg-[#3F4447] p-4 rounded-xl'>                                            
+                                                {questionGroup.answer}
+                                            </p>
                                         </AccordionContent>
                                     </AccordionItem>
                                     

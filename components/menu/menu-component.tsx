@@ -16,13 +16,20 @@ import { useContext, useEffect, useState } from "react";
 import { AppContext } from "@/context/StoryContext";
 import axios from "axios";
 import { deleteCookie } from 'cookies-next';
+import { useDynamicContext, useUserUpdateRequest, getAuthToken, useWalletConnectorEvent } from "@dynamic-labs/sdk-react-core"
+import axiosInterceptorInstance from "@/axiosInterceptorInstance";
+import { transfer, transfer2 } from "@/lib/transfer";
 
 const MenuComponent = () => {
     const { refresh, push } = useRouter()
+    const { user, primaryWallet, setShowAuthFlow, handleLogOut } = useDynamicContext()
 
     const [authUser, setAuthUser] =  useState(null)
-    const { userLoggedIn, setUserLoggedIn, user } = useContext(AppContext)
+    const { userLoggedIn, setUserLoggedIn } = useContext(AppContext)
 
+    const { updateUserWithModal,  } = useUserUpdateRequest();
+    const dynamicJwtToken = getAuthToken();
+    
     // let auth = localStorage.getItem("user");
     // let local_user = JSON.parse(auth)
     useEffect(() => {
@@ -58,47 +65,90 @@ const MenuComponent = () => {
         // refresh()
         // push("/")       
     }
+
+    useWalletConnectorEvent(
+        primaryWallet?.connector,
+        'accountChange',
+        ({ accounts }, connector) => {
+          console.group('accountChange');
+          console.log('accounts', accounts);
+          console.log('connector that emitted', connector);
+          console.groupEnd();
+        },
+    );
+
+    const sendTokenToServer = async () => {
+
+        try {
+
+            const res = await axiosInterceptorInstance.post("/token", {token: dynamicJwtToken}, {
+                headers: {
+                    Authorization: `Bearer ${dynamicJwtToken}`
+                }
+            })
+            console.log(res);
+        } catch (error) {
+            console.log(error);
+            
+        }
+        
+    };
+
+    const handleUpdateUserProfile = async () => {
+        
+        let updatedFields = await updateUserWithModal(["email", "username"])
+        try {
+            console.log('Updated fields:', updatedFields);
+            let { email, username } = updatedFields;
+            let current_email = user?.email
+            let lastVerifiedCredentialId = user?.lastVerifiedCredentialId
+            let userId = user?.userId
+
+        } catch (error) {
+            console.error('Update failed:', error);            
+        }
+         
+    };
     
     return (
         <div className="">
-        {/* <div className="absolute top-2 right-4"> */}
             <DropdownMenu>
                 <DropdownMenuTrigger className="px-4 py-1 text-white outline-none rounded-lg text-sm">
-                    <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center">
+                    <div className="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center">
                         <i className='bx bx-menu-alt-right text-2xl '></i>
                     </div>
                 </DropdownMenuTrigger>
+
                 <DropdownMenuContent>
                     <DropdownMenuLabel className="text-center">
-                        { (userLoggedIn) && `Hi, `}
-                        { !userLoggedIn && `Menu`}
+                        { (user) && `${user.username}`}
+                        { !user && `Menu`}
                     </DropdownMenuLabel>
                     
                     <DropdownMenuSeparator />
 
                     <DropdownMenuItem>
-                        <Button onClick={() => push('/')} className="w-full h-full text-xs">Home</Button>
+                        <Button 
+                        onClick={() => push('/')}
+                        className="w-full h-full text-xs">Home</Button>
                     </DropdownMenuItem>
 
-                    { userLoggedIn && 
+                    { user && 
                         <>
-                            {/* <DropdownMenuItem >                            
-                                <Button className="w-full h-full text-xs">Profile</Button>                        
-                            </DropdownMenuItem> */}
                             <DropdownMenuItem>
-                                <Button onClick={logout} type="submit" className="w-full h-full text-xs">Logout</Button>
+                                <Button onClick={handleUpdateUserProfile} className="w-full h-full text-xs">Profile</Button>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                                <Button onClick={() => handleLogOut()} type="submit" className="w-full h-full text-xs">Logout</Button>
                             </DropdownMenuItem>
                         </>
                     }
                         
 
-                    { !userLoggedIn && 
+                    { !user && 
                         <>
                             <DropdownMenuItem>
-                                <Button onClick={() => bringUpAdminRegisterModal() } className="w-full h-full text-xs">Register</Button>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                                <Button onClick={() => bringUpAdminLoginModal() } className="w-full h-full text-xs">Login</Button>
+                                <Button onClick={() => setShowAuthFlow(true) } className="w-full h-full text-xs">Login/Register</Button>
                             </DropdownMenuItem>
                         </>
                     }

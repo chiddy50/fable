@@ -10,3 +10,12 @@ type ChallengePayload = {
     projectId?: string
 }
 
+interface FeeCalculationResult {
+    percentage: number;
+    tenPercentFee: number;
+    tenPercentFeeInSol: number;
+    totalChargeInSol: number;
+    totalChargePlusFeeInSol: number;
+    totalCharge: number;
+    totalChargePlusFee: number;
+}

@@ -3,24 +3,17 @@
 import { useRouter } from 'next/navigation';
 import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
+import { getCookie } from 'cookies-next'; 
+
+import { AppContext } from '@/context/StoryContext';
 
 import Challenge from '@/components/challenge/challenge'
 import ConfirmStartChallenge from '@/components/challenge/confirm-start';
-import { AppContext } from '@/context/StoryContext';
-
 import { Skeleton } from "@/components/ui/skeleton"
+import PaginationComponent from '@/components/general/pagination-component';
 import ChallengeSubmission from './challenge-submission';
-import { getCookie } from 'cookies-next'; 
 import axiosInterceptorInstance from '@/axiosInterceptorInstance';
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination"
+
 import {
     Carousel,
     CarouselContent,
@@ -28,6 +21,7 @@ import {
     CarouselNext,
     CarouselPrevious,
   } from "@/components/ui/carousel"
+  import { getAuthToken } from '@dynamic-labs/sdk-react-core';
 
 const AdminChallenges = () => {
     const { push } = useRouter()
@@ -35,8 +29,17 @@ const AdminChallenges = () => {
     const [loading, setLoading] = useState(false)
     const [loadingSubmission, setLoadingSubmission] = useState(false)
     const [submissions, setSubmissions] = useState([])
+
+    // PAGINATION STATES
+    const [currentPage, setCurrentPage] = useState(1)
+    const [limit, setLimit] = useState(6)
+    const [hasNextPage, setHasNextPage] = useState(false)
+    const [hasPrevPage, setHasPrevPage] = useState(false)
+    const [totalPages, setTotalPages] = useState(false)
+
     const { user } = useContext(AppContext)
     let token = getCookie('token');
+    const dynamicJwtToken = getAuthToken();
 
     const clickEvent = () => {
         let sideNav = document.getElementById("submissions-modal")
@@ -45,6 +48,11 @@ const AdminChallenges = () => {
             sideNav.style.display = "block";
         }        
     }
+
+    useEffect(() => {
+        fetchChallenges()
+    }, [dynamicJwtToken])
+
     const fetchSubmissions = async (challenge: object) => {
         clickEvent()
         console.log(challenge);
@@ -52,7 +60,7 @@ const AdminChallenges = () => {
             setLoadingSubmission(true)
             let res = await axiosInterceptorInstance.get(`/stories/all?challengeId=${challenge.id}`, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${dynamicJwtToken}`
                 }
             })
             setSubmissions(res?.data?.stories)
@@ -73,25 +81,33 @@ const AdminChallenges = () => {
         }        
     }
 
-    useEffect(() => {
+    const filterChallenges = (page: number) => {
+        let set_next_page = currentPage + page
+        setCurrentPage(set_next_page)
+                   
+        fetchChallenges(set_next_page)
+    }
 
-        fetchChallenges();
-    }, [])
-
-    const fetchChallenges = async () => {
-        const local_user = localStorage.getItem('user');
-        let auth_user = local_user ? JSON.parse(local_user) : user;
-
+    const fetchChallenges = async (page = 1) => {
+        
         try {   
             setLoading(true)                     
 
             let response = await axiosInterceptorInstance.get(`/challenges`, {
+                params: {
+                    page: page,
+                    limit: limit
+                },
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${dynamicJwtToken}`
                 }
             });
             console.log(response);
             setChallengesData(response?.data?.challenges);
+            setHasNextPage(response?.data?.hasNextPage)
+            setHasPrevPage(response?.data?.hasPrevPage)
+            setTotalPages(response?.data?.totalPages)  
+
         } catch (error) {
             console.log(error);            
         }finally{
@@ -104,7 +120,7 @@ const AdminChallenges = () => {
         hideModal()
     }
 
-    const loaderCount = [1,2,3,4];
+    const loaderCount = [1,2,3];
 
     return (
         <>
@@ -114,11 +130,7 @@ const AdminChallenges = () => {
                 {
                     loaderCount.map((label, index) => (
                         <div key={index} className="flex flex-col space-y-3">
-                            <Skeleton className="h-[300px] w-[full] rounded-xl" />
-                            <div className="space-y-2">
-                                <Skeleton className="h-4 w-[250px]" />
-                                <Skeleton className="h-4 w-[200px]" />
-                            </div>
+                            <Skeleton className="h-[420px] w-[full] rounded-xl" />
                         </div>
                     ))
                 }
@@ -155,17 +167,18 @@ const AdminChallenges = () => {
                             <CarouselPrevious />
                             <CarouselNext />
                         </Carousel>
-                        <Pagination className='mt-7'>
-                            <PaginationContent>
-                                <PaginationItem className='bg-white rounded-md'>
-                                    <PaginationPrevious href="#" />
-                                </PaginationItem>
-                               
-                                <PaginationItem className='bg-white rounded-md'>
-                                    <PaginationNext href="#" />
-                                </PaginationItem>
-                            </PaginationContent>
-                        </Pagination>
+                        
+                        <PaginationComponent 
+                            hasPrevPage={hasPrevPage} 
+                            hasNextPage={hasNextPage} 
+                            triggerPagination={filterChallenges} 
+                            currentPage={currentPage} 
+                            totalPages={totalPages}
+                            textColor="text-black"
+                            bgColor="bg-white"
+                            descColor="text-white"
+                        />
+        
                     </>
                 )
  
@@ -182,7 +195,7 @@ const AdminChallenges = () => {
             }
             
             <div id="submissions-modal" className="sidenav-background">
-                <div className="sidenav bg-gray-200 shadow-xl z-20 p-7 xs:w-[100%] sm:w-[95%] md:w-[70%] lg:w-[40%]">
+                <div className="sidenav bg-[#151515] text-gray-200 shadow-xl z-20 p-7 xs:w-[100%] sm:w-[95%] md:w-[70%] lg:w-[40%]">
                     <div onClick={hideModal} className="flex items-center gap-2 cursor-pointer">
                         <i className='bx bx-arrow-back text-2xl' ></i>
                         <p className='text-xs'>Back to your challenges</p>

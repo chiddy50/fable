@@ -16,7 +16,7 @@ const GeneralMenuComponent = ({ label, options }) => {
 
     return (
         <DropdownMenu>
-                <DropdownMenuTrigger className="px-4 py-2 bg-gray-800 text-white outline-none rounded-lg text-sm tracking-wider">{label}</DropdownMenuTrigger>
+                <DropdownMenuTrigger className="px-4 py-2 bg-white text-black outline-none rounded-lg text-sm tracking-wider">{label}</DropdownMenuTrigger>
                 <DropdownMenuContent>
 
                     {

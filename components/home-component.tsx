@@ -26,14 +26,15 @@ export default function HomeComponent() {
     }
 
     return (
-        <div className="space-y-6 text-center">
-            <h1 className={cn(
+        <div className="space-y-6 text-center flex flex-col items-center justify-center">
+            {/* <h1 className={cn(
                 "welcome__txt text-white xs:text-[7rem] sm:text-[7rem] md:text-[8rem]",
                 bangers.className
             )}>
             FABLE
-            </h1>
-            <p className="text-white font-bold xs:text-sm sm:text-sm md:text-lg">
+            </h1> */}
+            <img src="/images/fable_transp.svg" alt="logo" className="xs:w-[60%] sm:w-[75%] md:w-[90%]" />
+            <p style={{ margin: "0 0 2rem" }} className="text-white tracking-wider mt-0 font-bold xs:text-sm sm:text-sm md:text-md">
                 {/* It&apos;s all about evoking the art of storytelling and the power of imagination */}
                 Empowering Storytellers with cNFT's
             </p>
@@ -48,13 +49,13 @@ export default function HomeComponent() {
 
             
 
-            <div className="flex mt-7 flex-col items-center justify-center">
+            <div className="flex mt-7 w-full flex-col items-center justify-center">
 
                 
-                <div className='text-center mb-5'>
+                {/* <div className='text-center mb-5'>
                     <p className='text-sm text-white'>Select how you want to participate</p>
-                </div>
-                <div  className="flex flex-col w-full gap-2">   
+                </div> */}
+                <div  className="flex flex-col w-full gap-2 px-5">   
                     <Button className="bg-white text-black hover:text-white" onClick={navigateToChooseChallengePage}>Tell a story</Button>           
                     <Button className="bg-white text-black hover:text-white" onClick={navigateToCreateChallengePage}>Add a Challenge</Button>           
                     {/* <div onClick={navigateToChooseChallengePage} className="mb-3 cursor-pointer group mt-20 sm:mt-0 rounded-full flex space-x-1 bg-white shadow-sm ring-1 ring-gray-900/5 text-black text-sm font-medium px-10 py-2 hover:shadow-lg active:shadow-sm transition-all">

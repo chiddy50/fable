@@ -38,6 +38,8 @@ import axiosInterceptorInstance from "@/axiosInterceptorInstance";
 import { getCookie } from 'cookies-next';
 import ChallengePreviewComponentModal from "@/components/modal/challenge-preview-component-modal";
 
+import { DynamicContextProvider, DynamicWidget, useDynamicContext, useUserUpdateRequest, getAuthToken } from '@dynamic-labs/sdk-react-core';
+
 const UploadForm = () => {
     const [openConfirmModal, setOpenConfirmModal] = useState(false);
     const [openConfirmMintModal, setOpenConfirmMintModal] = useState(false);
@@ -55,6 +57,10 @@ const UploadForm = () => {
     const [totalCharge, setTotalCharge] = useState<null|number>(null);
     const [totalChargeSol, setTotalChargeSol] = useState<null|number>(null);
 
+    const { user, primaryWallet, setShowAuthFlow } = useDynamicContext()
+
+    console.log({user, primaryWallet});
+    // console.log({useDynamicContext: useDynamicContext()});
     
     const { toast } = useToast()
     const wallet = useWallet();    
@@ -62,11 +68,14 @@ const UploadForm = () => {
 
     const { setVisible } = useWalletModal();
     let token = getCookie('token');
+    const dynamicJwtToken = getAuthToken();
 
+    const { updateUserWithModal } = useUserUpdateRequest();
+    
     const { 
-        user, userLoggedIn,
+        userLoggedIn,
         setChallengeTitle, challengeTitle,
-        setChallengeDescription,
+        setChallengeDescription, challengeDescription,
         challengeTime, setChallengeTime, 
         challengeDate, setChallengeDate, 
         challengePrice, setChallengePrice, 
@@ -136,20 +145,19 @@ const UploadForm = () => {
 
         const validate = validateMetaData();
         if (!validate) {
-           return; 
+        //    return; 
         }                
-
-        console.log("submitting data, auth user: ",{user});
         
-        if (!userLoggedIn) {
-            bringUpAdminLoginModal()
+        if (!user) {
+            // bringUpAdminLoginModal()
+            setShowAuthFlow(true)
             return           
         }
 
-        if (!wallet.connected) {            
-            setOpenPromptConnectWallet(true)        
-            return
-        }
+        // if (!wallet.connected) {            
+        //     setOpenPromptConnectWallet(true)        
+        //     return
+        // }
 
         setOpenConfirmModal(true);
     }
@@ -167,7 +175,7 @@ const UploadForm = () => {
         try {
             let res = await axiosInterceptorInstance.post("/transaction/create", payload, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${dynamicJwtToken}`
                 }
             })
 
@@ -201,25 +209,25 @@ const UploadForm = () => {
             // const transaction = await createTransaction(auth_user.id)
 
             // CREATE PROJECT
-            const underdogProject = await createUnderdogProject({
-                name: challengeTitle,
-                image: uploadedImage,
-                symbol: "FB",
-            });
+            // const underdogProject = await createUnderdogProject({
+            //     name: challengeTitle,
+            //     image: uploadedImage,
+            //     symbol: "FB",
+            // });
 
-            // let projectId = "19";
-            let projectId = underdogProject?.data?.projectId.toString();
+            let projectId = "1";
+            // let projectId = underdogProject?.data?.projectId.toString();
             if (!projectId) {
                 toast({
                     title: "Could not create project",
                     description: "Could not create project",
                 })
                 return
-            }
-
-
+            }    
+            
             const payload = {
                 title: challengeTitle,
+                description: challengeDescription,
                 image: uploadedImage,
                 date: `${challengeDate}`,
                 time: `${challengeTime}`,
@@ -227,43 +235,52 @@ const UploadForm = () => {
                 symbol: challengeCurrencySymbol,
                 price: challengePrice,
                 projectId: projectId,
-                projectTransactionId: underdogProject?.data.transactionId,
-                projectMintAddress: underdogProject?.data.mintAddress,
-                nftId: "",
-                nftTransactionId: ""
+                type: "challenge",
+                // projectTransactionId: underdogProject?.data.transactionId,
+                // projectMintAddress: underdogProject?.data.mintAddress,
             }
 
-            let challengeCreated = await saveChallengeToDatabase(payload, projectId)  
+            // USE PROJECT TO CREATE NFT
+            const underdogNft = await createUnderdogNft(payload, projectId, wallet.publicKey)
+            console.log(underdogNft);
+            if (!underdogNft) {
+                toast({
+                    title: "Could not create NFT challenge",
+                    description: "Could not create NFT challenge",
+                })
+                hideTransferLoader()
+                return;
+            }
+        
+            const nftPayload = {
+                ...payload,
+                nftId: underdogNft?.data?.nftId.toString(),
+                nftTransactionId: underdogNft?.data?.transactionId
+            }
+
+            let challengeCreated = await saveChallengeToDatabase(nftPayload, projectId)  
             console.log(challengeCreated);
             if (!challengeCreated?.challenge) {
                 console.log("could not save to db");                
             }
+
+            router.push("/admin/challenges")
             
-            setTimeout(async () => {                
-                // USE PROJECT TO CREATE NFT
-                const underdogNft = await createUnderdogNft(payload, projectId, wallet.publicKey)
-                console.log(underdogNft);
-                if (!underdogNft) {
-                    toast({
-                        title: "Could not create NFT challenge",
-                        description: "Could not create NFT challenge",
-                    })
-                    hideTransferLoader()
-                    return;
-                }
-
-                let challenge_updated = await updateChallenge(
-                    {
-                        nftId: underdogNft?.data?.nftId.toString(),
-                        nftTransactionId: underdogNft?.data?.transactionId
-                    }, 
-                    projectId
-                )
+            // setTimeout(async () => {                
                 
-                console.log(challenge_updated);
-                router.push("/admin/challenges")
 
-            }, 4000);
+            //     let challenge_updated = await updateChallenge(
+            //         {
+            //             nftId: underdogNft?.data?.nftId.toString(),
+            //             nftTransactionId: underdogNft?.data?.transactionId
+            //         }, 
+            //         projectId
+            //     )
+                
+            //     console.log(challenge_updated);
+            //     router.push("/admin/challenges")
+
+            // }, 2000);
             
         } catch (error) {
             console.log(error);            
@@ -368,7 +385,7 @@ const UploadForm = () => {
              
             const response = await axiosInterceptorInstance.post(`/challenges/create`, payload, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${dynamicJwtToken}`
                 }
             })
             console.log(response);
@@ -394,7 +411,7 @@ const UploadForm = () => {
             
             const response = await axiosInterceptorInstance.put(`/challenge/${projectId}`, payload, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${dynamicJwtToken}`
                 }
             })
             console.log(response);
@@ -411,6 +428,22 @@ const UploadForm = () => {
     }
 
     const validateMetaData = () => {
+        if (!challengeTitle) {
+            toast({
+                title: "No Title",
+                description: "Kindly provide a title",
+            })
+            return false;
+        }
+
+        if (!challengeDescription) {
+            toast({
+                title: "No Description",
+                description: "Kindly provide a description",
+            })
+            return false;
+        }
+
         if (!uploadedImage) {
             toast({
                 title: "No Image",
@@ -498,7 +531,6 @@ const UploadForm = () => {
             adminLoginModal.style.display = "block";    
         }
     }
-
     
     const openWalletModal = () => {
         setOpenPromptConnectWallet(false)
@@ -529,22 +561,22 @@ const UploadForm = () => {
     return (
         <>
             <div className="mb-4">
-                <label htmlFor="date" className='text-sm text-white'>Title</label>
+                <label htmlFor="date" className='text-xs text-white'>Title</label>
                 <Input type="text" onChange={updateTitle} className=' rounded-xl mt-1 w-full bg-white text-black  border-none outline-none text-xs' />
             </div>
 
             <div className="mb-4">
-                <label htmlFor="date" className='text-sm text-white'>Description</label>
+                <label htmlFor="date" className='text-xs text-white'>Description</label>
                 <textarea onChange={updateDescription} cols={2} rows={2} className='resize-none rounded-xl p-4 mt-1 w-full bg-white text-black  border-none outline-none text-xs'></textarea>
             </div>
 
             <div className='mb-4 grid gap-5 xs:grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2'>
                 <div>
-                    <label htmlFor="date" className='text-sm text-white'>Date</label>
+                    <label htmlFor="date" className='text-xs text-white'>Date</label>
                     <Input type="date" onChange={updateDate} className=' rounded-xl mt-1 w-full bg-white text-black border-none outline-none text-xs' />
                 </div>
                 <div>
-                    <label htmlFor="time" className='text-sm text-white'>Time</label>
+                    <label htmlFor="time" className='text-xs text-white'>Time</label>
                     <Input type="time" onChange={updateTime} className=' rounded-xl mt-1 w-full bg-white text-black border-none outline-none text-xs' />
                 </div>
             </div>
@@ -552,7 +584,7 @@ const UploadForm = () => {
             <div className='mb-4 grid gap-5 xs:grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2'>
 
                 <div className="">
-                    <label htmlFor="currency" className='text-sm text-white'>Currency</label>
+                    <label htmlFor="currency" className='text-xs text-white'>Currency</label>
                     <div className="mt-1 px-3 py-1 bg-white rounded-lg">
 
                         <select name="currency" onChange={updateCurrency} className="w-full text-black text-xs outline-none" id="">
@@ -569,7 +601,7 @@ const UploadForm = () => {
                 </div>
 
                 <div className="text-black">
-                    <label htmlFor="bounty" className='text-sm text-white'>Bounty Price</label>
+                    <label htmlFor="bounty" className='text-xs text-white'>Bounty Price</label>
                     <Input type="number" onKeyUp={(e) => setChallengePrice(e.target.value)} className='bg-white p-3 text-black rounded-xl mt-1 w-full outline-none text-xs'/>
 
                 </div>
@@ -585,12 +617,17 @@ const UploadForm = () => {
 
                 { !wallet?.connected && <Button className="bg-blue-600 text-white" onClick={submitMetaData}>Proceed</Button> }
 
-                <Button onClick={openPreviewModal} className="flex items-center bg-red-500 gap-1 text-white ">
+                <Button 
+                onClick={openPreviewModal} 
+                // onClick={() => setVisible(true)}
+                className="flex items-center justify-center bg-red-500 gap-2 text-white">
                     <i className='bx bxs-show'></i>
                     <span className="text-xs">Preview</span>
                 </Button>
+                
             </div>
             {/* MODALS HERE */}
+
 
             <ConfirmModalComponent 
             confirmProcess={proceedAfterConnectingWallet} 

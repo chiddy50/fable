@@ -12,6 +12,7 @@ import { createUnderdogNft, createUnderdogNftUsers } from "@/lib/data";
 import { toast } from "@/components/ui/use-toast";
 import axiosInterceptorInstance from "@/axiosInterceptorInstance";
 import { getCookie } from 'cookies-next'; 
+import { getAuthToken } from '@dynamic-labs/sdk-react-core';
 
 export default function AwardModal({ submission, firstPlace, secondPlace, thirdPlace }){
     const { push } = useRouter();
@@ -21,6 +22,7 @@ export default function AwardModal({ submission, firstPlace, secondPlace, thirdP
     const [success, setSuccess] = useState("");
 
     let token = getCookie('token');
+    const dynamicJwtToken = getAuthToken();
     
     const modalRef = useRef(null);
     const { setUserLoggedIn, authUserData, setAuthUserData } = useContext(AppContext)
@@ -78,6 +80,12 @@ export default function AwardModal({ submission, firstPlace, secondPlace, thirdP
 
 
     const award = async (percentage: number, position: string) => {
+
+        if (!submission.user.publicKey) {
+            console.log("User does not have a public key");            
+            return
+        }
+
         let reward = calculateAmounts(submission?.challenge?.price, percentage)
         let payload = { 
             story: JSON.stringify(submission.story), 
@@ -118,7 +126,7 @@ export default function AwardModal({ submission, firstPlace, secondPlace, thirdP
             
             const response = await axiosInterceptorInstance.put(`/stories/id/${storyId}`, payload, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${dynamicJwtToken}`
                 }
             })
             console.log(response);
@@ -154,20 +162,51 @@ export default function AwardModal({ submission, firstPlace, secondPlace, thirdP
 
                         {!submission?.award && 
                             <div className="flex flex-col gap-3">     
-                                <Button onClick={()  => award(0.5, "FIRST")} disabled={firstPlace} className="flex bg-green-600 items-center gap-2">
-                                    <i className='bx bx-medal text-lg'></i>
-                                    <span>1st Place {firstPlace ? 'has already awarded' : ''}</span>
-                                </Button>
-                                
-                                <Button onClick={()  => award(0.3, "SECOND")} disabled={secondPlace} className="flex bg-blue-600 items-center gap-2">                        
-                                    <i className='bx bx-medal text-lg'></i>
-                                    <span>2nd Place {secondPlace ? 'has already awarded' : ''}</span>
-                                </Button>
+                                {
+                                    firstPlace &&
+                                    <Button disabled={firstPlace} className="flex bg-green-600 items-center gap-2">
+                                        <i className='bx bx-medal text-lg'></i> <span>1st Place has already awarded</span>
+                                    </Button>
+                                }
 
-                                <Button onClick={()  => award(0.2, "THIRD")} disabled={thirdPlace} className="flex bg-orange-600 items-center gap-2">                        
-                                    <i className='bx bx-medal text-lg'></i>
-                                    <span>3rd Place {thirdPlace ? 'has already awarded' : ''}</span>
-                                </Button>
+                                {
+                                    !firstPlace &&
+                                    <Button onClick={() => award(0.5, "FIRST")} disabled={firstPlace} className="flex bg-green-600 items-center gap-2">
+                                        <i className='bx bx-medal text-lg'></i> <span>Award 1st Place </span>
+                                    </Button>
+                                }
+                                
+                                {
+                                    secondPlace && 
+                                    <Button disabled={secondPlace} className="flex bg-blue-600 items-center gap-2">                        
+                                        <i className='bx bx-medal text-lg'></i>
+                                        <span>2nd Place has already awarded</span>
+                                    </Button>   
+                                }
+
+                                {
+                                    !secondPlace && 
+                                    <Button onClick={()  => award(0.3, "SECOND")} disabled={secondPlace} className="flex bg-blue-600 items-center gap-2">                        
+                                        <i className='bx bx-medal text-lg'></i>
+                                        <span>Award 2nd Place</span>
+                                    </Button>   
+                                }
+
+                                {
+                                    thirdPlace &&
+                                    <Button disabled={thirdPlace} className="flex bg-orange-600 items-center gap-2">                        
+                                        <i className='bx bx-medal text-lg'></i>
+                                        <span>3rd Place has already awarded</span>
+                                    </Button>
+                                }
+
+                                {
+                                    !thirdPlace &&
+                                    <Button onClick={()  => award(0.2, "THIRD")} disabled={thirdPlace} className="flex bg-orange-600 items-center gap-2">                        
+                                        <i className='bx bx-medal text-lg'></i>
+                                        <span>Award 3rd Place </span>
+                                    </Button>
+                                }
                             </div>  
                         } 
 

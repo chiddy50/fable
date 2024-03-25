@@ -1,5 +1,4 @@
-import NewChallenge from '@/components/challenge/new-challenge'
-import NewStory from '@/components/challenge/new-story'
+import NewStory from '@/components/story/new-story'
 import fetchUser from '@/lib/fetchUser'
 
 export default async function StartChallenge() {

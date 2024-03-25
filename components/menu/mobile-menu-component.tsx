@@ -14,12 +14,14 @@ import { useContext, useEffect, useState } from "react";
 import { AppContext } from "@/context/StoryContext";
 import axios from "axios";
 import { deleteCookie } from 'cookies-next';
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
 
 const MobileMenuComponent = () => {
     const { refresh, push } = useRouter()
+    const { user, primaryWallet, setShowAuthFlow, handleLogOut } = useDynamicContext()
 
     const [authUser, setAuthUser] =  useState(null)
-    const { userLoggedIn, setUserLoggedIn, user } = useContext(AppContext)
+    const { userLoggedIn, setUserLoggedIn } = useContext(AppContext)
 
     useEffect(() => {
         if (userLoggedIn) {
@@ -62,8 +64,8 @@ const MobileMenuComponent = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <DropdownMenuLabel className="text-center">
-                        { (userLoggedIn && user) && `Hi, ${user?.name}`}
-                        { !userLoggedIn && `Menu`}
+                        { user && `Hi, ${user.username}`}
+                        { !user && `Menu`}
                     </DropdownMenuLabel>
                     
                     <DropdownMenuSeparator />
@@ -71,36 +73,43 @@ const MobileMenuComponent = () => {
                     <DropdownMenuItem>
                         <Button onClick={() => push('/')} className="w-full h-full text-xs uppercase">Home</Button>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <Button onClick={() => push('/admin/challenge/create')} className="w-full h-full text-xs uppercase">Create challenge</Button>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <Button onClick={() => push('/admin/challenges')} className="w-full h-full text-xs uppercase">My challenges</Button>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <Button onClick={() => push('/user/stories')} className="w-full h-full text-xs uppercase">My Stories</Button>
-                    </DropdownMenuItem>
+
                     <DropdownMenuItem>
                         <Button onClick={() => push('/user/challenges')} className="w-full h-full text-xs uppercase">Tell a story</Button>
                     </DropdownMenuItem>
 
-                    { userLoggedIn && 
+                    <DropdownMenuItem>
+                        <Button onClick={() => push('/admin/challenge/create')} className="w-full h-full text-xs uppercase">Create challenge</Button>
+                    </DropdownMenuItem>
+
+                    {
+                        user &&
+                        <DropdownMenuItem>
+                            <Button onClick={() => push('/admin/challenges')} className="w-full h-full text-xs uppercase">My challenges</Button>
+                        </DropdownMenuItem>
+                    }
+
+                    {
+                        user &&
+                        <DropdownMenuItem>
+                            <Button onClick={() => push('/user/stories')} className="w-full h-full text-xs uppercase">My Stories</Button>
+                        </DropdownMenuItem>
+                    }                    
+
+                    { user && 
                         <>                        
                             <DropdownMenuItem>
-                                <Button onClick={logout} className="w-full h-full text-xs uppercase">Logout</Button>
+                                <Button onClick={() => handleLogOut()} className="w-full h-full text-xs uppercase">Logout</Button>
                             </DropdownMenuItem>
                         </>
-                    }
-                        
+                    }                        
 
-                    { !userLoggedIn && 
+                    { !user && 
                         <>
                             <DropdownMenuItem>
-                                <Button onClick={() => bringUpAdminRegisterModal() } className="w-full h-full text-xs uppercase">Register</Button>
+                                <Button onClick={() => setShowAuthFlow(true) } className="w-full h-full text-xs uppercase">Register/Login</Button>
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
-                                <Button onClick={() => bringUpAdminLoginModal() } className="w-full h-full text-xs uppercase">Login</Button>
-                            </DropdownMenuItem>
+
                         </>
                     }
 

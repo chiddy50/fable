@@ -102,60 +102,24 @@ export default function Challenge({ challenge, clickEvent, type }){
         <div className="responsive h-full " >
             
             {/* <div className='flex h-full flex-col rounded-xl bg-white border-none shadow-sm border-gray-200 border cursor-pointer transition-all hover:shadow-2xl'> */}
-            <div className='flex h-full flex-col rounded-xl bg-white border-none border-gray-200 border'>
+            <div className='flex relative h-full flex-col shadow-xl border overflow-y-clip rounded-xl bg-white border-gray-500'>
     
                 <img
                     src={challenge.image}
                     className='w-full rounded-t-xl h-1/2'                     
                     alt="Picture of the image"
                 />
-                 <div className="h-1/2 p-4 flex flex-col justify-between">
-                    <h2 className='font-semibold text-md mb-2'>{challenge.title}</h2>
-                    <p className='text-xs mb-1'>Bounty: {challenge.symbol}{challenge.price}</p>
-                    <p className='text-xs mb-2'>Posted: { formatDate(challenge.createdAt) }</p>
-                    <p className='text-xs  '>
-                        <CountdownComponent date={`${challenge.date} ${challenge.time}`} />
+                <div className="h-1/2 p-4 flex flex-col  bg-[#3F4447] justify-between">
+                    <h2 className='font-semibold text-lg text-white mb-2'>{challenge.title}</h2>
+                    <p className='text-md text-gray-300 mb-1'>Bounty: {challenge.symbol}{challenge.price}</p>
+                    <p className='text-[12px] text-gray-300 mb-2'>Posted: { formatDate(challenge.createdAt) }</p>
+                    <p className='text-lg  '>
+                        <CountdownComponent date={`${challenge.date}`} />
                     </p>
                     <div className="flex justify-between mt-3">
-                        <div className='flex items-center '>
-                            { hasFirst && 
-
-                            <TooltipComponent>
-                                <TooltipTrigger asChild>
-                                <i className='bx bxs-medal bx-tada text-3xl text-yellow-600'></i>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    <p>First place awarded</p>
-                                </TooltipContent>
-                            </TooltipComponent>
-
-                            }
-                            { hasSecond && 
-                                <TooltipComponent>
-                                    <TooltipTrigger asChild>
-                                    <i className='bx bxs-medal bx-tada text-3xl text-gray-600'></i> 
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                        <p>Second place awarded</p>
-                                    </TooltipContent>
-                                </TooltipComponent>
-                            }
-
-
-                            { hasThird && 
-                            <TooltipComponent>
-                                <TooltipTrigger asChild>
-                                <i className='bx bxs-medal bx-tada text-3xl text-orange-600'></i> 
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    <p>Third place awarded</p>
-                                </TooltipContent>
-                            </TooltipComponent>
-                            }
-                            
-                        </div>
-                        <p className='flex items-center gap-2'>
-                            <i className="bx bx-heart"></i>
+                        
+                        <p className='flex items-center gap-2 text-gray-300'>
+                            <i className='bx bx-book-open'></i>
                             <span className='text-xs'>{challenge.stories.length ? challenge.stories.length : 0}</span>
                         </p>
                     </div>
@@ -175,7 +139,46 @@ export default function Challenge({ challenge, clickEvent, type }){
                     {/* <Button onClick={() => burn(challenge.nftId, challenge.projectId)} className='bg-purple-600 w-full mt-4'>Burn</Button> */}
 
 
-                 </div>
+                </div>
+
+                {(hasFirst || hasSecond || hasThird) &&<div className='flex items-center absolute top-1 right-1 bg-white p-1 rounded-xl'>
+                    { hasFirst && 
+
+                    <TooltipComponent>
+                        <TooltipTrigger asChild>
+                        <i className='bx bxs-medal bx-tada text-xl text-yellow-600'></i>
+                        </TooltipTrigger>
+                        <TooltipContent side='bottom'>
+                            <p>First place awarded</p>
+                        </TooltipContent>
+                    </TooltipComponent>
+
+                    }
+                    { hasSecond && 
+                        <TooltipComponent>
+                            <TooltipTrigger asChild>
+                            <i className='bx bxs-medal bx-tada text-xl text-gray-600'></i> 
+                            </TooltipTrigger>
+                            <TooltipContent side='bottom'>
+                                <p>Second place awarded</p>
+                            </TooltipContent>
+                        </TooltipComponent>
+                    }
+
+
+                    { hasThird && 
+                    <TooltipComponent>
+                        <TooltipTrigger asChild>
+                        <i className='bx bxs-medal bx-tada text-xl text-orange-600'></i> 
+                        </TooltipTrigger>
+                        <TooltipContent side='bottom'>
+                            <p>Third place awarded</p>
+                        </TooltipContent>
+                    </TooltipComponent>
+                    }
+                    
+                </div>}
+
              </div>
         </div>
     )

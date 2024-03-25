@@ -4,17 +4,18 @@ import React, { useEffect, useState, useContext } from 'react';
 
 import { useRouter, useParams } from 'next/navigation';
 
-import Countdown from '@/components/general/countdown-component'
 import { AppContext } from "@/context/StoryContext"
 
-import axios from 'axios';
-import { Skeleton } from "@/components/ui/skeleton"
-import Image from 'next/image';
 import axiosInterceptorInstance from '@/axiosInterceptorInstance';
 import { all_questions, questions } from '@/lib/questions';
 import { Button } from '../ui/button';
 import { hideTransferLoader, showTransferLoader } from '@/lib/helper';
 
+import {
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
+import TooltipComponent from '@/components/TooltipComponent';
 
 const NewStory = () => {
 
@@ -93,7 +94,6 @@ const NewStory = () => {
         if(!validateForm()){
             // return false;
         }
-        console.log(allQuestions);
         
         setStory(allQuestions)
         router.push('/user/summary')
@@ -174,11 +174,25 @@ const NewStory = () => {
             <div className="relative mt-10">
                 {
                     focusedQuestion && 
-                    <div className=" bg-white p-5 rounded-lg shadow-sm drop-shadow-sm col-span-3">
+                    <div className=" bg-gray-800 border border-gray-600 text-gray-200 p-5 rounded-lg shadow-sm drop-shadow-sm col-span-3">
                         <div className=" flex justify-between font-mono text-sm font-semibold  mb-4 tracking-widest text-gray-500 ">
                             <p className='xs:text-xs sm:text-xs md:text-sm'>
-                                <span className='text-xl font-bold'>0{focusedQuestion?.index}:</span> {focusedQuestion?.title}
+                                <span className='text-xl font-bold'>0{focusedQuestion?.index}:</span> <span>{focusedQuestion?.title}</span>
                             </p>
+
+                            <TooltipComponent>
+                                <TooltipTrigger asChild>
+                                <i className='bx bxs-info-circle bx-flashing text-xl hover:text-gray-800  cursor-pointer'></i>
+                                </TooltipTrigger>
+                                <TooltipContent side='bottom'>
+                                    {
+                                        focusedQuestion?.questions.map((question, index) => (
+
+                                            <p key={index} className=" font-mono text-[10px] mb-1 font-semibold tracking-widest text-gray-600  ">- {question?.name}</p>
+                                        ))
+                                    }
+                                </TooltipContent>
+                            </TooltipComponent>
                             {/* <div className=" flex space-x-8">                        
                                 <div>
                                     <button>
@@ -187,12 +201,7 @@ const NewStory = () => {
                                 </div>
                             </div> */}
                         </div>
-                        {
-                            focusedQuestion?.questions.map((question, index) => (
-
-                                <p key={index} className=" font-mono text-xs mb-1 font-semibold tracking-widest text-gray-400  ">- {question?.name}</p>
-                            ))
-                        }
+                        
                         
                         {/* <p className=" w-full text-xs mt-7 font-mono text-gray-800 tracking-widest leading-4">
                             { focusedQuestion?.answer }
@@ -231,23 +240,24 @@ const NewStory = () => {
         
                         {allQuestions.map((question, index) => (
 
-                            <div key={index}  className="flex flex-col justify-between ideaCard bg-white p-5 rounded-xl shadow-sm drop-shadow-sm">
-                                <div className=" top_description flex justify-between w-[320px] mx-auto mt-4">
-                                    <p className="text-clip uppercase text-sm tracking-wide font-bold text-gray-500">{question?.title}</p>                                                
+                            <div key={index}  className="flex flex-col justify-between ideaCard text-gray-200 bg-gray-800 border border-gray-600 p-5 rounded-xl shadow-sm drop-shadow-sm min-w-[360px] max-w-[360px]">
+                                <div className=" top_description flex justify-between w-full mx-auto mt-4">
+                                    <p className="text-clip uppercase text-sm tracking-wide font-bold ">{question?.title}</p>                                                
                                 </div>
                                 
                                 <div className="my-7 h-28 overflow-y-scroll">
-                                   { question && <p className='text-xs'>{ question?.answer }</p> } 
+                                   { question && <p className='text-xs w-full'>{ question?.answer }</p> } 
                                 </div>
                                 
                                 <textarea 
                                 id={`card_${question.index}`}
                                 placeholder=" Type here..." 
-                                rows={1}                               
+                                rows={1}  
+                                                             
                                 onFocus={() => textAreaFocused(question)} 
                                 onBlur={() => textAreaBlured(question)}  
                                 onKeyUp={(e) => updateAnswer(e, question)}
-                                className="story-input resize-none mt-4 w-full pb-9 px-3 pt-4 text-xs appearance-none outline-none rounded-xl bg-gray-100 flex items-center justify-center">                                
+                                className="story-input resize-none mt-4 w-full pb-9 px-3 pt-4 text-xs appearance-none outline-none rounded-xl bg-[#3F4447] flex items-center justify-center">                                
                                 </textarea>
 
 

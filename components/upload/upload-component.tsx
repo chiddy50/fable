@@ -3,7 +3,7 @@
 import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { AppContext } from "@/context/StoryContext"
-import UploadBoxComponent from "@/components/upload/upload-image-component";
+import UploadImageComponent from "@/components/upload/upload-image-component";
 import axios from "axios"
 import SuccessfullyUploadComponent from "./success-component";
 
@@ -103,9 +103,9 @@ const UploadComponent = () => {
     }
     
     return (
-        <div className="mb-7">
+        <div className="">
             <div className='flex justify-center mb-3 bg-white p-3 rounded-2xl'>                
-                { (!uploaded) && <UploadBoxComponent />}
+                { (!uploaded) && <UploadImageComponent />}
                 { (uploaded) && <SuccessfullyUploadComponent />}
             </div>
 

@@ -62,12 +62,12 @@
 
 .box div{
   position: absolute;
-  width: 60px;
-  height: 60px;
+  /* width: 60px; */
+  /* height: 60px; */
   background-color: transparent;
   /* border: 6px solid rgba(255, 255, 255, .8); */
-  border: 6px solid #fff;
-  border-radius: 50%;
+  /* border: 6px solid #fff; */
+  /* border-radius: 50%; */
 }
 
 
@@ -105,7 +105,7 @@
 .box div:nth-child(6) {
   top: 80%;
   left: 70%;
-  animation: animate 12s linear infinite;
+  animation: animate 11s linear infinite;
 }
 
 .box div:nth-child(7) {
@@ -130,6 +130,36 @@
   top: 20%;
   left: 80%;
   animation: animate 5s linear infinite;
+}
+
+.box div:nth-child(11) {
+  top: 12%;
+  left: 45%;
+  animation: animate 9s linear infinite;
+}
+
+.box div:nth-child(12) {
+  top: 95%;
+  left: 2%;
+  animation: animate 5s linear infinite;
+}
+
+.box div:nth-child(13) {
+  top: 20%;
+  left: 50%;
+  animation: animate 10s linear infinite;
+}
+
+.box div:nth-child(14) {
+  top: 99%;
+  left: 60%;
+  animation: animate 5s linear infinite;
+}
+
+.box div:nth-child(15) {
+  top: 40%;
+  left: 78%;
+  animation: animate 15s linear infinite;
 }
 
 

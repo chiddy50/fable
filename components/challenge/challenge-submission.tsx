@@ -11,8 +11,8 @@ const ChallengeSubmission = ({ moveToSummary, submission }) => {
         
         <div 
         onClick={() => moveToSummary(submission)}
-        className="p-4 bg-gray-100 flex items-center 
-        gap-3 border border-gray-200 
+        className="p-4 bg-gray-800 flex items-center 
+        gap-3 border border-gray-600 
         transition-all cursor-pointer rounded-xl 
         hover:border 
         hover:border-gray-400
@@ -25,7 +25,7 @@ const ChallengeSubmission = ({ moveToSummary, submission }) => {
 
             <div>
                 <h1 className="font-bold mb-2">{submission?.user?.name}</h1>
-                <p className='text-xs mb-1 text-gray-600'>Submitted { formatDate(submission.createdAt) }</p>
+                <p className='text-xs mb-1 text-gray-200'>Submitted { formatDate(submission.createdAt) }</p>
             </div>
         </div>
     )

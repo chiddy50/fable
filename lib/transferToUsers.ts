@@ -3,51 +3,28 @@ import { Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction } from
 import { CONNECTION, getKeypair, umi } from "./data";
 import { createSignerFromKeypair, signerIdentity } from "@metaplex-foundation/umi";
 
-export const transferToUsers = async (publicKey, amount: any)  => {
+export const transferToUsers = async (publicKey: string, amount: number) => {
     if (!publicKey) {
-        throw new Error("Wallet not found...");
+        throw new Error("publicKey not found...");
     }
 
-    const public_account = process.env.NEXT_PUBLIC_ACCOUNT_ADDRESS;
-    const private_key = process.env.NEXT_PUBLIC_PRIVATE_KEY;
-    if (!public_account) {
-        throw new Error("Could not identify the sender account");
-    }
+    const keypair = await getKeypair(); // Assuming getKeypair() is implemented elsewhere
 
-    const senderPublicKey = getPublicKeyFromPrivateKey(private_key);
-    console.log(senderPublicKey);
-    
-    
     const transaction = new Transaction().add(
         SystemProgram.transfer({
-            fromPubkey: senderPublicKey,
-            toPubkey: publicKey,
-            lamports: Math.round(amount * LAMPORTS_PER_SOL)
+            fromPubkey: new PublicKey(keypair.publicKey),
+            toPubkey: new PublicKey(publicKey),
+            lamports: amount * LAMPORTS_PER_SOL
         })
     );
 
-    let keyPair = getKeypair();
-
-    const signer = await createSignerFromKeypair(umi, keyPair);
-    
-    umi.use(signerIdentity(signer));
-
-    transaction.feePayer = signer.publicKey;
+    transaction.feePayer = new PublicKey(keypair.publicKey);
 
     const { blockhash } = await CONNECTION.getRecentBlockhash();
     transaction.recentBlockhash = blockhash;
 
-    
-    if (!signer.signTransaction) {
-        throw new Error("Wallet does not support signing transactions");
-    }
-    
-    const signedTransaction = await signer.signTransaction(transaction);
-    console.log({signedTransaction});
-
+    const signedTransaction = await keypair.signTransaction(transaction);
     const signature = await CONNECTION.sendRawTransaction(signedTransaction.serialize());
-    console.log({signature});
-    
     await CONNECTION.confirmTransaction(signature, 'finalized');
 }
 
