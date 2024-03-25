@@ -15,6 +15,7 @@ import { AppContext } from "@/context/StoryContext";
 import axios from "axios";
 import { deleteCookie } from 'cookies-next';
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
+import Link from "next/link";
 
 const MobileMenuComponent = () => {
     const { refresh, push } = useRouter()
@@ -71,28 +72,38 @@ const MobileMenuComponent = () => {
                     <DropdownMenuSeparator />
 
                     <DropdownMenuItem>
-                        <Button onClick={() => push('/')} className="w-full h-full text-xs uppercase">Home</Button>
+                        <Link href="/">
+                            <Button className="w-full h-full text-xs uppercase">Home</Button>
+                        </Link>
                     </DropdownMenuItem>
 
                     <DropdownMenuItem>
-                        <Button onClick={() => push('/user/challenges')} className="w-full h-full text-xs uppercase">Tell a story</Button>
+                        <Link href="/user/challenges">
+                            <Button className="w-full h-full text-xs uppercase">Tell a story</Button>
+                        </Link>
                     </DropdownMenuItem>
 
                     <DropdownMenuItem>
-                        <Button onClick={() => push('/admin/challenge/create')} className="w-full h-full text-xs uppercase">Create challenge</Button>
+                        <Link href="/admin/challenge/create">
+                            <Button className="w-full h-full text-xs uppercase">Create challenge</Button>
+                        </Link>
                     </DropdownMenuItem>
 
                     {
                         user &&
                         <DropdownMenuItem>
-                            <Button onClick={() => push('/admin/challenges')} className="w-full h-full text-xs uppercase">My challenges</Button>
+                            <Link href="/admin/challenges">
+                                <Button className="w-full h-full text-xs uppercase">My challenges</Button>
+                            </Link>
                         </DropdownMenuItem>
                     }
 
                     {
                         user &&
                         <DropdownMenuItem>
-                            <Button onClick={() => push('/user/stories')} className="w-full h-full text-xs uppercase">My Stories</Button>
+                            <Link href="/user/stories">
+                                <Button className="w-full h-full text-xs uppercase">My Stories</Button>
+                            </Link>
                         </DropdownMenuItem>
                     }                    
 

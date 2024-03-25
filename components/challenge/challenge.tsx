@@ -113,14 +113,14 @@ export default function Challenge({ challenge, clickEvent, type }){
                     <h2 className='font-semibold text-lg text-white mb-2'>{challenge.title}</h2>
                     <p className='text-md text-gray-300 mb-1'>Bounty: {challenge.symbol}{challenge.price}</p>
                     <p className='text-[12px] text-gray-300 mb-2'>Posted: { formatDate(challenge.createdAt) }</p>
-                    <p className='text-lg  '>
+                    <p className='text-lg'>
                         <CountdownComponent date={`${challenge.date}`} />
                     </p>
                     <div className="flex justify-between mt-3">
-                        
+
                         <p className='flex items-center gap-2 text-gray-300'>
                             <i className='bx bx-book-open'></i>
-                            <span className='text-xs'>{challenge.stories.length ? challenge.stories.length : 0}</span>
+                            <span className='text-xs'>{challenge._count.stories ? challenge._count.stories : 0}</span>
                         </p>
                     </div>
 

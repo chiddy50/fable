@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const GeneralMenuComponent = ({ label, options }) => {
     const { push } = useRouter()
@@ -22,7 +23,12 @@ const GeneralMenuComponent = ({ label, options }) => {
                     {
                         options.map((option: object, index: number) =>  (
                             <DropdownMenuItem key={index} className={ option.show ? "" : "hidden" }>
-                                <Button onClick={() => push(`${option.href}`) } className="w-full h-full text-xs uppercase tracking-wider">{ option.label }</Button>
+                                <Link href={`${option.href}`} className="w-full">
+                                    <Button className="w-full h-full text-xs uppercase tracking-wider">                                    
+                                        { option.label }
+                                    </Button>
+                                </Link>
+                                {/* <Link href={`${option.href}`}>{ option.label }</Link> */}
                             </DropdownMenuItem>
                         ))
                     }

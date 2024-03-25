@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation';
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
 import { DynamicWidget, getAuthToken, useEmbeddedWallet, useUserWallets, useUserUpdateRequest } from '@dynamic-labs/sdk-react-core';
 import { toast } from "@/components/ui/use-toast";
+import Link from "next/link";
 
 const bangers = Bangers({
     subsets: ["latin"],
@@ -104,14 +105,16 @@ const NavbarComponent = () => {
             {
                 !checkURL(pathname) &&
                 <div>
-                    <svg className="cursor-pointer" onClick={() => push('/')} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 298.380615234375 235.0001983642578" width="45" height="47.25525714735764">
-                        <title>Fable</title>
-                        <g fillRule="evenodd">
-                            <path d="M89.05 0h199.33a10 10 0 0 1 9.39 13.44l-19 52a10 10 0 0 1-9.44 6.56H70a10 10 0 0 1-9.39-13.44l19-52A10 10 0 0 1 89.05 0z" fill="#555"></path>
-                            <path d="M60.05 80h129.09a10 10 0 0 1 9.39 13.44l-19.05 52a10 10 0 0 1-9.39 6.56H41a10 10 0 0 1-9.39-13.44l19-52A10 10 0 0 1 60.05 80z" fill="#999"></path>
-                            <path d="M29.05 163h59.13a10 10 0 0 1 10 10 9.86 9.86 0 0 1-.61 3.44l-19 52a10 10 0 0 1-9.43 6.56H10a10 10 0 0 1-9.39-13.44l19.05-52a10 10 0 0 1 9.39-6.56z" fill="#ccc"></path>
-                        </g>
-                    </svg>
+                    <Link href="/" >
+                        <svg className="cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 298.380615234375 235.0001983642578" width="45" height="47.25525714735764">
+                            <title>Fable</title>
+                            <g fillRule="evenodd">
+                                <path d="M89.05 0h199.33a10 10 0 0 1 9.39 13.44l-19 52a10 10 0 0 1-9.44 6.56H70a10 10 0 0 1-9.39-13.44l19-52A10 10 0 0 1 89.05 0z" fill="#555"></path>
+                                <path d="M60.05 80h129.09a10 10 0 0 1 9.39 13.44l-19.05 52a10 10 0 0 1-9.39 6.56H41a10 10 0 0 1-9.39-13.44l19-52A10 10 0 0 1 60.05 80z" fill="#999"></path>
+                                <path d="M29.05 163h59.13a10 10 0 0 1 10 10 9.86 9.86 0 0 1-.61 3.44l-19 52a10 10 0 0 1-9.43 6.56H10a10 10 0 0 1-9.39-13.44l19.05-52a10 10 0 0 1 9.39-6.56z" fill="#ccc"></path>
+                            </g>
+                        </svg>
+                    </Link>
                 </div>
             }
 

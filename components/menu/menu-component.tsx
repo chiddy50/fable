@@ -19,6 +19,7 @@ import { deleteCookie } from 'cookies-next';
 import { useDynamicContext, useUserUpdateRequest, getAuthToken, useWalletConnectorEvent } from "@dynamic-labs/sdk-react-core"
 import axiosInterceptorInstance from "@/axiosInterceptorInstance";
 import { transfer, transfer2 } from "@/lib/transfer";
+import Link from "next/link";
 
 const MenuComponent = () => {
     const { refresh, push } = useRouter()
@@ -128,9 +129,10 @@ const MenuComponent = () => {
                     <DropdownMenuSeparator />
 
                     <DropdownMenuItem>
-                        <Button 
-                        onClick={() => push('/')}
-                        className="w-full h-full text-xs">Home</Button>
+                        <Link href="/" className="w-full">
+                            <Button 
+                            className="w-full h-full text-xs">Home</Button>
+                        </Link>
                     </DropdownMenuItem>
 
                     { user && 

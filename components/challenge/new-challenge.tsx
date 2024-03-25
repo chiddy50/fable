@@ -58,7 +58,7 @@ const NewChallenge = () => {
 
     useEffect(() => {
         console.log({userWallets, sdkHasLoaded, user, primaryWallet});
-        // getCurrentRate("usd")
+        getCurrentRate("usd")
     }, [])
 
     // FUNCTIONS
