@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/pagination"
 import { Button } from '../ui/button';
 import PaginationComponent from '../general/pagination-component';
+import { scrollToTop } from '@/lib/helper';
   
 
 const UserChallenges = () => {
@@ -95,6 +96,7 @@ const UserChallenges = () => {
     const fetchChallenges = async (page = 1) => {        
         try {   
             setLoading(true)     
+            scrollToTop()
             
             let response = await axiosInterceptorInstance.get(`challenges/all`, {
                 params: {

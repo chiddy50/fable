@@ -16,6 +16,7 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 import TooltipComponent from '@/components/TooltipComponent';
+import CountdownComponent from '../general/countdown-component';
 
 const NewStory = () => {
 
@@ -92,7 +93,7 @@ const NewStory = () => {
     function moveToSummaryPage(){
         
         if(!validateForm()){
-            // return false;
+            return false;
         }
         
         setStory(allQuestions)
@@ -234,6 +235,11 @@ const NewStory = () => {
                         { completionRate >= 100 &&
                             <Button onClick={moveToSummaryPage} className='bg-green-600'>100% complete</Button>
                         }
+
+                    <p className="text-xs">
+                        <CountdownComponent date={`${selectedChallenge?.date}`}/> 
+                    </p>
+                    
                     </div>
 
                     <div className=" overflow-x-auto flex space-x-5 w-full justify-start py-4">

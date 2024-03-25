@@ -23,6 +23,7 @@ import axiosInterceptorInstance from "@/axiosInterceptorInstance";
 import { getCookie } from 'cookies-next';
 import { getAuthToken } from '@dynamic-labs/sdk-react-core';
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
+import { useToast } from "@/components/ui/use-toast"
 
 
 const UserSummary = () => {
@@ -36,6 +37,7 @@ const UserSummary = () => {
     const [error, setError] = useState("");
     let token = getCookie('token');
     const dynamicJwtToken = getAuthToken();
+    const { toast } = useToast()
 
     console.log({story});
     
@@ -83,6 +85,11 @@ const UserSummary = () => {
             })
             console.log(res);
             localStorage.removeItem("question") 
+            toast({
+                title: "User story created",
+                description: "User story created",
+                variant: "default"
+            })
             push(`/user/stories`)
             
         } catch (error) {
@@ -111,7 +118,7 @@ const UserSummary = () => {
                         <Accordion type="single" collapsible className="w-full mb-10 relative" key={index}>
                                     
                             <AccordionItem value={`item-${1}`} 
-                            className="bg-gray-200 pt-1 pb-5 px-5 mt-2 rounded-xl"
+                            className="border-gray-600 bg-gray-800 border-none text-white pt-1 pb-5 px-5 mt-2 rounded-xl"
                             >
                                 <AccordionTrigger className='pb-2'>
                                     <span className="font-semibold text-lg">{questionGroup.title}</span>
@@ -122,7 +129,7 @@ const UserSummary = () => {
                                     ))}
                                 </div>
                                 
-                                <AccordionContent className="py-4 px-5 text-xs mt-7 bg-white rounded-xl">
+                                <AccordionContent className="py-4 px-5 text-xs mt-7 bg-[#3F4447] rounded-xl">
                                     <p className="font-bold mb-2 text-md">Answer</p>
                                     {questionGroup.answer}
                                 </AccordionContent>

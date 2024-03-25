@@ -106,13 +106,14 @@ export default function Challenge({ challenge, clickEvent, type }){
     
                 <img
                     src={challenge.image}
-                    className='w-full rounded-t-xl h-1/2'                     
+                    className='w-full rounded-t-xl h-1/2 object-cover object-center'                     
                     alt="Picture of the image"
                 />
                 <div className="h-1/2 p-4 flex flex-col  bg-[#3F4447] justify-between">
                     <h2 className='font-semibold text-lg text-white mb-2'>{challenge.title}</h2>
                     <p className='text-md text-gray-300 mb-1'>Bounty: {challenge.symbol}{challenge.price}</p>
-                    <p className='text-[12px] text-gray-300 mb-2'>Posted: { formatDate(challenge.createdAt) }</p>
+                    <p className='text-[12px] text-gray-300'>Posted: { formatDate(challenge.createdAt) }</p>
+                    <p className='text-[12px] text-gray-300 mb-2'>Author: { challenge?.user?.name }</p>
                     <p className='text-lg'>
                         <CountdownComponent date={`${challenge.date}`} />
                     </p>
@@ -129,7 +130,7 @@ export default function Challenge({ challenge, clickEvent, type }){
                     }
                     
                     { type === 'user' && !challengeExpired(challenge.date, challenge.time) && 
-                    <Button onClick={clickEvent} className='bg-green-600 w-full mt-4'>Start</Button>
+                        <Button onClick={clickEvent} className='bg-green-600 w-full mt-4'>Start</Button>
                     }
 
                     {  type === 'admin' && 

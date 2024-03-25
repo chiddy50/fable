@@ -22,6 +22,7 @@ import {
     CarouselPrevious,
   } from "@/components/ui/carousel"
   import { getAuthToken } from '@dynamic-labs/sdk-react-core';
+import { scrollToTop } from '@/lib/helper';
 
 const AdminChallenges = () => {
     const { push } = useRouter()
@@ -56,6 +57,7 @@ const AdminChallenges = () => {
     const fetchSubmissions = async (challenge: object) => {
         clickEvent()
         console.log(challenge);
+        scrollToTop()
         try {            
             setLoadingSubmission(true)
             let res = await axiosInterceptorInstance.get(`/stories/all?challengeId=${challenge.id}`, {
@@ -198,7 +200,7 @@ const AdminChallenges = () => {
                 <div className="sidenav bg-[#151515] text-gray-200 shadow-xl z-20 p-7 xs:w-[100%] sm:w-[95%] md:w-[70%] lg:w-[40%]">
                     <div onClick={hideModal} className="flex items-center gap-2 cursor-pointer">
                         <i className='bx bx-arrow-back text-2xl' ></i>
-                        <p className='text-xs'>Back to your challenges</p>
+                        <p className='text-xs'>Back</p>
                     </div>
                     <h1 className="text-2xl text-center font-bold my-5">Submissions</h1>
                     <div className="">                        
@@ -220,7 +222,7 @@ const AdminChallenges = () => {
                         }
 
                         {   (submissions.length < 1 && !loadingSubmission)  &&
-                            <div className="flex flex-col text-center mt-10 justify-center">
+                            <div className="flex flex-col text-center mt-10 justify-center bg-gray-800 p-5 rounded-xl">
                                 <i className='bx bxs-user-x text-6xl'></i>
                                 <p className="text-center text-xs font-semibold">No submissions yet</p>
                             </div>

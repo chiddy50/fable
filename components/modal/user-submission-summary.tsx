@@ -23,14 +23,14 @@ const UserSubmissionSummary = ({ selectedStory }) => {
                 {
                     selectedStory?.story.map((questionGroup: any, index: number) => (
 
-                        <Accordion type="single" collapsible className="w-full mb-10 relative" key={index}>
+                        <Accordion type="single" collapsible className="w-full mb-5 relative" key={index}>
                                     
                             <AccordionItem value={`item-${1}`} 
-                            className="bg-gray-800 text-white py-1 px-5 mt-2 rounded-xl"
+                            className="border border-gray-600 bg-gray-800 text-white py-1 px-5 mt-2 rounded-xl"
                             >
                                 <AccordionTrigger className='pb-2'>
                                     {/* <span className="font-semibold text-lg">{questionGroup.title}</span> */}
-                                    <span> Click to read</span>
+                                    <p className="font-bold"> Click to read</p>
                                 </AccordionTrigger>
                                 {/* <div  className='mb-2'>
                                     {questionGroup.questions.map((question: any, questionIndex: number) => (

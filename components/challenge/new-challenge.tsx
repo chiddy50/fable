@@ -167,6 +167,7 @@ const NewChallenge = () => {
                 toast({
                     title: "No wallet found",
                     description: "No wallet connection found",
+                    variant: "destructive"
                 })
                 return
             }
@@ -208,6 +209,7 @@ const NewChallenge = () => {
                 toast({
                     title: "Transaction error",
                     description: "Could not complete the transaction",
+                    variant: "destructive"
                 })
                 return
             }           
@@ -225,6 +227,7 @@ const NewChallenge = () => {
                 toast({
                     title: "No Image",
                     description: "Could not upload image",
+                    variant: "destructive"
                 })
                 hideTransferLoader()
 
@@ -244,6 +247,7 @@ const NewChallenge = () => {
                 toast({
                     title: "Could not create NFT challenge",
                     description: "Could not create NFT challenge",
+                    variant: "destructive"
                 })
                 hideTransferLoader()
                 return;
@@ -331,6 +335,7 @@ const NewChallenge = () => {
             toast({
                 title: "No current rate",
                 description: "No Current rate",
+                variant: "destructive"
             })
             return false;
         }
@@ -384,6 +389,7 @@ const NewChallenge = () => {
             toast({
                 title: "Unable to create challenge",
                 description: "Unable to create challenge",
+                variant: "destructive"
             })
             return false
         }
@@ -406,6 +412,7 @@ const NewChallenge = () => {
             toast({
                 title: "No Title",
                 description: "Kindly provide a title",
+                variant: "destructive",
             })
             return false;
         }
@@ -414,6 +421,7 @@ const NewChallenge = () => {
             toast({
                 title: "No Description",
                 description: "Kindly provide a description",
+                variant: "destructive"
             })
             return false;
         }
@@ -423,6 +431,7 @@ const NewChallenge = () => {
             toast({
                 title: "Invalid Date",
                 description: validate_date.message,
+                variant: "destructive"
             })
             return false;
         }
@@ -431,6 +440,7 @@ const NewChallenge = () => {
             toast({
                 title: "Invalid Price",
                 description: "Invalid Price",
+                variant: "destructive"
             })
             return false;
         }
@@ -501,14 +511,6 @@ const NewChallenge = () => {
                     <div className="mb-4">
                         <p className='text-sm font-semibold mb-1'>Price</p>
                         <div className="flex items-center text-xs ">
-                            {/* <select onChange={updateCurrency} className="py-3 px-4 border-none rounded-tl-xl rounded-bl-xl outline-none bg-[#3F4447]">
-                                <option disabled value="">Currency</option>
-                                {currencies.map((currency, key) => (
-                                    <option key={key} value={currency.symbol}>
-                                        {currency.name} - {currency.symbol}
-                                    </option>
-                                ))}
-                            </select> */}
                             <select onChange={updateCurrency} defaultValue={currencies.length > 0 ? currencies[0].symbol : ""} className="py-3 px-4 border-none rounded-tl-xl rounded-bl-xl outline-none bg-[#3F4447]">
                                 <option disabled value="">Currency</option>
                                 {currencies.map((currency, key) => (
@@ -546,7 +548,7 @@ const NewChallenge = () => {
                         Pay & Post
                     </Button>
                     
-                    <Button onClick={openPreviewModal} className="flex items-center  justify-center gap-1 bg-[#2f3d47] text-white">
+                    <Button onClick={openPreviewModal} className="flex items-center  justify-center gap-1 bg-[#2f3d47] text-white xs:flex sm:hidden md:hidden lg:hidden">
                         <i className='bx bxs-show'></i>
                         <span className="text-xs">Preview</span>
                     </Button>

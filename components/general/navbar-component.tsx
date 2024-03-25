@@ -77,6 +77,9 @@ const NavbarComponent = () => {
             navigator.clipboard.writeText(address);
             toast({
                 description: "Wallet address copied!",
+                className: cn(
+                    'top-20 right-0 flex fixed md:max-w-[420px] md:top-20 md:right-4'
+                ),
             })
         }
         
@@ -124,9 +127,9 @@ const NavbarComponent = () => {
                 <div className="flex items-center gap-5">
                     <img src={selectedChallenge.image} alt={selectedChallenge.title} className="h-10 w-10 rounded-full cursor-pointer" />
 
-                    <p className="text-xs">
+                    {/* <p className="text-xs">
                         <CountdownComponent date={`${selectedChallenge?.date}`}/> 
-                    </p>
+                    </p> */}
                     
 
                 </div>
@@ -137,7 +140,7 @@ const NavbarComponent = () => {
                 <GeneralMenuComponent label="CHALLENGE" options={challengeMenu} />
                 <GeneralMenuComponent label="STORY" options={storyMenu} />                            
                 {primaryWallet && <div className="flex items-center bg-white py-2 px-3  gap-2 rounded-3xl">
-                    <div className=" cursor-pointer  h-6 w-6 rounded-full flex items-center justify-center">
+                    <div className=" cursor-pointer  h-5 w-5 rounded-full flex items-center justify-center">
                         <img src="/images/solana-sol-logo.svg" alt="" />
                     </div>
                     <div onClick={copyToClipboard} className="border cursor-pointer border-gray-700 h-6 w-6 rounded-full flex items-center justify-center hover:bg-gray-700 hover:text-white hover:border-white">
@@ -159,7 +162,7 @@ const NavbarComponent = () => {
 
             <div className="items-center xs:flex sm:flex md:hidden lg:hidden xl:hidden 2xl:hidden">
                 {primaryWallet && <div className="flex items-center bg-white py-2 px-3  gap-2 rounded-3xl">
-                    <div className=" cursor-pointer  h-6 w-6 rounded-full flex items-center justify-center">
+                    <div className=" cursor-pointer  h-5 w-5 rounded-full flex items-center justify-center">
                         <img src="/images/solana-sol-logo.svg" alt="" />
                     </div>
                     <div onClick={copyToClipboard} className="border cursor-pointer border-gray-700 h-6 w-6 rounded-full flex items-center justify-center hover:bg-gray-700 hover:text-white hover:border-white">

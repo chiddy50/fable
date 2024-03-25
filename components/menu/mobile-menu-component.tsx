@@ -72,19 +72,19 @@ const MobileMenuComponent = () => {
                     <DropdownMenuSeparator />
 
                     <DropdownMenuItem>
-                        <Link href="/">
+                        <Link href="/" className="w-full">
                             <Button className="w-full h-full text-xs uppercase">Home</Button>
                         </Link>
                     </DropdownMenuItem>
 
                     <DropdownMenuItem>
-                        <Link href="/user/challenges">
+                        <Link href="/user/challenges" className="w-full">
                             <Button className="w-full h-full text-xs uppercase">Tell a story</Button>
                         </Link>
                     </DropdownMenuItem>
 
                     <DropdownMenuItem>
-                        <Link href="/admin/challenge/create">
+                        <Link href="/admin/challenge/create" className="w-full">
                             <Button className="w-full h-full text-xs uppercase">Create challenge</Button>
                         </Link>
                     </DropdownMenuItem>
@@ -92,7 +92,7 @@ const MobileMenuComponent = () => {
                     {
                         user &&
                         <DropdownMenuItem>
-                            <Link href="/admin/challenges">
+                            <Link href="/admin/challenges" className="w-full">
                                 <Button className="w-full h-full text-xs uppercase">My challenges</Button>
                             </Link>
                         </DropdownMenuItem>
@@ -101,7 +101,7 @@ const MobileMenuComponent = () => {
                     {
                         user &&
                         <DropdownMenuItem>
-                            <Link href="/user/stories">
+                            <Link href="/user/stories" className="w-full">
                                 <Button className="w-full h-full text-xs uppercase">My Stories</Button>
                             </Link>
                         </DropdownMenuItem>
