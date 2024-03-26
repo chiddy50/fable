@@ -12,14 +12,16 @@ import { createUnderdogNft, createUnderdogNftUsers } from "@/lib/data";
 import { toast } from "@/components/ui/use-toast";
 import axiosInterceptorInstance from "@/axiosInterceptorInstance";
 import { getCookie } from 'cookies-next'; 
-import { getAuthToken } from '@dynamic-labs/sdk-react-core';
+import { getAuthToken, useDynamicContext } from '@dynamic-labs/sdk-react-core';
 
-export default function AwardModal({ submission, firstPlace, secondPlace, thirdPlace }){
-    const { push } = useRouter();
+export default function AwardModal({ submission, firstPlace, secondPlace, thirdPlace, recognized }){
+    const router = useRouter();
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+
+    const { user, primaryWallet } = useDynamicContext()
 
     let token = getCookie('token');
     const dynamicJwtToken = getAuthToken();
@@ -81,42 +83,59 @@ export default function AwardModal({ submission, firstPlace, secondPlace, thirdP
 
     const award = async (percentage: number, position: string) => {
 
-        if (!submission.user.publicKey) {
+        if (!primaryWallet) {
             console.log("User does not have a public key");            
             return
         }
+        
+        let user_is_a_winner = position === "FIRST" || position === "SECOND" || position === "THIRD"
+        let position_label = ""
+        if (user_is_a_winner) {
+            position_label = `${position.toLowerCase()} place`
+        }else if (position === "RECOGNIZED") {
+            position_label = `Recognized writer`        
+        }
+        
+        let reward =  0;
+        if (position !== "RECOGNIZED") {            
+            reward = calculateAmounts(submission?.challenge?.price, percentage)
+        }
 
-        let reward = calculateAmounts(submission?.challenge?.price, percentage)
         let payload = { 
             story: JSON.stringify(submission.story), 
+            position: position_label,
+            currency: submission.challenge.symbol,
+            bounty: submission.challenge.price,
             reward, 
+            percentage: percentage * 100,
             userId: submission.user.id,
             email: submission.user.email,
         }
 
-
         try {
             setLoading(true)
-            let newNft = await createUnderdogNftUsers(payload, submission?.challenge?.projectId, submission?.user?.publicKey);
-            console.log(newNft);
+            // let newNft = await createUnderdogNftUsers(payload, submission?.challenge?.projectId, primaryWallet.address);
+            // console.log(newNft);
 
-            if (!newNft) {
-                return
-            }
+            // if (!newNft) {
+            //     return
+            // }
 
             let storyUpdated = await updateStory({
-                nftId: newNft?.data?.nftId.toString(),
-                nftTransactionId: newNft?.data?.transactionId, 
+                nftId: "20",
+                nftTransactionId: "2b673766-c013-43ae-98f7-5304c90ef64f",
+                // nftId: newNft?.data?.nftId.toString(),
+                // nftTransactionId: newNft?.data?.transactionId, 
                 award: position    
             }, submission.id)
             console.log(storyUpdated);
-            
+            router.refresh()
+            closeModal()
         } catch (error) {
             console.log(error);   
         }finally{
             setLoading(false)
-        }
-        
+        }        
     }
 
     const updateStory = async (payload, storyId) => {
@@ -205,6 +224,22 @@ export default function AwardModal({ submission, firstPlace, secondPlace, thirdP
                                     <Button onClick={()  => award(0.2, "THIRD")} disabled={thirdPlace} className="flex bg-orange-600 items-center gap-2">                        
                                         <i className='bx bx-medal text-lg'></i>
                                         <span>Award 3rd Place </span>
+                                    </Button>
+                                }
+
+                                {
+                                    recognized &&
+                                    <Button disabled={recognized} className="flex bg-purple-600 items-center gap-2">                        
+                                        <i className='bx bx-medal text-lg'></i>
+                                        <span>Recognized Story</span>
+                                    </Button>
+                                }
+
+                                {
+                                    !recognized &&
+                                    <Button onClick={()  => award(0, "RECOGNIZED")} disabled={recognized} className="flex bg-purple-600 items-center gap-2">                        
+                                        <i className='bx bx-medal text-lg'></i>
+                                        <span>Award Recognition</span>
                                     </Button>
                                 }
                             </div>  

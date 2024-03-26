@@ -21,10 +21,6 @@ export default function Challenge({ challenge, clickEvent, type }){
     const [hasSecond, setHasSecond] = useState(false);
     const [hasThird, setHasThird] = useState(false);
 
-    const moveToChooseChallenge = () => {
-        router.push('/start')
-    }
-
     useEffect(() => {
         checkAwards(challenge.stories)
     }, [])
@@ -34,9 +30,9 @@ export default function Challenge({ challenge, clickEvent, type }){
         return format ?? '';        
     }
 
-    function challengeExpired(dateString: string, timeString:string) {
+    function challengeExpired(dateString: string) {
         // Combine date and time strings into a single string
-        const dateTimeString = dateString + 'T' + timeString + ':00';
+        const dateTimeString = dateString;
     
         // Create a Date object for the provided date and time
         const challengeDateTime = new Date(dateTimeString);
@@ -113,11 +109,11 @@ export default function Challenge({ challenge, clickEvent, type }){
                     <h2 className='font-semibold text-lg text-white mb-2'>{challenge.title}</h2>
                     <p className='text-md text-gray-300 mb-1'>Bounty: {challenge.symbol}{challenge.price}</p>
                     <p className='text-[12px] text-gray-300'>Posted: { formatDate(challenge.createdAt) }</p>
-                    <p className='text-[12px] text-gray-300 mb-2'>Author: { challenge?.user?.name }</p>
-                    <p className='text-lg'>
-                        <CountdownComponent date={`${challenge.date}`} />
-                    </p>
+                    <p className='text-[12px] text-gray-300'>Author: { challenge?.user?.name }</p>
                     <div className="flex justify-between mt-3">
+                        <p className='text-lg'>
+                            <CountdownComponent date={`${challenge.date}`} />
+                        </p>
 
                         <p className='flex items-center gap-2 text-gray-300'>
                             <i className='bx bx-book-open'></i>
@@ -125,16 +121,16 @@ export default function Challenge({ challenge, clickEvent, type }){
                         </p>
                     </div>
 
-                    {  type === 'user' && challengeExpired(challenge.date, challenge.time) && 
-                        <Button className='bg-red-600 w-full mt-4'>Expired</Button>
+                    {  type === 'user' && challengeExpired(challenge.date) && 
+                        <Button className='bg-red-600 w-full mt-2'>Expired</Button>
                     }
                     
-                    { type === 'user' && !challengeExpired(challenge.date, challenge.time) && 
-                        <Button onClick={clickEvent} className='bg-green-600 w-full mt-4'>Start</Button>
+                    { type === 'user' && !challengeExpired(challenge.date) && 
+                        <Button onClick={clickEvent} className='bg-green-600 w-full mt-2'>Start</Button>
                     }
 
                     {  type === 'admin' && 
-                        <Button onClick={clickEvent} className='bg-blue-600 w-full mt-4'>Submissions</Button>
+                        <Button onClick={clickEvent} className='bg-blue-600 w-full mt-2'>Submissions</Button>
                     }
 
                     {/* <Button onClick={() => burn(challenge.nftId, challenge.projectId)} className='bg-purple-600 w-full mt-4'>Burn</Button> */}

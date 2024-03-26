@@ -160,7 +160,7 @@ const createUnderdogNftUsers = async (data, projectId, pubKey) => {
         const underdogApiEndpoint = process.env.NEXT_PUBLIC_UNDERDOG_API_URL
 
         const nftData = {
-            name: "1st Place Story Teller",
+            name: data.position,
             image: "https://img.freepik.com/free-psd/books-stacked-isolated-transparent-background_191095-17333.jpg?t=st=1709118646~exp=1709122246~hmac=e3c428c8030046b6f70930e0c93af4e287932cceae81f6c4c3bd7cba735df20c&w=1380",
             attributes: data,
             receiver: {

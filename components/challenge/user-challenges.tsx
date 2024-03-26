@@ -149,9 +149,13 @@ const UserChallenges = () => {
             {
                 !loading && (
                     (challengesData.length < 1) &&
-                    <div className='flex flex-col text-white items-center gap-3 justify-center'>
+                    <div className='flex flex-col text-gray-200 items-center gap-3 justify-center'>
                         <i className="bx bx-data text-[6rem]"></i>
-                        <p className='text-xs '>No challenge created yet...</p>
+                        <p className='text-xs mb-2'>No challenge created yet...</p>
+                        <div onClick={() => fetchChallenges(1)} className="flex items-center gap-1 px-3 py-1 bg-white text-gray-800 rounded-xl cursor-pointer">
+                            <span className='text-xs'>Refresh</span>
+                            <i className='bx bx-refresh text-xl s cursor-pointer'></i>
+                        </div>
                     </div>
                 )
             }

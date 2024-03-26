@@ -15,8 +15,10 @@ const UserStory = ({ clickEvent, story }) => {
         <div onClick={clickEvent} className="relative flex items-center cursor-pointer gap-4 mb-3 border rounded-xl transition-all bg-gray-800 p-3 border-gray-400 hover:border-white">
             <div className="w-20 h-20 flex items-center justify-center rounded-full bg-white ">
                 {story.award === 'FIRST' && <i className='bx bxs-medal text-6xl text-yellow-600'></i>}
-                {story.award === 'SECOND' && <i className='bx bxs-medal text-6xl text-gray-600'></i>}
+                {story.award === 'SECOND' && <i className='bx bxs-medal text-6xl text-gray-900'></i>}
                 {story.award === 'THIRD' && <i className='bx bxs-medal text-6xl text-orange-600'></i>}                
+                {story.award === 'RECOGNIZED' && <i className='bx bxs-star text-5xl text-yellow-500'></i>}                
+                {story.award === null && <i className='bx bxs-hourglass text-5xl text-gray-600'></i>}                                
             </div>
             <div className="text-gray-300 w-max">
                 <p className="mb-2 uppercase text-xl font-bold">

@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/tooltip"
 import TooltipComponent from '@/components/TooltipComponent';
 import CountdownComponent from '../general/countdown-component';
+import Link from 'next/link';
 
 const NewStory = () => {
 
@@ -233,8 +234,14 @@ const NewStory = () => {
                         }
 
                         { completionRate >= 100 &&
-                            <Button onClick={moveToSummaryPage} className='bg-green-600'>100% complete</Button>
+                            <Link href="/user/summary">
+                                <Button className='bg-green-600'>100% complete</Button>
+                            </Link>
                         }
+
+                        {/* { completionRate >= 100 && !validateForm() &&
+                            <Button disabled className='bg-green-600'>Incomplete</Button>
+                        } */}
 
                     <p className="text-xs">
                         <CountdownComponent date={`${selectedChallenge?.date}`}/> 

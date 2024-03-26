@@ -18,6 +18,7 @@ import {
 import UserSubmissionSummary from "@/components/modal/user-submission-summary";
 import { getAuthToken } from '@dynamic-labs/sdk-react-core';
 import PaginationComponent from "@/components/general/pagination-component";
+import { scrollToTop } from "@/lib/helper";
 
 const UserStories = () => {
     const [loading, setLoading] = useState(false)
@@ -50,6 +51,8 @@ const UserStories = () => {
     const getUserStories = async (page = 1) => {
 
         try {   
+            scrollToTop()
+
             setLoading(true)         
             const response = await axiosInterceptorInstance.get(`/stories`, {
                 params: {
