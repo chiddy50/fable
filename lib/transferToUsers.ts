@@ -4,37 +4,33 @@ import { CONNECTION, getKeypair, umi } from "./data";
 import { createSignerFromKeypair, signerIdentity } from "@metaplex-foundation/umi";
 
 export const transferToUsers = async (publicKey: string, amount: number) => {
-    if (!publicKey) {
-        throw new Error("publicKey not found...");
-    }
+   try{
+    const keypair = await getKeypair()
 
-    const keypair = await getKeypair(); // Assuming getKeypair() is implemented elsewhere
+    const signer = createSignerFromKeypair(umi, keypair)
+
+    const blockHash = (await CONNECTION.getLatestBlockhash()).blockhash
 
     const transaction = new Transaction().add(
         SystemProgram.transfer({
             fromPubkey: new PublicKey(keypair.publicKey),
             toPubkey: new PublicKey(publicKey),
-            lamports: amount * LAMPORTS_PER_SOL
+            lamports: 1 * LAMPORTS_PER_SOL,
+            
         })
-    );
+    )
 
-    transaction.feePayer = new PublicKey(keypair.publicKey);
+    // const createTransaction = await buildTra
 
-    const { blockhash } = await CONNECTION.getRecentBlockhash();
-    transaction.recentBlockhash = blockhash;
+    // transaction.recentBlockhash = blockHash
+    // transaction.feePayer = new PublicKey(keypair.publicKey)
+    // transaction.sign()
+    // transaction.
 
-    const signedTransaction = await keypair.signTransaction(transaction);
-    const signature = await CONNECTION.sendRawTransaction(signedTransaction.serialize());
-    await CONNECTION.confirmTransaction(signature, 'finalized');
-}
-
-function getPublicKeyFromPrivateKey(privateKey) {
-    const privateKeyUint8Array = new Uint8Array(privateKey);
-    console.log(privateKeyUint8Array);
+    // const signature = await CONNECTION.sendTransaction(transaction, [])
     
-    const keypair = Keypair.fromSecretKey(privateKeyUint8Array);
-
-    // Get the public key from the keypair
-    const publicKey = keypair.publicKey.toBase58();
-    return publicKey;
+    // console.log(signature)
+   }catch(error){
+    console.log("Error: ", error)
+   }
 }
