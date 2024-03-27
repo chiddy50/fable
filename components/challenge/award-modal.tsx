@@ -129,7 +129,7 @@ export default function AwardModal({ submission, firstPlace, secondPlace, thirdP
                 award: position    
             }, submission.id)
             console.log(storyUpdated);
-            router.refresh()
+            window.location.reload()
             closeModal()
         } catch (error) {
             console.log(error);   

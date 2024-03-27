@@ -47,7 +47,7 @@ export default function HomeComponent() {
                 <div  className="flex flex-col w-full gap-2 px-5">   
                     <Link href="user/challenges" className="w-full bg-white rounded-lg">
                         <Button className="bg-white text-black w-full hover:text-white">
-                            Tell a story
+                            Take a Challenge
                         </Button>           
                     </Link>
                     <Link href="admin/challenge/create" className="w-full bg-white rounded-lg">

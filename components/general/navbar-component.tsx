@@ -27,7 +27,7 @@ const NavbarComponent = () => {
 
     const { userLoggedIn, selectedChallenge } = useContext(AppContext)
     const { push } = useRouter();
-    const { user, primaryWallet, setShowAuthFlow, setShowDynamicUserProfile } = useDynamicContext()
+    const { user, primaryWallet, setShowAuthFlow, setShowDynamicUserProfile, handleLogOut } = useDynamicContext()
     const { updateUserWithModal,  } = useUserUpdateRequest();
 
     const { userHasEmbeddedWallet } = useEmbeddedWallet();
@@ -135,11 +135,15 @@ const NavbarComponent = () => {
                 </div>
             }
 
-            <div className="flex items-center justify-center gap-5 xs:hidden sm:hidden md:flex lg:flex xl:flex 2xl:flex">
+            {/* <div className="flex items-center justify-center gap-5 xs:hidden sm:hidden md:flex lg:flex xl:flex 2xl:flex"> */}
+            <div className="flex items-center justify-center gap-5">
+                
+                
 
-                <GeneralMenuComponent label="CHALLENGE" options={challengeMenu} />
-                <GeneralMenuComponent label="STORY" options={storyMenu} />                            
-                {primaryWallet && <div className="flex items-center bg-white py-2 px-3  gap-2 rounded-3xl">
+                {/* <GeneralMenuComponent label="CHALLENGE" options={challengeMenu} />
+                <GeneralMenuComponent label="STORY" options={storyMenu} />                             */}
+                {
+                primaryWallet && <div className="flex items-center bg-white py-2 px-3  gap-2 rounded-3xl">
                     <div className=" cursor-pointer  h-5 w-5 rounded-full flex items-center justify-center">
                         <img src="/images/solana-sol-logo.svg" alt="" />
                     </div>
@@ -153,14 +157,33 @@ const NavbarComponent = () => {
                         <i className="bx bx-user text-xs"></i>
                     </div>
 
-                </div>}
+                </div>
+                }
+                
                 <div className=" hidden">
                     <DynamicWidget />
                 </div>
-                <MenuComponent />
+
+                <div className="dropdown">
+                    <button className="dropbtn flex items-center text-gray-800 tracking-widest uppercase bg-gray-200 px-3 py-2 text-sm border-none">
+                        Menu
+                        <i className='bx bx-menu-alt-right text-lg'></i>
+                    </button>
+                    <div className="dropdown-content text-sm uppercase right-0">
+                        <Link className="px-3 py-3 tracking-wider" href="/">Home</Link>
+                        <Link className="px-3 py-3 tracking-wider" href="/admin/challenge/create">Add challenge</Link>
+                        <Link className="px-3 py-3 tracking-wider" href="/user/challenges">Tell a story</Link>
+                        { user && <Link className="px-3 py-3 tracking-wider" href="/admin/challenges">My challenges</Link> }
+                        { user && <Link className="px-3 py-3 tracking-wider" href="/user/stories">My stories</Link>  }
+                        { !user && <a className="px-3 py-3 tracking-wider cursor-pointer" onClick={() => setShowAuthFlow(true)}>Register/Login</a> }
+                        { user && <a className="px-3 py-3 tracking-wider cursor-pointer" onClick={() => handleLogOut()}>Logout</a> }
+                    </div>
+                </div>
+
+                {/* <MenuComponent /> */}
             </div>
 
-            <div className="items-center xs:flex sm:flex md:hidden lg:hidden xl:hidden 2xl:hidden">
+            {/* <div className="items-center xs:flex sm:flex md:hidden lg:hidden xl:hidden 2xl:hidden">
                 {primaryWallet && <div className="flex items-center bg-white py-2 px-3  gap-2 rounded-3xl">
                     <div className=" cursor-pointer  h-5 w-5 rounded-full flex items-center justify-center">
                         <img src="/images/solana-sol-logo.svg" alt="" />
@@ -177,7 +200,7 @@ const NavbarComponent = () => {
 
                 </div>}
                 <MobileMenuComponent/>
-            </div>
+            </div> */}
 
         </div>
     )
