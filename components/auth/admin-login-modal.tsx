@@ -101,7 +101,7 @@ export default function AdminLoginModal(){
 
     return (
         <div id="admin-login-modal" ref={modalRef} className="modal fixed z-10 left-0 top-0 w-full h-full overflow-auto">
-            <div className="modal-content p-5 rounded-xl shadow-md ">
+            <div className="modal-content bg-white p-5 rounded-xl shadow-md ">
 
                 
                     <div>                    

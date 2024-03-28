@@ -8,17 +8,12 @@ import UserStory from "@/components/story/user-story";
 import { transferToUsers } from "@/lib/transferToUsers";
 import { getCookie } from 'cookies-next';
 import axiosInterceptorInstance from "@/axiosInterceptorInstance";
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination"
+
 import UserSubmissionSummary from "@/components/modal/user-submission-summary";
 import { getAuthToken } from '@dynamic-labs/sdk-react-core';
 import PaginationComponent from "@/components/general/pagination-component";
 import { scrollToTop } from "@/lib/helper";
+import StoryAwardLegendComponent from "@/components/story/story-award-legend-component";
 
 const UserStories = () => {
     const [loading, setLoading] = useState(false)
@@ -89,8 +84,17 @@ const UserStories = () => {
     return (
         <div className='layout-width '>
             <div className="py-10 ">
-                <h1 className='text-white xs:text-lg sm:text-lg md:text-3xl mb-7 font-bold'>Here are your stories:</h1>
-                
+                <h1 className='text-white xs:text-lg sm:text-lg md:text-3xl mb-4 font-bold'>Here are your stories:</h1>
+
+                <div className="mb-7 bg-[#3F4447] py-3 px-5 rounded-xl grid 
+                xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-4
+                xs:gap-4 sm:gap-4 md:gap-4
+                ">                    
+                    <StoryAwardLegendComponent iconBgColor="text-yellow-600" icon="bx bxs-medal" label="First Place" />
+                    <StoryAwardLegendComponent iconBgColor="text-gray-900" icon="bx bxs-medal" label="Second Place" />
+                    <StoryAwardLegendComponent iconBgColor="text-orange-600" icon="bx bxs-medal" label="Third Place" />
+                    <StoryAwardLegendComponent iconBgColor="text-yellow-500" icon="bx bxs-star" label="Honorable Mention" />
+                </div>
                 <>
                 { loading && <div className=''>
                     {

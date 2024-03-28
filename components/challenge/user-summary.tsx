@@ -90,7 +90,7 @@ const UserSummary = () => {
                 description: "User story created",
                 variant: "default"
             })
-            push(`/user/stories`)
+            push("/user/stories")
             
         } catch (error) {
             console.log(error);

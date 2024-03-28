@@ -172,7 +172,7 @@ const NavbarComponent = () => {
                     <div className="dropdown-content text-sm uppercase right-0">
                         <Link className="px-3 py-3 tracking-wider" href="/">Home</Link>
                         <Link className="px-3 py-3 tracking-wider" href="/admin/challenge/create">Add challenge</Link>
-                        <Link className="px-3 py-3 tracking-wider" href="/user/challenges">Tell a story</Link>
+                        <Link className="px-3 py-3 tracking-wider" href="/user/challenges">Take a challenge</Link>
                         { user && <Link className="px-3 py-3 tracking-wider" href="/admin/challenges">My challenges</Link> }
                         { user && <Link className="px-3 py-3 tracking-wider" href="/user/stories">My stories</Link>  }
                         { !user && <a className="px-3 py-3 tracking-wider cursor-pointer" onClick={() => setShowAuthFlow(true)}>Register/Login</a> }

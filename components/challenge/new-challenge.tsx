@@ -232,8 +232,7 @@ const NewChallenge = () => {
                 hideTransferLoader()
 
                 return false;
-            }
-            
+            }            
     
             let projectId = "1";
             const payload = getCreateChallengePayload(image, projectId)

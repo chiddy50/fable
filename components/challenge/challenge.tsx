@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/tooltip"
 import TooltipComponent from '@/components/TooltipComponent';
 import axios from 'axios';
+import { formatDate } from '@/lib/helper';
 
 export default function Challenge({ challenge, clickEvent, type }){
     const router = useRouter();
@@ -24,11 +25,6 @@ export default function Challenge({ challenge, clickEvent, type }){
     useEffect(() => {
         checkAwards(challenge.stories)
     }, [])
-
-    const formatDate = (targetDate: string) => {
-        let format = formatDistanceToNow(new Date(targetDate), { addSuffix: true })
-        return format ?? '';        
-    }
 
     function challengeExpired(dateString: string) {
         // Combine date and time strings into a single string

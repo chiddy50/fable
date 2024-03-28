@@ -34,7 +34,7 @@ const ConfirmStartChallenge = ({ challenge }) => {
 
     return (
         <div id="confirm-start-modal" ref={modalRef} className="modal fixed z-10 left-0 top-0 w-full h-full overflow-auto">
-            {challenge && <div className="md-modal-content py-5 px-7 rounded-xl shadow-md ">
+            {challenge && <div className="md-modal-content bg-white py-5 px-7 rounded-xl shadow-md ">
                 
                 <div className="flex justify-end items-center mb-2">
                     {/* <h1 className='text-xl font-bold'>Sign in</h1> */}

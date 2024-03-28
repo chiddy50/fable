@@ -1,6 +1,6 @@
 "use client"
 
-import { useContext, useRef, useState, useTransition } from "react";
+import { useContext, useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from 'next/navigation';
 import { Button } from "../ui/button";
 import { FormError } from "../from-error";
@@ -13,13 +13,16 @@ import { toast } from "@/components/ui/use-toast";
 import axiosInterceptorInstance from "@/axiosInterceptorInstance";
 import { getCookie } from 'cookies-next'; 
 import { getAuthToken, useDynamicContext } from '@dynamic-labs/sdk-react-core';
+import { now } from "@/lib/helper";
+import Lottie from 'react-lottie';
+import * as animationData from "@/public/animations/animation.json"
 
-export default function AwardModal({ submission, firstPlace, secondPlace, thirdPlace, recognized }){
+export default function AwardModal({ fetchSubmission, submission, firstPlace, secondPlace, thirdPlace, recognized }){
     const router = useRouter();
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-    const [success, setSuccess] = useState("");
+    const [success, setSuccess] = useState(false);
 
     const { user, primaryWallet } = useDynamicContext()
 
@@ -60,6 +63,15 @@ export default function AwardModal({ submission, firstPlace, secondPlace, thirdP
             setLoading(false)
         }
     }
+
+    const defaultOptions = {
+        loop: true,
+        autoplay: true, 
+        animationData: animationData,
+        rendererSettings: {
+          preserveAspectRatio: 'xMidYMid slice'
+        }
+    };
 
     const validateCredentials = () => {
         setError("")
@@ -114,23 +126,29 @@ export default function AwardModal({ submission, firstPlace, secondPlace, thirdP
 
         try {
             setLoading(true)
-            // let newNft = await createUnderdogNftUsers(payload, submission?.challenge?.projectId, primaryWallet.address);
-            // console.log(newNft);
+            let newNft = await createUnderdogNftUsers(payload, submission?.challenge?.projectId, primaryWallet.address);
+            console.log(newNft);
 
-            // if (!newNft) {
-            //     return
-            // }
+            if (!newNft) {
+                return
+            }
 
             let storyUpdated = await updateStory({
-                nftId: "20",
-                nftTransactionId: "2b673766-c013-43ae-98f7-5304c90ef64f",
-                // nftId: newNft?.data?.nftId.toString(),
-                // nftTransactionId: newNft?.data?.transactionId, 
-                award: position    
+                nftId: newNft?.data?.nftId.toString(),
+                nftTransactionId: newNft?.data?.transactionId, 
+                award: position,
+                awardedAt: now()
             }, submission.id)
+            setSuccess(true)
+            
             console.log(storyUpdated);
-            window.location.reload()
-            closeModal()
+            fetchSubmission()
+
+            setTimeout(() => {
+                closeModal()
+                setSuccess(false)
+            }, 4000);
+            
         } catch (error) {
             console.log(error);   
         }finally{
@@ -167,16 +185,40 @@ export default function AwardModal({ submission, firstPlace, secondPlace, thirdP
 
     return (
         <div id="award-modal" ref={modalRef} className="modal fixed z-10 left-0 top-0 w-full h-full overflow-auto">
-            <div className="modal-content p-5 rounded-xl shadow-md ">
+            <div className="modal-content bg-white p-5 rounded-xl shadow-md ">
 
-                <h1 className="text-center text-xl mb-5 font-bold">Time for a reward</h1>
 
-                {  !loading &&
+                {  !loading && !success &&
                     <>                
-                        <ul className="text-xs mb-4">
-                            <li className="mb-1 text-gray-600">First place 50%: {submission?.challenge?.symbol}{calculateAmounts(submission?.challenge?.price, 0.5)} </li>
-                            <li className="mb-1 text-gray-600">Second place 30%: {submission?.challenge?.symbol}{calculateAmounts(submission?.challenge?.price, 0.3)} </li>
-                            <li className="mb-1 text-gray-600">Third place 20%: {submission?.challenge?.symbol}{calculateAmounts(submission?.challenge?.price, 0.2)} </li>
+                        <h1 className="text-center text-xl mb-5 font-bold">Time for a reward</h1>
+                        <ul className="text-xs mb-4 grid xs:gap-2 xs:grid-cols-1 sm:grid-cols-3">
+                            <li className=" text-gray-600">
+                                <p className="text-sm font-bold">First place</p> 
+                                <p className="italic flex items-center gap-1">
+                                    <span>50%</span>
+                                    <span>
+                                        ({submission?.challenge?.symbol}{calculateAmounts(submission?.challenge?.price, 0.5)}) 
+                                    </span>
+                                </p>                                 
+                            </li>
+                            <li className=" text-gray-600">
+                                <p className="text-sm font-bold">Second place</p> 
+                                <p className="italic flex items-center gap-1">
+                                    <span>30%</span>
+                                    <span>
+                                        ({submission?.challenge?.symbol}{calculateAmounts(submission?.challenge?.price, 0.3)}) 
+                                    </span>
+                                </p>                                 
+                            </li>
+                            <li className=" text-gray-600">
+                                <p className="text-sm font-bold">Third place</p> 
+                                <p className="italic flex items-center gap-1">
+                                    <span>20%</span>
+                                    <span>
+                                        ({submission?.challenge?.symbol}{calculateAmounts(submission?.challenge?.price, 0.2)}) 
+                                    </span>
+                                </p>                                 
+                            </li>
                         </ul>
 
                         {!submission?.award && 
@@ -184,7 +226,7 @@ export default function AwardModal({ submission, firstPlace, secondPlace, thirdP
                                 {
                                     firstPlace &&
                                     <Button disabled={firstPlace} className="flex bg-green-600 items-center gap-2">
-                                        <i className='bx bx-medal text-lg'></i> <span>1st Place has already awarded</span>
+                                        <i className='bx bx-medal text-lg'></i> <span>1st Place awarded</span>
                                     </Button>
                                 }
 
@@ -199,7 +241,7 @@ export default function AwardModal({ submission, firstPlace, secondPlace, thirdP
                                     secondPlace && 
                                     <Button disabled={secondPlace} className="flex bg-blue-600 items-center gap-2">                        
                                         <i className='bx bx-medal text-lg'></i>
-                                        <span>2nd Place has already awarded</span>
+                                        <span>2nd Place awarded</span>
                                     </Button>   
                                 }
 
@@ -215,7 +257,7 @@ export default function AwardModal({ submission, firstPlace, secondPlace, thirdP
                                     thirdPlace &&
                                     <Button disabled={thirdPlace} className="flex bg-orange-600 items-center gap-2">                        
                                         <i className='bx bx-medal text-lg'></i>
-                                        <span>3rd Place has already awarded</span>
+                                        <span>3rd Place awarded</span>
                                     </Button>
                                 }
 
@@ -255,7 +297,28 @@ export default function AwardModal({ submission, firstPlace, secondPlace, thirdP
                             <Button onClick={closeModal}>Cancel</Button>
                         </div>                                 
                     </>
-                }        
+                }  
+
+                {  !loading && success &&
+                    <div>
+                        <h1 className="text-center text-xl mb-5 font-bold">
+                            Awarded!!
+                        </h1>
+
+                        <div className="flex justify-center mb-3">
+                            {/* <i className='bx bx-party bx-tada text-[6rem] text-green-600' ></i> */}
+                            <div className="w-[90%]">                            
+                                <Lottie options={defaultOptions}
+                                    // height={200}
+                                    // width={200}
+                                    isStopped={false}
+                                    isPaused={false}/>
+                            </div>
+                        </div>
+
+                        <Button className="w-full" onClick={() => closeModal()}>Cancel</Button>
+                    </div>
+                }         
 
                 {   loading &&
                     <div className="flex items-center justify-center my-7">

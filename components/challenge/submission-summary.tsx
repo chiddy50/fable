@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button";
 import { AppContext } from "@/context/StoryContext"
-import { openAwardModal } from "@/lib/helper";
+import { formatDate, openAwardModal } from "@/lib/helper";
 import AwardModal from "@/components/challenge/award-modal";
 import axiosInterceptorInstance from '@/axiosInterceptorInstance';
 import { getCookie } from 'cookies-next';
@@ -84,11 +84,11 @@ const SubmissionSummary  = () => {
     return (
         <div className="layout-width">
             <div className="mt-32">
-                <i onClick={() => push("/admin/challenges")} className='bx bx-arrow-back text-4xl cursor-pointer text-white'></i>
+                <i onClick={() => push("/admin/challenges")} className='bx bx-arrow-back text-4xl cursor-pointer text-gray-200'></i>
             </div>
 
             <div className="flex justify-between my-10">
-                <h1 className="text-center text-white xs:text-3xl sm:text-3xl md:text-4xl font-bold mb-10">
+                <h1 className="text-center text-gray-200 xs:text-3xl sm:text-3xl md:text-4xl font-bold mb-10">
                     Summary
                 </h1>
 
@@ -114,8 +114,14 @@ const SubmissionSummary  = () => {
             {
                 (!loading && submission) &&
                 <>
-                    <div className='mb-3 text-xs text-white font-bold'>Author: <span className='font-light capitalize'>{submission?.user?.name}</span></div>
-                    <div className='mb-3 text-xs text-white font-bold'>Email: <span className='font-light'>{submission?.user?.email}</span></div>
+                    <div className='h-[300px] border border-gray-700 rounded-xl overflow-clip xs:w-full sm:w-[400px] mb-5'>
+                        <img src={submission?.challenge?.image} alt="challenge image" className='rounded-xl w-full h-full object-cover object-center'/>
+                    </div>
+                    <div className='mb-3 text-3xl text-gray-200 font-bold'>{submission?.challenge?.title}</div>
+                    <div className='mb-3 text-xs text-gray-200'>Author: <span className='font-light capitalize'>{submission?.user?.name}</span></div>
+                    <div className='mb-3 text-xs text-gray-200'>Email: <span className='font-light'>{submission?.user?.email}</span></div>
+                    <p className='text-xs text-gray-200 mb-4'>Submitted {formatDate(submission?.createdAt)}</p>
+
                     <div className='mb-10'>
                     {
                     submission && !submission?.award && 
@@ -126,10 +132,13 @@ const SubmissionSummary  = () => {
                     }
                     {
                     submission && submission?.award && 
-                        <Button variant="outline" size="sm">
-                            <span className='mr-3 text-xs'>{submission?.award}</span>
-                            <i className='bx bx-medal text-xl'></i>
-                        </Button>    
+                        <div>
+                            <p className='text-xs text-gray-200 mb-4'>Awarded {formatDate(submission?.awardedAt)}</p>
+                            <Button variant="outline" size="sm">
+                                <span className='mr-3 text-xs uppercase'>Awarded {submission?.award}</span>
+                                <i className='bx bx-medal text-xl'></i>
+                            </Button>    
+                        </div>
                     }
                     </div>
                     <div className="mb-4">
@@ -174,6 +183,7 @@ const SubmissionSummary  = () => {
             {
                 submission && 
                 <AwardModal 
+                fetchSubmission={fetchSubmission}
                 submission={submission} 
                 firstPlace={firstPlace} 
                 secondPlace={secondPlace} 

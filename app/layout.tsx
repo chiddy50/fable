@@ -44,6 +44,7 @@ export default function RootLayout({
       <head>
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet' />
         <link rel="icon" href="/images/fable_black.png" sizes="any" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
       </head>
       <body className={cn(
         "bg-[#151515] h-screen",
