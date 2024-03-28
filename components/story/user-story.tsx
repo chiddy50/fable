@@ -58,10 +58,16 @@ const UserStory = ({ clickEvent, story }) => {
                 <p className="xs:text-[10px] sm:text-[10px] md:text-[15px] font-bold mb-3">
                     Price: {story.challenge.symbol}{story.challenge.price}
                 </p>
-                <div className="flex justify-between gap-10 items-center w-full">
+                <div className="flex flex-col w-full">
                     <p className="text-xs">
                         Submitted {formatDate(story.createdAt)}
                     </p>
+                    {
+                        story.awardedAt &&
+                        <p className="text-xs mt-2">
+                            Awarded {formatDate(story.awardedAt)}
+                        </p>
+                    }
                 </div>
                 {/* { getReward() && <button className=" absolute top-2 right-2 py-2 px-4 bg-blue-600 text-white rounded-xl text-xs">Claim Reward</button>} */}
             </div>

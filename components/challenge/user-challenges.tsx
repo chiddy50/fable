@@ -93,16 +93,19 @@ const UserChallenges = () => {
         fetchChallenges(set_next_page)
     }
 
-    const fetchChallenges = async (page = 1) => {        
+    const fetchChallenges = async (page = 1, filter:null|string = "active") => {        
         try {   
             setLoading(true)     
             scrollToTop()
-            
+
+            let params = {
+                page: page,
+                limit: limit,
+                type: filter
+            }
+
             let response = await axiosInterceptorInstance.get(`challenges/all`, {
-                params: {
-                    page: page,
-                    limit: limit
-                }
+                params: params
             })
             console.log(response);
 
@@ -132,6 +135,18 @@ const UserChallenges = () => {
 
     return (
         <>        
+            <div className="flex items-center justify-between mb-7 xs:flex-col sm:flex-col md:flex-row xs:gap-4 sm:gap-4" 
+            style={{ marginTop: "5rem" }}>
+                <h1 className='text-white xs:text-xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-3xl  font-bold '>Choose Your Challenge</h1>
+                <div className=" pr-3 bg-gray-50 border border-gray-300 rounded-lg">
+                    <select id="countries" onChange={(e) => fetchChallenges(1, e.target.value)} className="border-none rounded-lg text-gray-900 text-xs block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white outline-none">
+                        <option selected disabled>Filter</option>
+                        <option value="all">All</option>
+                        <option value="expired">Expired</option>
+                        <option value="active">Active</option>
+                    </select>
+                </div>
+            </div> 
             { 
             loading && 
             <div className='grid md:grid-cols-1 lg:grid-cols-3 gap-5'>
