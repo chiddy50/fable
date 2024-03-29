@@ -25,7 +25,8 @@ export default function HomeComponent() {
             <img src="/images/fable_transp.svg" alt="logo" className="xs:w-[60%] sm:w-[75%] md:w-[90%]" />
             <p style={{ margin: "0 0 2rem" }} className="text-white tracking-wider mt-0 font-bold xs:text-sm sm:text-sm md:text-md">
                 {/* It&apos;s all about evoking the art of storytelling and the power of imagination */}
-                Empowering Storytellers with cNFT's
+                {/* Empowering Storytellers with cNFT's */}
+                Write better stories faster..
             </p>
 
 

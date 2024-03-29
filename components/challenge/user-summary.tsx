@@ -26,6 +26,7 @@ import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
 import { useToast } from "@/components/ui/use-toast"
 import SuccessModal from "../modal/success-modal";
 
+import * as animationData from "@/public/animations/balloons.json"
 
 const UserSummary = () => {
     const { push } = useRouter()
@@ -90,6 +91,7 @@ const UserSummary = () => {
                 variant: "default"
             })
 
+            clearForm()
             document.getElementById('success-modal').style.display = "block";
             
             setTimeout(() => {
@@ -104,7 +106,14 @@ const UserSummary = () => {
             hideTransferLoader()
         }
     }
-
+    
+    const clearForm = () => {
+        
+        const storyInputs = document.getElementsByClassName('story-input');
+        for (let index = 0; index < storyInputs.length; index++) {            
+            storyInputs[index].value = ""
+        }
+    }
     
     return (
         <div className="layout-width">
@@ -173,7 +182,7 @@ const UserSummary = () => {
                 buttonText="Submit"
             />
 
-            <SuccessModal />
+            <SuccessModal animation={animationData} title="Story created" />
 
         </div>
     )

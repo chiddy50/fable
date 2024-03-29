@@ -87,13 +87,14 @@ const UserStories = () => {
                 <h1 className='text-white xs:text-lg sm:text-lg md:text-3xl mb-4 font-bold'>Here are your stories:</h1>
 
                 <div className="mb-7 bg-[#0c0d0f] py-3 px-5 rounded-xl grid 
-                xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-4
+                xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5
                 xs:gap-4 sm:gap-4 md:gap-4
                 ">                    
                     <StoryAwardLegendComponent iconBgColor="text-yellow-600" icon="bx bxs-medal" label="First Place" />
                     <StoryAwardLegendComponent iconBgColor="text-gray-900" icon="bx bxs-medal" label="Second Place" />
                     <StoryAwardLegendComponent iconBgColor="text-orange-600" icon="bx bxs-medal" label="Third Place" />
                     <StoryAwardLegendComponent iconBgColor="text-yellow-500" icon="bx bxs-star" label="Honorable Mention" />
+                    <StoryAwardLegendComponent iconBgColor="text-gray-600" icon="bx bxs-hourglass" label="Submitted" />
                 </div>
                 <>
                 { loading && <div className=''>

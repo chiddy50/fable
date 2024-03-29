@@ -23,6 +23,8 @@ const bangers = Bangers({
 
 const NavbarComponent = () => {
     const [hasEmbeddedWallet, setHasEmbeddedWallet] = useState(false)
+    const [isClient, setIsClient] = useState(false)
+ 
     const copyTextRef = useRef(null);
 
     const { userLoggedIn, selectedChallenge } = useContext(AppContext)
@@ -36,6 +38,7 @@ const NavbarComponent = () => {
 
     useEffect(() => {
         console.log({primaryWallet});
+        setIsClient(true)
         
         if (user && primaryWallet) {
           console.log("The authenticated user has a connected wallet.");
@@ -144,15 +147,17 @@ const NavbarComponent = () => {
                 <GeneralMenuComponent label="STORY" options={storyMenu} />                             */}
                 {
                 primaryWallet && <div className="flex items-center bg-white py-2 px-3  gap-2 rounded-3xl">
-                    <div className=" cursor-pointer  h-5 w-5 rounded-full flex items-center justify-center">
+                    {/* <div className=" cursor-pointer  h-5 w-5 rounded-full flex items-center justify-center">
                         <img src="/images/solana-sol-logo.svg" alt="" />
+                    </div> */}
+                    <div onClick={copyToClipboard} className="border cursor-pointer flex items-center border-gray-700 rounded-full hover:bg-gray-700 hover:text-white hover:border-white pr-2">                        
+                        <div className="h-6 w-6 rounded-full flex items-center justify-center ">
+                            <i className='bx bx-copy text-xs'></i>
+                        </div>
+                        <p className="text-[9px]" ref={copyTextRef} id="primary-wallet-address">
+                            {truncateString(primaryWallet?.address)}
+                        </p>
                     </div>
-                    <div onClick={copyToClipboard} className="border cursor-pointer border-gray-700 h-6 w-6 rounded-full flex items-center justify-center hover:bg-gray-700 hover:text-white hover:border-white">
-                        <i className='bx bx-copy text-xs'></i>
-                    </div>
-                    <p className="text-[9px]" ref={copyTextRef} id="primary-wallet-address">
-                        {truncateString(primaryWallet?.address)}
-                    </p>
                     <div onClick={bringUpDynamicUserProfile} className="border cursor-pointer border-gray-700 h-6 w-6 rounded-full flex items-center justify-center hover:bg-gray-700 hover:text-white hover:border-white">
                         <i className="bx bx-user text-xs"></i>
                     </div>
@@ -169,15 +174,15 @@ const NavbarComponent = () => {
                         Menu
                         <i className='bx bx-menu-alt-right text-lg'></i>
                     </button>
-                    <div className="dropdown-content text-sm uppercase right-0">
+                    {isClient && <div className="dropdown-content text-sm uppercase right-0">
                         <Link className="px-3 py-3 tracking-wider" href="/">Home</Link>
                         <Link className="px-3 py-3 tracking-wider" href="/admin/challenge/create">Add challenge</Link>
                         <Link className="px-3 py-3 tracking-wider" href="/user/challenges">Take a challenge</Link>
                         { user && <Link className="px-3 py-3 tracking-wider" href="/admin/challenges">My challenges</Link> }
                         { user && <Link className="px-3 py-3 tracking-wider" href="/user/stories">My stories</Link>  }
-                        { !user && <a className="px-3 py-3 tracking-wider cursor-pointer" onClick={() => setShowAuthFlow(true)}>Register/Login</a> }
-                        { user && <a className="px-3 py-3 tracking-wider cursor-pointer" onClick={() => handleLogOut()}>Logout</a> }
-                    </div>
+                        { !user && <p className="px-3 py-3 tracking-wider cursor-pointer" onClick={() => setShowAuthFlow(true)}>Register/Login</p> }
+                        { user && <p className="px-3 py-3 tracking-wider cursor-pointer" onClick={() => handleLogOut()}>Logout</p> }
+                    </div>}
                 </div>
 
                 {/* <MenuComponent /> */}

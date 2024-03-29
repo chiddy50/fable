@@ -3,7 +3,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import Lottie from 'react-lottie';
-import * as animationData from "@/public/animations/thumbs-up.json"
 
 export default function SuccessModal({ animation, title }){
     const modalRef = useRef(null);
