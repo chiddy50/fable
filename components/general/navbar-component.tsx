@@ -13,8 +13,9 @@ import { usePathname } from "next/navigation";
 import { useRouter } from 'next/navigation';
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
 import { DynamicWidget, getAuthToken, useEmbeddedWallet, useUserWallets, useUserUpdateRequest } from '@dynamic-labs/sdk-react-core';
-import { toast } from "@/components/ui/use-toast";
+// import { toast } from "@/components/ui/use-toast";
 import Link from "next/link";
+import toast, { Toaster } from 'react-hot-toast';
 
 const bangers = Bangers({
     subsets: ["latin"],
@@ -78,12 +79,44 @@ const NavbarComponent = () => {
         let address:string = primaryWallet?.address;
         if (address) {            
             navigator.clipboard.writeText(address);
-            toast({
-                description: "Wallet address copied!",
-                className: cn(
-                    'top-20 right-0 flex fixed md:max-w-[420px] md:top-20 md:right-4'
-                ),
-            })
+            // toast({
+            //     description: "Wallet address copied!",
+            //     className: cn(
+            //         'top-20 right-0 flex fixed md:max-w-[420px] md:top-20 md:right-4'
+            //     ),
+            // })
+            toast.custom((t) => (
+                <div
+                  className={`${
+                    t.visible ? 'animate-enter' : 'animate-leave'
+                  } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+                >
+                  <div className="flex-1 w-0 p-3">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0 pt-0.5">
+                        <img
+                          className="h-4 w-4"
+                          src="/images/solana-sol-logo.svg"                          
+                          alt="Solana logo"
+                        />
+                      </div>
+                      <div className="ml-3 flex-1">
+                        <p className="text-sm font-medium text-gray-900">
+                            Wallet address copied!
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  {/* <div className="flex border-l border-gray-200">
+                    <button
+                      onClick={() => toast.dismiss(t.id)}
+                      className="w-full outline-none border-none rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                    >
+                      Close
+                    </button>
+                  </div> */}
+                </div>
+            ))
         }
         
       };
@@ -174,15 +207,17 @@ const NavbarComponent = () => {
                         Menu
                         <i className='bx bx-menu-alt-right text-lg'></i>
                     </button>
-                    {isClient && <div className="dropdown-content text-sm uppercase right-0">
-                        <Link className="px-3 py-3 tracking-wider" href="/">Home</Link>
-                        <Link className="px-3 py-3 tracking-wider" href="/admin/challenge/create">Add challenge</Link>
-                        <Link className="px-3 py-3 tracking-wider" href="/user/challenges">Take a challenge</Link>
-                        { user && <Link className="px-3 py-3 tracking-wider" href="/admin/challenges">My challenges</Link> }
-                        { user && <Link className="px-3 py-3 tracking-wider" href="/user/stories">My stories</Link>  }
-                        { !user && <p className="px-3 py-3 tracking-wider cursor-pointer" onClick={() => setShowAuthFlow(true)}>Register/Login</p> }
-                        { user && <p className="px-3 py-3 tracking-wider cursor-pointer" onClick={() => handleLogOut()}>Logout</p> }
-                    </div>}
+                    {isClient && 
+                        <div className="dropdown-content text-sm uppercase right-0">
+                            <Link className="px-3 py-3 tracking-wider" href="/">Home</Link>
+                            <Link className="px-3 py-3 tracking-wider" href="/admin/challenge/create">Add challenge</Link>
+                            <Link className="px-3 py-3 tracking-wider" href="/user/challenges">Take a challenge</Link>
+                            { user && <Link className="px-3 py-3 tracking-wider" href="/admin/challenges">My challenges</Link> }
+                            { user && <Link className="px-3 py-3 tracking-wider" href="/user/stories">My stories</Link>  }
+                            { !user && <p className="px-3 py-3 tracking-wider cursor-pointer" onClick={() => setShowAuthFlow(true)}>Register/Login</p> }
+                            { user && <p className="px-3 py-3 tracking-wider cursor-pointer" onClick={() => handleLogOut()}>Logout</p> }
+                        </div>
+                    }
                 </div>
 
                 {/* <MenuComponent /> */}
@@ -206,7 +241,7 @@ const NavbarComponent = () => {
                 </div>}
                 <MobileMenuComponent/>
             </div> */}
-
+            <Toaster toastOptions={{ duration: 2000 }} />
         </div>
     )
 }

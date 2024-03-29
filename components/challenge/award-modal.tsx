@@ -13,11 +13,11 @@ import { toast } from "@/components/ui/use-toast";
 import axiosInterceptorInstance from "@/axiosInterceptorInstance";
 import { getCookie } from 'cookies-next'; 
 import { getAuthToken, useDynamicContext } from '@dynamic-labs/sdk-react-core';
-import { now } from "@/lib/helper";
+import { getCurrentRate, now, setTransactionNarration } from "@/lib/helper";
 import Lottie from 'react-lottie';
 import * as animationData from "@/public/animations/animation.json"
 import { transferToUsers } from "@/lib/transferToUsers";
-import { createStoryTransaction } from "@/lib/databaseHelpers";
+import { createStoryTransaction, updateStory } from "@/lib/databaseHelpers";
 
 export default function AwardModal({ fetchSubmission, submission, firstPlace, secondPlace, thirdPlace, recognized }){
     const router = useRouter();
@@ -107,8 +107,8 @@ export default function AwardModal({ fetchSubmission, submission, firstPlace, se
         }
         
         let user_is_a_winner = position === "FIRST" || position === "SECOND" || position === "THIRD"
-        let position_label = user_is_a_winner ? `${position.toLowerCase()} place` : `Recognized writer`
-        let reward = position !== "RECOGNIZED" ? calculateAmounts(submission?.challenge?.price, percentage) : 0
+        let position_label = user_is_a_winner ? `${position.toLowerCase()} place` : `Honorable mention`
+        let reward = position !== "RECOGNIZED" ? calculateAmounts(submission?.challenge?.price, percentage) : "0"
         
         const currentRate = await getCurrentRate(challenge?.currency)
         if (!currentRate) {
@@ -116,55 +116,53 @@ export default function AwardModal({ fetchSubmission, submission, firstPlace, se
             return
         }
 
-        const rewardInSol = Number(reward) / currentRate; // total reward in sol
+        const rewardInSol = Number(reward) / Number(currentRate); // total reward in sol
         const narration = setTransactionNarration(position)
 
         let payload: any = { 
             storyId,
-            currentRate,
+            currentRate: currentRate.toString(),
             challengeId: challenge.id,
             story: JSON.stringify(story), 
-            position: position_label,
+            positionLabel: position_label,
             narration,
+            position,
             currency: challenge.currency,
             symbol: challenge.symbol,
-            bounty: challenge.price,
-            reward: reward, 
-            rewardInSol: rewardInSol,
+            bounty: challenge.price.toString(),
+            reward: reward.toString(), 
+            rewardInSol: rewardInSol.toString(),
             percentage: percentage * 100,
             userId: user.id,
-            email: user.email,
-            paidAt: null,
-            awardedAt: null,
+            email: user.email,            
         }
 
         console.log({payload});
         try {
             setLoading(true)
-
-            // return;
-            let transaction = await transferToUsers(userPrimaryWalletAddress, 1)      
-            let status = "FAILED"  
-            if (!transaction) {  
-                payload = {
-                    ...payload,
-                    amountPending: reward,
-                    amountPaid: 0,
-                }
-            }else{
-                status = "SUCCESS"
-                payload = {
-                    ...payload,
-                    transactionPublicId: transaction,
-                    amountPending: 0,
-                    amountPaid: reward,
-                    paidAt: now()
-                }
-            }
-
-            await createStoryTransaction(payload, status, dynamicJwtToken)
-
+            
             if (user_is_a_winner) {
+                let transaction = await transferToUsers(userPrimaryWalletAddress, 1)      
+                let status = "FAILED"  
+                if (!transaction) {  
+                    payload = {
+                        ...payload,
+                        amountPending: reward.toString(),
+                        amountPaid: "0",
+                    }
+                }else{
+                    status = "SUCCESS"
+                    payload = {
+                        ...payload,
+                        transactionPublicId: transaction,
+                        amountPending: "0",
+                        amountPaid: reward.toString(),
+                        paidAt: now()
+                    }
+                }
+    
+                await createStoryTransaction(payload, status, dynamicJwtToken)
+    
                 let newNft = await createUnderdogNftUsers(payload, projectId, userPrimaryWalletAddress);
                 console.log(newNft);              
                 let nftGenerated = newNft ? true : false;
@@ -178,7 +176,7 @@ export default function AwardModal({ fetchSubmission, submission, firstPlace, se
                 }
             }            
 
-            let storyUpdated = await updateStory(payload, storyId)
+            let storyUpdated = await updateStory(payload, storyId, dynamicJwtToken)
             setSuccess(true)
             
             console.log(storyUpdated);
@@ -196,75 +194,11 @@ export default function AwardModal({ fetchSubmission, submission, firstPlace, se
         }        
     }
 
-    const updateStory = async (payload: any, storyId: string) => {
-        try {                
-            const response = await axiosInterceptorInstance.put(`/stories/id/${storyId}`, 
-                {
-                    challengeId: payload.challengeId,           
-                    nftId: payload.nftId,                 
-                    nftTransactionId: payload.nftTransactionId,      
-                    projectId: payload.projectId,             
-                    amountPaid: payload.amountPaid,            
-                    amountPending: payload.amountPending,         
-                    paidAt: payload.paidAt,                
-                    awardedAt: payload.awardedAt,             
-                }, 
-                {
-                    headers: {
-                        Authorization: `Bearer ${dynamicJwtToken}`
-                    }
-                }
-            )
-            console.log(response);
+    
 
-            return response;
-        } catch (error) {
-            console.log(error)
-            toast({
-                title: "Unable to update story",
-                description: "Unable to update story",
-            })
-            return false
-        }
-    }
+    
 
-    const setTransactionNarration = (position: string) => {        
-        if (position === "FIRST") {
-            return "Reward for first place writing"
-        }
-        
-        if (position === "SECOND") {
-            return "Reward for second place writing"
-        }
-
-        if (position === "THIRD") {
-            return "Reward for third place writing"
-        }
-
-        if (position === "RECOGNIZED") {
-            return "Reward for a recognized writer"
-        }
-    }
-
-    const getCurrentRate = async (currency: string) => {
-        try {
-            let formatCurrency = currency.toLowerCase();
-            const currencyMap: { [key: string]: string } = {
-                eur: 'eur',
-                cny: 'cny',
-                gbp: 'gbp',
-                ngn: 'ngn',
-                usd: 'usd'
-            };
-        
-            const res = await axios.get(`https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=${formatCurrency}`)            
-            const rate = res.data.solana[currencyMap[formatCurrency]]; 
-            return rate       
-        } catch (error) {
-            console.log(error);            
-            return null;
-        }
-    }
+    
 
     const calculateAmounts = (amount, percentage) => {
         return Number(amount) * percentage;

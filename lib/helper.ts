@@ -99,3 +99,46 @@ export const now = () => {
     return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
 }
 
+export const getCurrentRate = async (currency: string) => {
+    try {
+        let formatCurrency = currency.toLowerCase();
+        const currencyMap: { [key: string]: string } = {
+            eur: 'eur',
+            cny: 'cny',
+            gbp: 'gbp',
+            ngn: 'ngn',
+            usd: 'usd'
+        };
+    
+        const res = await axios.get(`https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=${formatCurrency}`)            
+        const rate = res.data.solana[currencyMap[formatCurrency]]; 
+        return rate       
+    } catch (error) {
+        console.log(error);            
+        return null;
+    }
+}
+
+export const setTransactionNarration = (position: string) => {        
+    if (position === "FIRST") {
+        return "Reward for first place writing"
+    }
+    
+    if (position === "SECOND") {
+        return "Reward for second place writing"
+    }
+
+    if (position === "THIRD") {
+        return "Reward for third place writing"
+    }
+
+    if (position === "RECOGNIZED") {
+        return "Reward for a recognized writer"
+    }
+}
+
+export const getAwardPercentage = (position: string) => {        
+    if (position === 'FIRST') return 0.5;
+    if (position === 'SECOND') return 0.3;
+    if (position === 'THIRD') return 0.2;
+}

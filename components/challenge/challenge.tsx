@@ -95,11 +95,13 @@ export default function Challenge({ challenge, clickEvent, type }){
             
             {/* <div className='flex h-full flex-col rounded-xl bg-white border-none shadow-sm border-gray-200 border cursor-pointer transition-all hover:shadow-2xl'> */}
             <div className='flex relative h-full flex-col shadow-xl border overflow-y-clip rounded-xl bg-white border-gray-500'>
-                <div className='overflow-hidden h-[300px]'>                    
-                    <img
+                <div className='relative overflow-hidden h-[300px]'>                    
+                    <Image
+                        fill={true}
                         src={challenge.image}
                         className='w-full rounded-t-xl h-full object-cover object-center'                     
                         alt={challenge.title}
+                        loading="lazy"
                     />
                 </div>
                 <div className="h-1/2 p-4 flex flex-col  bg-[#3F4447] justify-between">

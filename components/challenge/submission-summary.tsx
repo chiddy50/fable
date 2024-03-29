@@ -4,16 +4,6 @@ import React, { useEffect, useState, useContext } from 'react';
 
 import { useRouter, useParams } from 'next/navigation';
 
-import Countdown from '@/components/general/countdown-component'
-import QuestionOne from '@/components/question/question-one';
-import QuestionTwo from '@/components/question/question-two';
-import QuestionThree from '@/components/question/question-three';
-import QuestionFour from '@/components/question/question-four';
-import QuestionFive from '@/components/question/question-five';
-import QuestionSix from '@/components/question/question-six';
-import QuestionSeven from '@/components/question/question-seven';
-import QuestionEight from '@/components/question/question-eight';
-import axios from 'axios';
 import { Skeleton } from "@/components/ui/skeleton"
 import ScrollToTopBottom from "@/components/general/scroll-to-top-bottom";
 import {
@@ -24,11 +14,14 @@ import {
 } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button";
 import { AppContext } from "@/context/StoryContext"
-import { formatDate, openAwardModal } from "@/lib/helper";
+import { formatDate, getAwardPercentage, getCurrentRate, now, openAwardModal, setTransactionNarration } from "@/lib/helper";
 import AwardModal from "@/components/challenge/award-modal";
 import axiosInterceptorInstance from '@/axiosInterceptorInstance';
 import { getCookie } from 'cookies-next';
 import { getAuthToken } from '@dynamic-labs/sdk-react-core';
+import { createUnderdogNftUsers } from '@/lib/data';
+import { Toaster } from 'react-hot-toast';
+import { updateStory } from '@/lib/databaseHelpers';
 
 const SubmissionSummary  = () => {
     const [loading, setLoading] = useState(false)
@@ -81,6 +74,68 @@ const SubmissionSummary  = () => {
     }
     const loaderCount = [1,2,3];
 
+    const retryCreateNft = async () => {
+        try {            
+            const { challenge, user, story } = submission;
+            
+            const storyId = submission.id;
+            const projectId = challenge?.projectId
+            const userPrimaryWalletAddress = user?.primaryWalletAddress;
+            const position = submission?.award
+            const percentage = getAwardPercentage(position)
+            const percentageValue = percentage * 100;
+            const user_is_a_winner = position === "FIRST" || position === "SECOND" || position === "THIRD"
+            const position_label = user_is_a_winner ? `${position.toLowerCase()} place` : `Honorable mention`
+            const reward = position !== "RECOGNIZED" ? Number(submission?.challenge?.price) * percentage : "0"
+            
+            const currentRate = await getCurrentRate(challenge?.currency)
+            if (!currentRate) {
+                console.log("Current rate for "+ challenge?.currency +" to sol is required");            
+                return
+            }
+    
+            const rewardInSol = Number(reward) / Number(currentRate); // total reward in sol
+            const narration = setTransactionNarration(position)
+    
+            let payload: any = { 
+                storyId,
+                currentRate: currentRate.toString(),
+                challengeId: challenge.id,
+                story: JSON.stringify(story), 
+                positionLabel: position_label,
+                narration,
+                position,
+                currency: challenge.currency,
+                symbol: challenge.symbol,
+                bounty: challenge.price.toString(),
+                reward: reward.toString(), 
+                rewardInSol: rewardInSol.toString(),
+                percentage: percentageValue.toString(),
+                userId: user.id,
+                email: user.email,            
+            }
+    
+            console.log({payload});
+            
+            const newNft = await createUnderdogNftUsers(payload, "1", userPrimaryWalletAddress);
+            const nftGenerated = newNft ? true : false;
+    
+            payload = {
+                ...payload, 
+                nftGenerated,
+                nftId: nftGenerated ? newNft?.data?.nftId.toString() : null,
+                nftTransactionId: nftGenerated ? newNft?.data?.transactionId : null,
+                awardedAt: nftGenerated ? now() : null
+            }
+    
+            let storyUpdated = await updateStory(payload, storyId, dynamicJwtToken)
+            console.log(storyUpdated);
+        } catch (error) {
+            console.log(error);            
+        }
+        
+    }
+
     return (
         <div className="layout-width">
             <div className="mt-32">
@@ -132,13 +187,22 @@ const SubmissionSummary  = () => {
                     }
                     {
                     submission && submission?.award && 
-                        <div>
-                            <p className='text-xs text-gray-200 mb-4'>Awarded {formatDate(submission?.awardedAt)}</p>
+                        <div className=''>
+                            {submission?.awardedAt && <p className='text-xs text-gray-200 mb-4'>Awarded {formatDate(submission?.awardedAt)}</p>}
+                            
+
                             <Button variant="outline" size="sm">
                                 <span className='mr-3 text-xs uppercase'>Awarded {submission?.award}</span>
                                 <i className='bx bx-medal text-xl'></i>
                             </Button>    
                         </div>
+                    }
+
+                    {!submission?.awardedAt || !submission?.award && 
+                        <Button onClick={retryCreateNft} className='bg-blue-600 mt-3' size="sm">
+                            <span className='mr-3 text-xs uppercase'>Mint cNFT</span>
+                            {/* <i className='bx bx-medal text-xl'></i> */}
+                        </Button>   
                     }
                     </div>
                     <div className="mb-4">
@@ -191,6 +255,9 @@ const SubmissionSummary  = () => {
                 recognized={recognized}
                 />
             }
+
+            <Toaster />
+
         </div>
     )
 }
