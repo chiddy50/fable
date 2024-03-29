@@ -1,36 +1,39 @@
-import { Wallet, WalletContextState } from "@solana/wallet-adapter-react";
-import { Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
 import { CONNECTION, getKeypair, umi } from "./data";
 import { createSignerFromKeypair, signerIdentity } from "@metaplex-foundation/umi";
 
-export const transferToUsers = async (publicKey: string, amount: number) => {
-   try{
-    const keypair = await getKeypair()
+import { Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction, sendAndConfirmRawTransaction, sendAndConfirmTransaction } from "@solana/web3.js";
 
-    const signer = createSignerFromKeypair(umi, keypair)
 
-    const blockHash = (await CONNECTION.getLatestBlockhash()).blockhash
-
-    const transaction = new Transaction().add(
-        SystemProgram.transfer({
-            fromPubkey: new PublicKey(keypair.publicKey),
-            toPubkey: new PublicKey(publicKey),
-            lamports: 1 * LAMPORTS_PER_SOL,
-            
-        })
-    )
-
-    // const createTransaction = await buildTra
-
-    // transaction.recentBlockhash = blockHash
-    // transaction.feePayer = new PublicKey(keypair.publicKey)
-    // transaction.sign()
-    // transaction.
-
-    // const signature = await CONNECTION.sendTransaction(transaction, [])
+export const transferToUsers  = async (toPublic: PublicKey, amount: number) => {
+    try {
+        
+        const keyPair = await getKeypair();
+        const from = Keypair.fromSecretKey(keyPair.secretKey);
     
-    // console.log(signature)
-   }catch(error){
-    console.log("Error: ", error)
-   }
+        const transaction = new Transaction().add(
+            SystemProgram.transfer({
+                fromPubkey: from.publicKey,
+                toPubkey: toPublic,
+                lamports: LAMPORTS_PER_SOL * amount
+            })
+        );
+    
+        transaction.feePayer = from.publicKey;
+    
+        const { blockhash } = await CONNECTION.getRecentBlockhash();
+        transaction.recentBlockhash = blockhash;
+    
+        const signedTransaction = await sendAndConfirmTransaction(
+            CONNECTION,
+            transaction,
+            [from]
+        );
+            
+        return signedTransaction;
+        console.log({signedTransaction})
+    } catch (error) {
+        return null;
+        console.log(error);        
+    }
+
 }

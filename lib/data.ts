@@ -146,7 +146,7 @@ const createUnderdogNft = async (data, projectId, pubKey) => {
 
 }
 
-const createUnderdogNftUsers = async (data, projectId, pubKey) => {
+const createUnderdogNftUsers = async (data, projectId: string, pubKey: string) => {
     console.log(typeof  data);
     // return
     

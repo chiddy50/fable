@@ -10,7 +10,6 @@ import { toast } from '@/components/ui/use-toast';
 import { getCookie, deleteCookie } from 'cookies-next';
 import { AppContext } from '@/context/StoryContext';
 import axiosInterceptorInstance from '@/axiosInterceptorInstance';
-import { Card, CardContent } from "@/components/ui/card"
 import {
   Carousel,
   CarouselContent,
@@ -18,15 +17,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel"
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination"
 import { Button } from '../ui/button';
 import PaginationComponent from '../general/pagination-component';
 import { scrollToTop } from '@/lib/helper';

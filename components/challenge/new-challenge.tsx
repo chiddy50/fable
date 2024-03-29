@@ -19,6 +19,8 @@ import { hideTransferLoader, openPreviewModal, showTransferLoader } from '@/lib/
 import { PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js';
 import axiosInterceptorInstance from '@/axiosInterceptorInstance';
 import ChallengePreviewComponentModal from '../modal/challenge-preview-component-modal';
+import SuccessModal from '../modal/success-modal';
+import * as animationData from "@/public/animations/thumbs-up.json"
 
 const NewChallenge = () => {
     
@@ -102,7 +104,7 @@ const NewChallenge = () => {
         let selectedCurrency = currencies.find(currency => currency.symbol === symbol);
 
         if (selectedCurrency) {
-            setChallengeCurrency(selectedCurrency.name)
+            setChallengeCurrency(selectedCurrency.code)
             getCurrentRate(selectedCurrency.code)            
         }        
     }
@@ -212,10 +214,10 @@ const NewChallenge = () => {
                     variant: "destructive"
                 })
                 return
-            }           
+            }       
 
             // CREATE TRANSACTION
-            let transaction = await createTransaction(result, tx)
+            let transaction = await createTransaction(result, tx, "SUCCESS")
             if (!transaction) {
                 console.log("Could not create transaction record for challenge");                
             }
@@ -268,8 +270,12 @@ const NewChallenge = () => {
             if (!challengeCreated?.challenge) {
                 console.log("could not save to db");                
             }
-    
-            router.push("/admin/challenges")
+            
+            document.getElementById("success-modal").style.display = "block"
+            setTimeout(() => {
+                document.getElementById("success-modal").style.display = "none"                
+                router.push("/admin/challenges")
+            }, 5000);
         } catch (error) {
             console.log(error);
             
@@ -278,7 +284,7 @@ const NewChallenge = () => {
         }
     }
 
-    const createTransaction = async (result: FeeCalculationResult, transactionPublicId: string) => {
+    const createTransaction = async (result: FeeCalculationResult, transactionPublicId: string, status) => {
         let { percentage, tenPercentFee, tenPercentFeeInSol, totalChargeInSol, totalChargePlusFeeInSol, totalCharge, totalChargePlusFee } = result;
         
         let payload = {
@@ -292,7 +298,7 @@ const NewChallenge = () => {
             transactionPublicId: transactionPublicId,
             currency: challengeCurrency,
             symbol: challengeCurrencySymbol,
-            status: "SUCCESS"
+            status,
         }
         // let { percentage, tenPercentFee, tenPercentFeeInSol, totalChargeInSol, totalChargePlusFeeInSol, totalCharge, totalChargePlusFee } = result;
 
@@ -545,7 +551,7 @@ const NewChallenge = () => {
                     
                     <Button onClick={submitMetaData} className="bg-gray-200 text-gray-800 hover:bg-gray-300 hover:text-gray-900">
                         Pay & Post
-                    </Button>
+                    </Button>                    
                     
                     <Button onClick={openPreviewModal} className="flex items-center  justify-center gap-1 bg-[#2f3d47] text-white xs:flex sm:hidden md:hidden lg:hidden">
                         <i className='bx bxs-show'></i>
@@ -567,7 +573,7 @@ const NewChallenge = () => {
             buttonText="Pay"
             />
             <ChallengePreviewComponentModal />
-
+            <SuccessModal animation={animationData} title="Challenge created" />
         </div>
     )
 }

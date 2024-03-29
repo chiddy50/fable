@@ -24,6 +24,7 @@ import { getCookie } from 'cookies-next';
 import { getAuthToken } from '@dynamic-labs/sdk-react-core';
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
 import { useToast } from "@/components/ui/use-toast"
+import SuccessModal from "../modal/success-modal";
 
 
 const UserSummary = () => {
@@ -38,8 +39,6 @@ const UserSummary = () => {
     let token = getCookie('token');
     const dynamicJwtToken = getAuthToken();
     const { toast } = useToast()
-
-    console.log({story});
     
     const submitStoryData = async () => {
         // console.log(user);
@@ -90,7 +89,13 @@ const UserSummary = () => {
                 description: "User story created",
                 variant: "default"
             })
-            push("/user/stories")
+
+            document.getElementById('success-modal').style.display = "block";
+            
+            setTimeout(() => {
+                document.getElementById('success-modal').style.display = "none";
+                push("/user/stories")                
+            }, 4000);
             
         } catch (error) {
             console.log(error);
@@ -168,6 +173,7 @@ const UserSummary = () => {
                 buttonText="Submit"
             />
 
+            <SuccessModal />
 
         </div>
     )

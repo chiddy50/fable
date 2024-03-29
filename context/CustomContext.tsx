@@ -28,7 +28,7 @@ const CustomContext = ({ children }) => {
                 console.log('onLinkSuccess was called', args);
                 let { authToken, primaryWallet, user } = args
 
-                if (user.newUser) {
+                // if (user.newUser) {
                   let payload = {
                     // token: authToken,
                     publicAddress: primaryWallet?.address,
@@ -38,7 +38,7 @@ const CustomContext = ({ children }) => {
                   }
 
                   createUser(payload)
-                }
+                // }
                 // Call handleSignUpSuccess function here
                 
               },

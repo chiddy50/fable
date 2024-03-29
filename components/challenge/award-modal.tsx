@@ -16,6 +16,8 @@ import { getAuthToken, useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { now } from "@/lib/helper";
 import Lottie from 'react-lottie';
 import * as animationData from "@/public/animations/animation.json"
+import { transferToUsers } from "@/lib/transferToUsers";
+import { createStoryTransaction } from "@/lib/databaseHelpers";
 
 export default function AwardModal({ fetchSubmission, submission, firstPlace, secondPlace, thirdPlace, recognized }){
     const router = useRouter();
@@ -24,9 +26,8 @@ export default function AwardModal({ fetchSubmission, submission, firstPlace, se
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
 
-    const { user, primaryWallet } = useDynamicContext()
+    const { user } = useDynamicContext()
 
-    let token = getCookie('token');
     const dynamicJwtToken = getAuthToken();
     
     const modalRef = useRef(null);
@@ -95,50 +96,89 @@ export default function AwardModal({ fetchSubmission, submission, firstPlace, se
 
     const award = async (percentage: number, position: string) => {
 
-        if (!primaryWallet) {
+        const { challenge, user, story } = submission;
+        const storyId = submission.id;
+        const projectId = challenge?.projectId
+        let userPrimaryWalletAddress = user?.primaryWalletAddress;
+
+        if (!userPrimaryWalletAddress) {
             console.log("User does not have a public key");            
             return
         }
         
         let user_is_a_winner = position === "FIRST" || position === "SECOND" || position === "THIRD"
-        let position_label = ""
-        if (user_is_a_winner) {
-            position_label = `${position.toLowerCase()} place`
-        }else if (position === "RECOGNIZED") {
-            position_label = `Recognized writer`        
-        }
+        let position_label = user_is_a_winner ? `${position.toLowerCase()} place` : `Recognized writer`
+        let reward = position !== "RECOGNIZED" ? calculateAmounts(submission?.challenge?.price, percentage) : 0
         
-        let reward =  0;
-        if (position !== "RECOGNIZED") {            
-            reward = calculateAmounts(submission?.challenge?.price, percentage)
+        const currentRate = await getCurrentRate(challenge?.currency)
+        if (!currentRate) {
+            console.log("Current rate for "+ challenge?.currency +" to sol is required");            
+            return
         }
 
-        let payload = { 
-            story: JSON.stringify(submission.story), 
+        const rewardInSol = Number(reward) / currentRate; // total reward in sol
+        const narration = setTransactionNarration(position)
+
+        let payload: any = { 
+            storyId,
+            currentRate,
+            challengeId: challenge.id,
+            story: JSON.stringify(story), 
             position: position_label,
-            currency: submission.challenge.symbol,
-            bounty: submission.challenge.price,
-            reward, 
+            narration,
+            currency: challenge.currency,
+            symbol: challenge.symbol,
+            bounty: challenge.price,
+            reward: reward, 
+            rewardInSol: rewardInSol,
             percentage: percentage * 100,
-            userId: submission.user.id,
-            email: submission.user.email,
+            userId: user.id,
+            email: user.email,
+            paidAt: null,
+            awardedAt: null,
         }
 
+        console.log({payload});
         try {
             setLoading(true)
-            let newNft = await createUnderdogNftUsers(payload, submission?.challenge?.projectId, primaryWallet.address);
-            console.log(newNft);
 
-            if (!newNft) {
-                return
+            // return;
+            let transaction = await transferToUsers(userPrimaryWalletAddress, 1)      
+            let status = "FAILED"  
+            if (!transaction) {  
+                payload = {
+                    ...payload,
+                    amountPending: reward,
+                    amountPaid: 0,
+                }
+            }else{
+                status = "SUCCESS"
+                payload = {
+                    ...payload,
+                    transactionPublicId: transaction,
+                    amountPending: 0,
+                    amountPaid: reward,
+                    paidAt: now()
+                }
             }
 
-            let storyUpdated = await updateStory({
-                nftId: newNft?.data?.nftId.toString(),
-                nftTransactionId: newNft?.data?.transactionId, 
-                award: position,
-                awardedAt: now()
-            }, submission.id)
+            await createStoryTransaction(payload, status, dynamicJwtToken)
+
+            if (user_is_a_winner) {
+                let newNft = await createUnderdogNftUsers(payload, projectId, userPrimaryWalletAddress);
+                console.log(newNft);              
+                let nftGenerated = newNft ? true : false;
+
+                payload = {
+                    ...payload, 
+                    nftGenerated,
+                    nftId: nftGenerated ? newNft?.data?.nftId.toString() : null,
+                    nftTransactionId: nftGenerated ? newNft?.data?.transactionId : null,
+                    awardedAt: nftGenerated ? now() : null
+                }
+            }            
+
+            let storyUpdated = await updateStory(payload, storyId)
             setSuccess(true)
             
             console.log(storyUpdated);
@@ -156,16 +196,25 @@ export default function AwardModal({ fetchSubmission, submission, firstPlace, se
         }        
     }
 
-    const updateStory = async (payload, storyId) => {
-        try {
-
-            console.log(payload);
-            
-            const response = await axiosInterceptorInstance.put(`/stories/id/${storyId}`, payload, {
-                headers: {
-                    Authorization: `Bearer ${dynamicJwtToken}`
+    const updateStory = async (payload: any, storyId: string) => {
+        try {                
+            const response = await axiosInterceptorInstance.put(`/stories/id/${storyId}`, 
+                {
+                    challengeId: payload.challengeId,           
+                    nftId: payload.nftId,                 
+                    nftTransactionId: payload.nftTransactionId,      
+                    projectId: payload.projectId,             
+                    amountPaid: payload.amountPaid,            
+                    amountPending: payload.amountPending,         
+                    paidAt: payload.paidAt,                
+                    awardedAt: payload.awardedAt,             
+                }, 
+                {
+                    headers: {
+                        Authorization: `Bearer ${dynamicJwtToken}`
+                    }
                 }
-            })
+            )
             console.log(response);
 
             return response;
@@ -179,12 +228,50 @@ export default function AwardModal({ fetchSubmission, submission, firstPlace, se
         }
     }
 
+    const setTransactionNarration = (position: string) => {        
+        if (position === "FIRST") {
+            return "Reward for first place writing"
+        }
+        
+        if (position === "SECOND") {
+            return "Reward for second place writing"
+        }
+
+        if (position === "THIRD") {
+            return "Reward for third place writing"
+        }
+
+        if (position === "RECOGNIZED") {
+            return "Reward for a recognized writer"
+        }
+    }
+
+    const getCurrentRate = async (currency: string) => {
+        try {
+            let formatCurrency = currency.toLowerCase();
+            const currencyMap: { [key: string]: string } = {
+                eur: 'eur',
+                cny: 'cny',
+                gbp: 'gbp',
+                ngn: 'ngn',
+                usd: 'usd'
+            };
+        
+            const res = await axios.get(`https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=${formatCurrency}`)            
+            const rate = res.data.solana[currencyMap[formatCurrency]]; 
+            return rate       
+        } catch (error) {
+            console.log(error);            
+            return null;
+        }
+    }
+
     const calculateAmounts = (amount, percentage) => {
         return Number(amount) * percentage;
     }
 
     return (
-        <div id="award-modal" ref={modalRef} className="modal fixed z-10 left-0 top-0 w-full h-full overflow-auto">
+        <div id="award-modal" ref={modalRef} className="modal fixed z-10 left-0 top-0 w-full h-full overflow-auto backdrop-blur-sm">
             <div className="modal-content bg-white p-5 rounded-xl shadow-md ">
 
 
@@ -263,7 +350,7 @@ export default function AwardModal({ fetchSubmission, submission, firstPlace, se
 
                                 {
                                     !thirdPlace &&
-                                    <Button onClick={()  => award(0.2, "THIRD")} disabled={thirdPlace} className="flex bg-orange-600 items-center gap-2">                        
+                                    <Button onClick={() => award(0.2, "THIRD")} disabled={thirdPlace} className="flex bg-orange-600 items-center gap-2">                        
                                         <i className='bx bx-medal text-lg'></i>
                                         <span>Award 3rd Place </span>
                                     </Button>
@@ -279,7 +366,7 @@ export default function AwardModal({ fetchSubmission, submission, firstPlace, se
 
                                 {
                                     !recognized &&
-                                    <Button onClick={()  => award(0, "RECOGNIZED")} disabled={recognized} className="flex bg-purple-600 items-center gap-2">                        
+                                    <Button onClick={() => award(0, "RECOGNIZED")} disabled={recognized} className="flex bg-purple-600 items-center gap-2">                        
                                         <i className='bx bx-medal text-lg'></i>
                                         <span>Award Recognition</span>
                                     </Button>
