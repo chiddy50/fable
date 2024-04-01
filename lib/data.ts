@@ -12,38 +12,38 @@ const currencies = [
         "name_plural": "US dollars",
         "symbol": "$"
     },
-    {
-        "id": "9b5f3f84-7ebd-48db-bc8c-546467deee92",
-        "country_code": "NG",
-        "name": "Nigerian Naira",
-        "code": "ngn",
-        "name_plural": "Nigerian nairas",
-        "symbol": "₦"
-    },
-    {
-        "id": "9b5f3f83-ea52-4b7b-944b-404a6474cc25",
-        "country_code": "GB",
-        "name": "British Pound Sterling",
-        "code": "gbp",
-        "name_plural": "British pounds sterling",
-        "symbol": "£"
-    },
-    {
-        "id": "9b5f3f83-7cac-4d4a-8da2-a19f79328d73",
-        "country_code": "AD",
-        "name": "Euro",
-        "code": "eur",
-        "name_plural": "euros",
-        "symbol": "€"
-    },
-    {
-        "id": "9b5f3f83-c346-4409-a5cb-10ee1519bee9",
-        "country_code": "CN",
-        "name": "Chinese Yuan",
-        "code": "cny",
-        "name_plural": "Chinese yuan",
-        "symbol": "CN¥"
-    },
+    // {
+    //     "id": "9b5f3f84-7ebd-48db-bc8c-546467deee92",
+    //     "country_code": "NG",
+    //     "name": "Nigerian Naira",
+    //     "code": "ngn",
+    //     "name_plural": "Nigerian nairas",
+    //     "symbol": "₦"
+    // },
+    // {
+    //     "id": "9b5f3f83-ea52-4b7b-944b-404a6474cc25",
+    //     "country_code": "GB",
+    //     "name": "British Pound Sterling",
+    //     "code": "gbp",
+    //     "name_plural": "British pounds sterling",
+    //     "symbol": "£"
+    // },
+    // {
+    //     "id": "9b5f3f83-7cac-4d4a-8da2-a19f79328d73",
+    //     "country_code": "AD",
+    //     "name": "Euro",
+    //     "code": "eur",
+    //     "name_plural": "euros",
+    //     "symbol": "€"
+    // },
+    // {
+    //     "id": "9b5f3f83-c346-4409-a5cb-10ee1519bee9",
+    //     "country_code": "CN",
+    //     "name": "Chinese Yuan",
+    //     "code": "cny",
+    //     "name_plural": "Chinese yuan",
+    //     "symbol": "CN¥"
+    // },
 
    
 ]

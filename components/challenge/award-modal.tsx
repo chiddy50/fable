@@ -31,39 +31,6 @@ export default function AwardModal({ fetchSubmission, submission, firstPlace, se
     const dynamicJwtToken = getAuthToken();
     
     const modalRef = useRef(null);
-    const { setUserLoggedIn, authUserData, setAuthUserData } = useContext(AppContext)
-
-    const submitData = async () => {
-        try {            
-            if (!validateCredentials()) {
-                return;    
-            }
-    
-            const payload = {
-                email: adminEmail,
-                password: adminPassword,
-            }
-    
-            setLoading(true)
-
-            const response = await axios.post("/api/auth/admin/login", payload)
-            console.log(response);
-            setUserLoggedIn(true)
-            closeModal()
-
-            setAuthUserData(response?.data?.data)
-            if (localStorage) {
-
-                localStorage.setItem("user", JSON.stringify(response?.data?.data))
-            }
-        } catch (error) {
-            console.log(error);
-            let error_msg = "Something went wrong"
-            setError(error_msg)
-        }finally{
-            setLoading(false)
-        }
-    }
 
     const defaultOptions = {
         loop: true,
@@ -73,21 +40,6 @@ export default function AwardModal({ fetchSubmission, submission, firstPlace, se
           preserveAspectRatio: 'xMidYMid slice'
         }
     };
-
-    const validateCredentials = () => {
-        setError("")
-
-        if (!adminEmail) {
-            setError("Email is required")
-            return false
-        }
-
-        if (!adminPassword) {
-            setError("Password is required")
-            return false
-        }
-        return true
-    }
 
     const closeModal = () => {        
         modalRef.current.style.display = 'none'

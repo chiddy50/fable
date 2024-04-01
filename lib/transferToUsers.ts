@@ -29,8 +29,8 @@ export const transferToUsers  = async (toPublic: PublicKey, amount: number) => {
             [from]
         );
             
-        return signedTransaction;
         console.log({signedTransaction})
+        return signedTransaction;
     } catch (error) {
         return null;
         console.log(error);        

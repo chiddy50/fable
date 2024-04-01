@@ -1,26 +1,28 @@
-"use client"
+"use client";
 
-import { transferToUsers } from "@/lib/transferToUsers"
-import { useEffect, useState, useContext, ChangeEvent } from 'react';
+import React, { useEffect, useState, useContext, ChangeEvent } from 'react';
+import { useRouter } from 'next/navigation';
+
 import { AppContext } from "@/context/StoryContext"
+
 import { Button } from '@/components/ui/button';
 import UploadImageComponent from '@/components/upload/upload-image-component';
 import SuccessfullyUploadComponent from '@/components/upload/success-component';
 import ConfirmModalComponent from "@/components/general/confirm-modal-component";
-import { useRouter } from 'next/navigation';
 
 import { createUnderdogNft, createUnderdogProject, currencies, umi } from "@/lib/data"
 import axios from 'axios';
 import { useEmbeddedWallet, DynamicWidget, useDynamicContext, useUserUpdateRequest, getAuthToken, useSendBalance, useUserWallets } from '@dynamic-labs/sdk-react-core';
 
-import { hideTransferLoader, getCurrentRate, openPreviewModal, showTransferLoader } from '@/lib/helper';
+import { useToast } from "@/components/ui/use-toast"
+import { hideTransferLoader, openPreviewModal, showTransferLoader } from '@/lib/helper';
 import { PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js';
 import axiosInterceptorInstance from '@/axiosInterceptorInstance';
+import ChallengePreviewComponentModal from '../modal/challenge-preview-component-modal';
 import SuccessModal from '../modal/success-modal';
 import * as animationData from "@/public/animations/thumbs-up.json"
-import toast, { Toaster } from 'react-hot-toast';
 
-const NewChallenge = () => {
+const NewChallenge3 = () => {
     
     // STATE
     const [currentRate, setCurrentRate] = useState<null|number>(null);
@@ -32,79 +34,51 @@ const NewChallenge = () => {
 
     const router = useRouter();    
 
-    // EXTERNAL HOOKS 
-    const { open } = useSendBalance()
-    const { user, primaryWallet, setShowAuthFlow, sdkHasLoaded } = useDynamicContext()
-    const { createEmbeddedWallet, userHasEmbeddedWallet } = useEmbeddedWallet();
-    const userWallets = useUserWallets();
-    const dynamicJwtToken = getAuthToken();
-
-    useEffect(() => {
-        console.log({userWallets, sdkHasLoaded, user, primaryWallet});
-        // getCurrentRate("usd") 
-        updateCurrentRate("usd")
-    }, [])
-
     // CONTEXT
     const { 
-        inPreview,        
-        setInPreview,
-        uploadedImage, setUploadedImage,
-        imagePlaceholder, setImagePlaceholder,        
+        userLoggedIn, uploaded,
         setChallengeTitle, challengeTitle,
         setChallengeDescription, challengeDescription,
         challengeTime, setChallengeTime, 
         challengeDate, setChallengeDate, 
         challengePrice, setChallengePrice, 
-        challengeCurrency, setChallengeCurrency,
+        challengeCurrency, setChallengeCurrency, 
+        uploadedImage, setUploadedImage, imagePlaceholder,
         challengeImage, setChallengeImage,
         challengeCurrencySymbol, setChallengeCurrencySymbol
-
     } = useContext(AppContext)
 
-    const updateCurrentRate = async (currency: string) => {
-        let rate = await getCurrentRate(currency)
-        setCurrentRate(rate);          
-    }
+    // EXTERNAL HOOKS 
+    const { open } = useSendBalance()
+    const { user, primaryWallet, setShowAuthFlow, sdkHasLoaded } = useDynamicContext()
+    const { createEmbeddedWallet, userHasEmbeddedWallet } = useEmbeddedWallet();
+    const userWallets = useUserWallets();
+    const { toast } = useToast()
+    const dynamicJwtToken = getAuthToken();
 
-    const openDatetimePicker = async (e) =>  {
-        try {
-            await e.target.showPicker();
-        } catch (error) {
-            console.log(error);                
+    // END OF EXTERNAL HOOKS 
+
+    useEffect(() => {
+        console.log({userWallets, sdkHasLoaded, user, primaryWallet});
+        getCurrentRate("usd")
+    }, [])
+
+    // FUNCTIONS
+
+    const ensureWalletConnection = async () => {        
+        if (!userHasEmbeddedWallet()) {
+          try {
+            const walletId = await createEmbeddedWallet();
+            console.log("Embedded Wallet Created with ID:", walletId);
+            // Wallet is created and by default, this should act as "reconnecting" the user to their new wallet
+          } catch (e) {
+            console.error("Error creating embedded wallet:", e);
+          }
+        } else {
+          console.log("User already has an embedded wallet.");
+          // Here, you might include logic to use the wallet or ensure it's "connected" based on your app's logic
         }
-    }
-
-    const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files ? event.target.files[0] : null;
-        console.log({file});
-        
-        if (!file) {
-           return 
-        }
-        
-        // let res = await uploadImage(file);
-
-        if (file) {
-
-            setChallengeImage(null)
-            setChallengeImage(file)
-
-            const reader = new FileReader();
-            setInPreview(true)
-
-            reader.onload = (e) => {
-
-                let preview_box = document.getElementById('preview') as HTMLElement
-                if (preview_box) {  
-                    setUploadedImage(e?.target?.result)
-                    setImagePlaceholder(e?.target?.result)
-                    preview_box.src = e?.target?.result;
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-    }
+    };
 
     const updateDate = (e: ChangeEvent<HTMLInputElement>) => {        
         setChallengeDate(e.target.value)
@@ -118,8 +92,12 @@ const NewChallenge = () => {
     const updateDescription = (e: ChangeEvent<HTMLTextAreaElement>) => {        
         setChallengeDescription(e.target.value)
     }
+    
+    const updateTime = (e: ChangeEvent<HTMLInputElement>) => {
+        setChallengeTime(e.target.value)
+    }
 
-    const updateCurrency = async (e: ChangeEvent<HTMLSelectElement>) => {        
+    const updateCurrency = (e: ChangeEvent<HTMLSelectElement>) => {        
         let symbol = e.target.value;
         setChallengeCurrencySymbol(symbol)
 
@@ -127,9 +105,52 @@ const NewChallenge = () => {
 
         if (selectedCurrency) {
             setChallengeCurrency(selectedCurrency.code)
-            let rate = await getCurrentRate(selectedCurrency.code)
-            setCurrentRate(rate);            
+            getCurrentRate(selectedCurrency.code)            
         }        
+    }
+
+    const getCurrentRate = (currency: string) => {
+        let formatCurrency = currency.toLowerCase();
+        const currencyMap: { [key: string]: string } = {
+            eur: 'eur',
+            cny: 'cny',
+            gbp: 'gbp',
+            ngn: 'ngn',
+            usd: 'usd'
+        };
+    
+        axios.get(`https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=${formatCurrency}`)
+            .then(res => {
+                const rate = res.data.solana[currencyMap[formatCurrency]];
+                setCurrentRate(rate);
+            })
+            .catch(err => console.log(err));  
+    }
+
+    const debitWallet = async (paymentAmount: number) => {
+        const WalletAddress  = process.env.NEXT_PUBLIC_ACCOUNT_ADDRESS
+
+        try {            
+            if(WalletAddress === undefined){
+                console.log("Undefined")
+                return
+            }
+
+            let amount = BigInt(paymentAmount)
+            console.log({amount});
+            
+            
+            const tx = await open({
+                recipientAddress: new PublicKey(WalletAddress).toBase58(),        
+                value: amount,
+            });
+            console.log({tx});
+            
+            return tx;
+        } catch (error) {
+            console.log(error);
+            return  null;            
+        }
     }
 
     const submitMetaData = async () => {
@@ -145,7 +166,11 @@ const NewChallenge = () => {
             }              
                         
             if (!primaryWallet) {                
-                toast('No wallet found')
+                toast({
+                    title: "No wallet found",
+                    description: "No wallet connection found",
+                    variant: "destructive"
+                })
                 return
             }
             
@@ -155,31 +180,6 @@ const NewChallenge = () => {
             console.log(error);            
         }finally{
             hideTransferLoader()
-        }
-    }
-
-    const debitWallet = async (paymentAmount: number) => {
-        const WalletAddress  = process.env.NEXT_PUBLIC_ACCOUNT_ADDRESS
-
-        try {            
-            if(WalletAddress === undefined){
-                console.log("Undefined")
-                return
-            }
-
-            let amount = BigInt(paymentAmount)
-            console.log({amount});            
-            
-            const tx = await open({
-                recipientAddress: new PublicKey(WalletAddress).toBase58(),        
-                value: amount,
-            });
-            console.log({tx});
-            
-            return tx;
-        } catch (error) {
-            console.log(error);
-            return  null;            
         }
     }
 
@@ -208,7 +208,11 @@ const NewChallenge = () => {
             const tx: any = await debitWallet(Math.floor(paymentAmount))
             if (!tx) {  
                 hideTransferLoader()
-                toast('Could not complete the transaction')
+                toast({
+                    title: "Transaction error",
+                    description: "Could not complete the transaction",
+                    variant: "destructive"
+                })
                 return
             }       
 
@@ -222,8 +226,11 @@ const NewChallenge = () => {
             console.log({image});
 
             if (!image) {
-                toast('Could not upload image')
-
+                toast({
+                    title: "No Image",
+                    description: "Could not upload image",
+                    variant: "destructive"
+                })
                 hideTransferLoader()
 
                 return false;
@@ -238,6 +245,11 @@ const NewChallenge = () => {
             console.log(underdogNft);
             
             if (!underdogNft) {
+                // toast({
+                //     title: "Could not create NFT challenge",
+                //     description: "Could not create NFT challenge",
+                //     variant: "destructive"
+                // })
                 // hideTransferLoader()
                 // return;
             }
@@ -265,7 +277,8 @@ const NewChallenge = () => {
                 router.push("/admin/challenges")
             }, 5000);
         } catch (error) {
-            console.log(error);             
+            console.log(error);
+            
         }finally{
             hideTransferLoader()
         }
@@ -324,9 +337,11 @@ const NewChallenge = () => {
 
     const calculateFees = () => {
         if (!currentRate) {
-
-            toast('No Current rate')
-
+            toast({
+                title: "No current rate",
+                description: "No Current rate",
+                variant: "destructive"
+            })
             return false;
         }
 
@@ -376,38 +391,62 @@ const NewChallenge = () => {
             return response;
         } catch (error) {
             console.log(error)
-            toast('Unable to create challenge')
-
+            toast({
+                title: "Unable to create challenge",
+                description: "Unable to create challenge",
+                variant: "destructive"
+            })
             return false
+        }
+    }
+
+    const generateEmbeddedWallet = async () => {
+        try {
+            const walletId = await createEmbeddedWallet();
+            // Once the wallet is created, ensure it's set as the primary wallet for further operations
+            console.log("Embedded Wallet Created with ID:", walletId);
+            return walletId;
+        } catch(e) {
+            console.error("Error creating embedded wallet:", e);
+            return null;
         }
     }
 
     const validateMetaData = () => {
         if (!challengeTitle) {
-            toast('Kindly provide a title')
-            return false;
-        }
-
-        if (!uploadedImage) {
-            toast('Kindly provide an image')
+            toast({
+                title: "No Title",
+                description: "Kindly provide a title",
+                variant: "destructive",
+            })
             return false;
         }
 
         if (!challengeDescription) {
-            toast('Kindly provide a description')
+            toast({
+                title: "No Description",
+                description: "Kindly provide a description",
+                variant: "destructive"
+            })
             return false;
         }
 
         const validate_date = validateDateTime(challengeDate)
         if (validate_date.error) {
-            toast(`${validate_date.message}`)
-
+            toast({
+                title: "Invalid Date",
+                description: validate_date.message,
+                variant: "destructive"
+            })
             return false;
         }
 
         if (challengePrice < 0) {
-            toast('Invalid Price')
-
+            toast({
+                title: "Invalid Price",
+                description: "Invalid Price",
+                variant: "destructive"
+            })
             return false;
         }
 
@@ -458,90 +497,73 @@ const NewChallenge = () => {
         }
     }
 
+    // FUNCTIONS END
+    
     return (
-        <div className=" h-screen bg-[#151515]">
-            <div className=" "></div>
-
-            <div className=" w-11/12 flex justify-center items-center mx-auto pt-5">
-                <div className=" bg-gray-800 w-[400px] h-[280px] rounded-lg overflow-hidden">
-                    <img id='preview'
-                        src={ imagePlaceholder ? imagePlaceholder : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAACUCAMAAADLemePAAAAMFBMVEXx8/XCy9L09ve/yNDGztXN1Nrs7/HT2d/o6+7Z3uPh5enJ0dfk6Ovc4eXQ19zV299BB7LwAAAEOElEQVR4nO2a2baDIAwAkU0Utf//t9e17gUCgtyTea7LNBgSgBT/GpL6BZ4F9XIG9XIG9XIG9XIG9XIG9XIG9XIG9XIG9XIG9XIG9XIG9XIG9XIG9XIG9XIG9XIG9XIG9eLDgt3pXXq84KKsqupTdpqHuOF79BgXn0YRukBUW2rO/CL5Fj3Gq0GNbKFUqkp4Cb5Dj+lakr3bbEikKj0E36DHivZKbVWswLdOr9cPy8vA7QU1LILJ9ZhQBrlRUFYcIphaj1XSwm4U/AD8Uus1dnKjoHIPYFI9pi1Dtwg6j9CUeky42Q0BFG5+CfVYJ93kBj/i9gUm1Cud5UZql4o7nV7pODC/AZQOAzSVHgPGjowD1PoxifRYB7YbaG2fk0hPeNkR2lg+x1ePQcp5xv3shg/Qrtv10us70LLshPviget8d+VnlWA89Jhuxw5UNqXjlQ6V2D2ys3gSXI99vx9KbD+FiZ/dnQOdOX5gPbadt6jLbapAdoSWRj+oHtvnPqqAF/r5GSs0cPSaw6PM/+RkFyCtbDD5QfVOMbANX5C0Yu0H1TulB7tEzdqgcsbvD6jHjmPTPE5G/Goxdz+o3qlVo5WFHrdZNnLl1/wH1VMQPRb4w5sR4fXOg9OcOhm0xTOhQ+sVn1NquX/Ggn5Grud2hQmqd3pVi7rsHPFQ3C4Rgqf1+hA+cwFYPWbX9383/RFYT+9yJ22Nds8NzR/Ph5fUfONHa3NecV/1C+Dn0RDxZt7ZodI8KbBQXdCt32VZ4dWtd+0w/SmL3amQfcIdV1+/32JEwXusfnoqA8IjL/7lSCtlTw/NAarO/3QcvQhDc/BrTuGLo/dEJX3ld0qfMfRYsNUVI8fC91ovyImgLzqa3amp3umxQnftdDCoz/f1R/Agx7siZM2FY3rZ6LGiq+XmYNBw7qkuQQcSdjxYa1747eunVW+tQra/JrL2PNf1aK154bf7/FY9cXt4pgGemRm5aHwfZvu2ix479acbqAJsk8z3jZc1F7abR4ueqayoHY8kLHaRh+b0ric94/IjlU5b9l8iZs2Vdcdq1LMbQdJiR+YYvKhZc+U7PAc9216MuuaYGG3QJXJ5TzJs49t+/VQ6blRGqjXPL7oUn2Q4+uRwYf3bZx+843JTRObZjxTcaRHE4VgeE+nsyFycEecdKYs90YkUc8L6llPvR35N5zdXtlYNBU8yJ6xvOS4tga5UNhk09E6eM8NLAi811jCPbZdYM273Q681bVZGbGFv6WcH6KX096k1/eyatCUCrDfsWtwHMHFamemHp8fV6r7GfmYX1hnqVfJeLQuPaSVVLRYWer2px18SuwBcJFD9P2I3cdz6gpzefzP7Jv7xbbzYUCmKaaWQFbwMeh7uFVBSf4TmXIvqP311K5RIqZSS9F/aIQiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCICn4A49MS2/QrYSCAAAAAElFTkSuQmCC' }
-                        className='w-full border border-gray-700 h-full object-cover object-center'                     
-                        alt="Picture of the image"
-                    />
-                </div>
-                {/* <div className=" matrix_box flex flex-col justify-items-center tracking-widest text-gray-400 space-y-3">
-                    <p className=" text-xs font-bold">TEMPLATE</p>
-                    <div className=" scroller flex-auto space-y-5 overflow-auto max-h-72 w-24">
-                        <button className=" w-20 h-20 bg-gray-800 flex justify-center items-center rounded-lg shadow-lg">2</button>
-                        <button className=" w-20 h-20 bg-gray-800 flex justify-center items-center rounded-lg shadow-lg">3</button>
-                        <button className=" w-20 h-20 bg-gray-800 flex justify-center items-center rounded-lg shadow-lg">4</button>
-                        <button className=" w-20 h-20 bg-gray-800 flex justify-center items-center rounded-lg shadow-lg">5</button>
-                        <button className=" w-20 h-20 bg-gray-800 flex justify-center items-center rounded-lg shadow-lg">6</button>
-                        
+        <div className="">
+            <div className=' border border-gray-700 bg-gray-800 text-gray-200 rounded-xl p-5'>
+                <div>
+                    <div className="mb-3">
+                        <label htmlFor="title" className='text-sm font-semibold '>Title</label>
+                        <input type="text" onChange={updateTitle} value={challengeTitle} className='py-3 px-4 rounded-lg mt-1 w-full bg-[#3F4447] border border-none outline-none text-xs' />
                     </div>
-                </div> */}
 
-            </div>
-
-            <div className=" fixed bottom-0 pb-4 inset-x-0 bg-gray-800 border border-gray-600 space-y-3 mx-auto rounded-t-xl w-11/12 pt-2">
-            
-                <div className=" flex items-end w-11/12 mx-auto">
-                    <div className="flex items-center w-5/12 justify-between mx-auto">
-                    
-                        <label htmlFor="uploader">
-                            <div className="cursor-pointer flex items-center">
-                                <div className=" bg-gray-300 w-10 h-10 rounded-l flex justify-center items-center ">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M246.309-148.001q-41.308 0-69.808-28.5-28.5-28.5-28.5-69.808v-65.461q0-17.769 12.616-30.384 12.615-12.615 30.384-12.615t30.384 12.615Q234-329.539 234-311.77v65.461q0 4.616 3.846 8.463 3.847 3.846 8.463 3.846h467.382q4.616 0 8.463-3.846 3.846-3.847 3.846-8.463v-65.461q0-17.769 12.615-30.384 12.615-12.615 30.384-12.615t30.384 12.615q12.616 12.615 12.616 30.384v65.461q0 41.308-28.5 69.808-28.5 28.5-69.808 28.5H246.309Zm189.692-499.462-76.923 76.923q-12.923 12.923-30.192 13.308-17.269.384-30.577-12.923-13.692-13.308-13.499-30.576.192-17.269 13.499-30.577l146.384-146.383q7.615-7.615 15.846-10.923 8.23-3.308 18.461-3.308 10.231 0 18.461 3.308 8.231 3.308 15.846 10.923l146.384 146.383q12.923 12.923 13.307 29.884.385 16.961-13.307 30.269-13.308 13.307-30.384 13.115-17.077-.192-30.385-13.5l-76.923-75.923v282.002q0 17.768-12.615 30.384-12.615 12.615-30.384 12.615t-30.384-12.615q-12.615-12.616-12.615-30.384v-282.002Z"/></svg>
-                                </div>
-                                <p className="text-xs uppercase w-max pl-3 pr-4 h-10 flex items-center justify-center bg-gray-200 rounded-r ">upload</p>
-
-                            </div>
-                        </label>
-                        <input type="file" onChange={handleFileChange} accept=".jpg, .jpeg, .png" name="uploader" id="uploader" className="hidden"/>
-
+                    <div className="mb-3">
+                        <label htmlFor="description" className='text-sm font-semibold '>Description</label>
+                        <textarea onChange={updateDescription} value={challengeDescription} cols={2} rows={2} className='resize-none rounded-xl p-4 mt-1 w-full bg-[#3F4447] border-none outline-none text-xs'></textarea>
                     </div>
-                
-                    <div className=" w-7/12 mx-auto mt-4">
-                        <input type="text" placeholder="Title" onChange={updateTitle} value={challengeTitle} className=" bg-gray-600 text-gray-100 outline-none w-full h-10 px-4 rounded "  />
-                    </div>
-                </div>
 
-                <div className=" flex w-11/12 mx-auto">
-                    <textarea name="" onChange={updateDescription} value={challengeDescription} placeholder=" Describe your challenge..." id="" cols={30} rows={2} className=" bg-gray-600 text-gray-100 outline-none w-full rounded-md p-2"></textarea>
-                </div>
-
-                <div className="grid w-11/12 mx-auto gap-3 xs:grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
-                    <div className="flex col-span-1 gap-2 items-center">
-                        <div className="w-[22%] h-10 bg-gray-600 flex items-center justify-center rounded px-1">
-                            <select onChange={updateCurrency} defaultValue={currencies.length > 0 ? currencies[0].symbol : ""} className=" bg-gray-600 text-gray-100 outline-none h-8 w-11/12 text-xs uppercase tracking-widest font-medium">
+                    <div className="mb-4">
+                        <p className='text-sm font-semibold mb-1'>Price</p>
+                        <div className="flex items-center text-xs ">
+                            <select onChange={updateCurrency} defaultValue={currencies.length > 0 ? currencies[0].symbol : ""} className="py-3 px-4 border-none rounded-tl-xl rounded-bl-xl outline-none bg-[#3F4447]">
                                 <option disabled value="">Currency</option>
                                 {currencies.map((currency, key) => (
                                     <option key={key} value={currency.symbol}>
-                                        {currency.code} - {currency.symbol}
+                                        {currency.name} - {currency.symbol}
                                     </option>
                                 ))}
                             </select>
+                            <input type="number" value={challengePrice} onChange={(e: ChangeEvent<HTMLInputElement>) => setChallengePrice(e.target.value)} placeholder='Price...' className='py-3 px-4 w-full rounded-tr-xl rounded-br-xl bg-[#3F4447] border-none outline-none' />
                         </div>
-
-                        <div className="w-[78%]">
-                            <input type="number" value={challengePrice} onChange={(e: ChangeEvent<HTMLInputElement>) => setChallengePrice(e.target.value)} placeholder="Price" className=" bg-gray-600 text-gray-100 outline-none w-full h-10 px-4 rounded "  />                   
-                        </div>
-
+                    </div>
+    
+                    <div className="mb-7">
+                        <p className='text-sm font-semibold  mb-1'>Duration</p>
+                        <input onChange={updateDate} value={challengeDate} type="datetime-local" placeholder="dd/mm/aaaa hh:mm" className='w-full py-3 px-4 rounded-lg text-xs outline-none bg-[#3F4447]' data-input="data-input"/>
                     </div>
 
-                    <div className=" col-span-1">
-                        <input type="datetime-local" onChange={updateDate} value={challengeDate} id="datetimeInput" onClick={openDatetimePicker} placeholder="dd/mm/aaaa hh:mm" className=" bg-gray-600 text-gray-100 cursor-pointer outline-none w-full h-10 px-4 rounded "  />                   
+                </div>
+                
+                
+                <div className="mb-5">
+                    <div className='flex justify-center bg-[#3F4447] rounded-2xl'>                
+                        { (!uploaded) && <UploadImageComponent />}
+                        { (uploaded) && <SuccessfullyUploadComponent />}
                     </div>
 
-                </div>           
-
-                <div className=" w-11/12 flex mx-auto mb-5">
-                    <button onClick={submitMetaData} className=" bg-gray-300 rounded w-full p-3 uppercase text-sm font-bold tracking-widest">create</button>
+                    {/* <div id="upload-progress-box" className="mb-2 h-1 rounded-lg">
+                        <div id="progress-bar" className="h-full rounded-lg"></div>
+                    </div>                                             */}
                 </div>
 
+                <div className="flex items-center justify-between">
+                    
+                    <Button onClick={submitMetaData} className="bg-gray-200 text-gray-800 hover:bg-gray-300 hover:text-gray-900">
+                        Pay & Post
+                    </Button>                    
+                    
+                    <Button onClick={openPreviewModal} className="flex items-center  justify-center gap-1 bg-[#2f3d47] text-white xs:flex sm:hidden md:hidden lg:hidden">
+                        <i className='bx bxs-show'></i>
+                        <span className="text-xs">Preview</span>
+                    </Button>
+                    
+                </div>
             </div>
 
+
+
+            {/* MODALS */}
             <ConfirmModalComponent 
             confirmProcess={proceedAfterConfirmation} 
             openConfirmModal={openConfirmModal} 
@@ -550,13 +572,10 @@ const NewChallenge = () => {
             subtitle="Disclaimer: We would never share your credentials with anyone"
             buttonText="Pay"
             />
-
+            <ChallengePreviewComponentModal />
             <SuccessModal animation={animationData} title="Challenge created" />
-            <Toaster />
-
-
         </div>
     )
 }
 
-export default NewChallenge
+export default NewChallenge3

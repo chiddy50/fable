@@ -76,22 +76,17 @@ const NavbarComponent = () => {
     }
 
     const copyToClipboard = () => {
-        let address:string = primaryWallet?.address;
+        let address:string = primaryWallet?.address ?? ''
+
         if (address) {            
             navigator.clipboard.writeText(address);
-            // toast({
-            //     description: "Wallet address copied!",
-            //     className: cn(
-            //         'top-20 right-0 flex fixed md:max-w-[420px] md:top-20 md:right-4'
-            //     ),
-            // })
             toast.custom((t) => (
                 <div
                   className={`${
                     t.visible ? 'animate-enter' : 'animate-leave'
                   } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
                 >
-                  <div className="flex-1 w-0 p-3">
+                  <div className="flex-1 items-center w-0 p-3">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 pt-0.5">
                         <img

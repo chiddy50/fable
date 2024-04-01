@@ -16,7 +16,7 @@ export function StoryContext({ children, user }) {
     const [challengeDate, setChallengeDate] = useState("")    
     const [challengeTime, setChallengeTime] = useState("")
     const [challengePrice, setChallengePrice] = useState("")
-    const [challengeCurrency, setChallengeCurrency] = useState("")
+    const [challengeCurrency, setChallengeCurrency] = useState("usd")
     const [challengeCurrencySymbol, setChallengeCurrencySymbol] = useState("$")
     const [challengeImage, setChallengeImage] = useState(null)
     const [imagePlaceholder, setImagePlaceholder] = useState(null)
