@@ -128,8 +128,8 @@ const UserChallenges = () => {
             <div className="flex items-center justify-between mb-7 xs:flex-col sm:flex-col md:flex-row xs:gap-4 sm:gap-4" 
             style={{ marginTop: "5rem" }}>
                 <h1 className='text-white xs:text-xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-3xl  font-bold '>Choose Your Challenge</h1>
-                <div className=" pr-3 bg-gray-50 border border-gray-300 rounded-lg">
-                    <select id="countries" onChange={(e) => fetchChallenges(1, e.target.value)} className="border-none rounded-lg text-gray-900 text-xs block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white outline-none">
+                <div className=" pr-3 bg-white border border-gray-300 rounded-lg">
+                    <select id="countries" onChange={(e) => fetchChallenges(1, e.target.value)} className="border-none bg-white rounded-lg text-gray-900 text-xs block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white outline-none">
                         <option selected disabled>Filter</option>
                         <option value="all">All</option>
                         <option value="expired">Expired</option>

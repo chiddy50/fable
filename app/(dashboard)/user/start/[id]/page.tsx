@@ -4,7 +4,7 @@ import fetchUser from '@/lib/fetchUser'
 export default async function StartChallenge() {
   
   return (
-    <div className='layout-width '>
+    <div className='layout-width mt-[80px]'>
       
       {/* <NewChallenge /> */}
       <NewStory />

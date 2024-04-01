@@ -9,7 +9,7 @@ import { AppContext } from "@/context/StoryContext"
 import axiosInterceptorInstance from '@/axiosInterceptorInstance';
 import { all_questions, questions } from '@/lib/questions';
 import { Button } from '../ui/button';
-import { hideTransferLoader, showTransferLoader } from '@/lib/helper';
+import { hideTransferLoader, scrollToTop, showTransferLoader } from '@/lib/helper';
 
 import {
     TooltipContent,
@@ -58,6 +58,7 @@ const NewStory = () => {
         } catch (error) {
             console.log(error);            
         }finally{
+            scrollToTop()
             setLoading(false)  
             hideTransferLoader()
         }        
