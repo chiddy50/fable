@@ -27,7 +27,6 @@ import {
 
 // import { auth } from "@/auth";
 import { useRouter } from 'next/navigation';
-import { WalletButton } from "@/components/wallet/wallet-adapter";
 import { transfer } from "@/lib/transfer";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";

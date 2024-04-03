@@ -1,15 +1,12 @@
 "use client"
 
 import { useRouter } from 'next/navigation';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import axiosInterceptorInstance from '@/axiosInterceptorInstance';
 import Challenge from '@/components/challenge/challenge'
 import ConfirmStartChallenge from '@/components/challenge/confirm-start';
-import axios from 'axios';
 import { Skeleton } from "@/components/ui/skeleton"
 import { toast } from '@/components/ui/use-toast';
-import { getCookie, deleteCookie } from 'cookies-next';
-import { AppContext } from '@/context/StoryContext';
-import axiosInterceptorInstance from '@/axiosInterceptorInstance';
 import {
   Carousel,
   CarouselContent,
@@ -17,8 +14,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel"
-import { Button } from '../ui/button';
-import PaginationComponent from '../general/pagination-component';
+import { Button } from '@/components/ui/button';
+import PaginationComponent from '@/components/general/pagination-component';
 import { scrollToTop } from '@/lib/helper';
   
 
@@ -28,13 +25,12 @@ const UserChallenges = () => {
     const [challengesData, setChallengesData] = useState([])
     const [loading, setLoading] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
-    const [limit, setLimit] = useState(6)
+    const [limit, setLimit] = useState(10)
     const [hasNextPage, setHasNextPage] = useState(false)
     const [hasPrevPage, setHasPrevPage] = useState(false)
     const [totalPages, setTotalPages] = useState(false)
 
     const [selectedChallenge, setSelectedChallenge] = useState(false)
-    const { setUserLoggedIn } = useContext(AppContext)
     
     const promptStartChallenge = (challenge: any) => {
         console.log(challenge);
@@ -107,21 +103,13 @@ const UserChallenges = () => {
         } catch (error) {
             console.log(error);            
             let message = error?.response?.data?.message
-            
-            if (message && message === 'jwt expired') {
-                console.log(message);
-                deleteCookie('token')
-                localStorage.removeItem("user") 
-                localStorage.removeItem("question") 
-                setUserLoggedIn(false)
-            }
         }finally{
             setLoading(false)         
         }
         
     }
 
-    const buttonLabels = [1,2,3];
+    const loaders = [1,2,3];
 
     return (
         <>        
@@ -141,8 +129,8 @@ const UserChallenges = () => {
             loading && 
             <div className='grid md:grid-cols-1 lg:grid-cols-3 gap-5'>
                 {
-                    buttonLabels.map((label, index) => (
-                        <div key={index} className="flex flex-col space-y-3">
+                    loaders.map((label) => (
+                        <div key={label} className="flex flex-col space-y-3">
                             <Skeleton className="h-[420px] w-[full] rounded-xl" />                            
                         </div>
                     ))

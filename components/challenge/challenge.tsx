@@ -102,6 +102,7 @@ export default function Challenge({ challenge, clickEvent, type }){
                         className='w-full rounded-t-xl h-full object-cover object-center'                     
                         alt={challenge.title}
                         loading="lazy"
+                        sizes="(max-width: 768px) 100%, (max-width: 1200px) 100%, 100%"
                     />
                 </div>
                 <div className="h-1/2 p-4 flex flex-col  bg-[#3F4447] justify-between">

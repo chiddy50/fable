@@ -235,8 +235,8 @@ const NewStory = () => {
                         }
 
                         { completionRate >= 100 &&
-                            <Link href="/user/summary">
-                                <Button className='bg-green-600'>100% complete</Button>
+                            <Link href="/user/summary" className='py-2 px-4 border border-gray-100 bg-green-600 text-white rounded-lg'>
+                                100% complete
                             </Link>
                         }
 
@@ -298,7 +298,6 @@ const NewStory = () => {
                     </div>
                 </div>
 
-                {/* <div className=" overflow-x-auto flex space-x-5 inset-x-0 fixed bottom-14 w-full justify-start px-7 py-4"> */}
 
 
             </div>

@@ -7,6 +7,7 @@ import ConfirmStart from '@/components/challenge/confirm-start';
 import ConfirmStartChallenge from '@/components/challenge/confirm-start';
 import UserChallenges from '@/components/challenge/user-challenges';
 import { cn } from "@/lib/utils"
+import MostWinsRanking from '@/components/rankings/most-wins-ranking';
 
 
 export default function ChallengesPage() {
@@ -20,33 +21,7 @@ export default function ChallengesPage() {
             </div>
             
             <div className="grid gap-5 xs:grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-2">
-                <div>
-                    
-                    <div className='bg-[#3F4447] text-gray-300 rounded-2xl p-5 mb-10 border border-gray-500'>
-                        <h1 className='font-semibold text-center mb-3 text-gray-300 text-2xl'>Rankings</h1>
-                    
-                        {
-                            count.map((item, index) => (
-                        
-                                <div key={index} className={cn(
-                                    "p-4 flex items-center border border-gray-500 rounded-xl mb-3 xs:gap-4 sm:gap-10 xs:flex-col sm:flex-row",
-                                    item == 1 ? "border-orange-400  border-2" : ""
-                                    )}>
-                                    <h2 className="font-bold text-4xl">#{item}</h2>
-
-                                    <div className="flex items-center gap-2">
-                                        <div className=" h-10 w-10 flex items-center justify-center bg-black rounded-full">
-                                            <i className='bx bxs-user text-white text-xl'></i>
-                                        </div>
-                                        <h1>Jane Cooper</h1>
-                                    </div>
-
-                                    <h1 className='text-xs '>10 wins</h1>
-                                </div>
-                            ))
-                        }
-                    </div>
-                </div>
+                <MostWinsRanking/>
 
                 <div>
                     <div className='bg-[#3F4447] text-gray-300 rounded-2xl p-5 mb-10 border border-gray-500'>
