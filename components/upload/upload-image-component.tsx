@@ -118,7 +118,7 @@ const UploadImageComponent = () => {
     
     return (
         <>
-            <div className="bg-[#3F4447] p-3 rounded-2xl w-full border-gray-400 border-dashed border-2">
+            <div className="bg-[#232323] p-3 rounded-2xl w-full border-gray-400 border-dashed border-2">
                 <label htmlFor="image">
                     <div className='text-center cursor-pointer text-blue-500'>
 

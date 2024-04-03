@@ -505,18 +505,18 @@ const NewChallenge3 = () => {
                 <div>
                     <div className="mb-3">
                         <label htmlFor="title" className='text-sm font-semibold '>Title</label>
-                        <input type="text" onChange={updateTitle} value={challengeTitle} className='py-3 px-4 rounded-lg mt-1 w-full bg-[#3F4447] border border-none outline-none text-xs' />
+                        <input type="text" onChange={updateTitle} value={challengeTitle} className='py-3 px-4 rounded-lg mt-1 w-full bg-[#232323] border border-none outline-none text-xs' />
                     </div>
 
                     <div className="mb-3">
                         <label htmlFor="description" className='text-sm font-semibold '>Description</label>
-                        <textarea onChange={updateDescription} value={challengeDescription} cols={2} rows={2} className='resize-none rounded-xl p-4 mt-1 w-full bg-[#3F4447] border-none outline-none text-xs'></textarea>
+                        <textarea onChange={updateDescription} value={challengeDescription} cols={2} rows={2} className='resize-none rounded-xl p-4 mt-1 w-full bg-[#232323] border-none outline-none text-xs'></textarea>
                     </div>
 
                     <div className="mb-4">
                         <p className='text-sm font-semibold mb-1'>Price</p>
                         <div className="flex items-center text-xs ">
-                            <select onChange={updateCurrency} defaultValue={currencies.length > 0 ? currencies[0].symbol : ""} className="py-3 px-4 border-none rounded-tl-xl rounded-bl-xl outline-none bg-[#3F4447]">
+                            <select onChange={updateCurrency} defaultValue={currencies.length > 0 ? currencies[0].symbol : ""} className="py-3 px-4 border-none rounded-tl-xl rounded-bl-xl outline-none bg-[#232323]">
                                 <option disabled value="">Currency</option>
                                 {currencies.map((currency, key) => (
                                     <option key={key} value={currency.symbol}>
@@ -524,20 +524,20 @@ const NewChallenge3 = () => {
                                     </option>
                                 ))}
                             </select>
-                            <input type="number" value={challengePrice} onChange={(e: ChangeEvent<HTMLInputElement>) => setChallengePrice(e.target.value)} placeholder='Price...' className='py-3 px-4 w-full rounded-tr-xl rounded-br-xl bg-[#3F4447] border-none outline-none' />
+                            <input type="number" value={challengePrice} onChange={(e: ChangeEvent<HTMLInputElement>) => setChallengePrice(e.target.value)} placeholder='Price...' className='py-3 px-4 w-full rounded-tr-xl rounded-br-xl bg-[#232323] border-none outline-none' />
                         </div>
                     </div>
     
                     <div className="mb-7">
                         <p className='text-sm font-semibold  mb-1'>Duration</p>
-                        <input onChange={updateDate} value={challengeDate} type="datetime-local" placeholder="dd/mm/aaaa hh:mm" className='w-full py-3 px-4 rounded-lg text-xs outline-none bg-[#3F4447]' data-input="data-input"/>
+                        <input onChange={updateDate} value={challengeDate} type="datetime-local" placeholder="dd/mm/aaaa hh:mm" className='w-full py-3 px-4 rounded-lg text-xs outline-none bg-[#232323]' data-input="data-input"/>
                     </div>
 
                 </div>
                 
                 
                 <div className="mb-5">
-                    <div className='flex justify-center bg-[#3F4447] rounded-2xl'>                
+                    <div className='flex justify-center bg-[#232323] rounded-2xl'>                
                         { (!uploaded) && <UploadImageComponent />}
                         { (uploaded) && <SuccessfullyUploadComponent />}
                     </div>

@@ -124,6 +124,10 @@ const UserSummary = () => {
                 </h1>
             </div>
 
+            <div className="mb-7" onClick={submitStoryData}>
+                <Button variant="secondary" className="bg-[#222d28] border border-[#155a3c] text-[#85e0b7] hover:bg-[#389a6b] hover:text-white hover:border-[#3ed08e]">Proceed</Button>
+            </div>
+
             <div className="mb-4">
 
                 {
@@ -132,7 +136,7 @@ const UserSummary = () => {
                         <Accordion type="single" collapsible className="w-full mb-10 relative" key={index}>
                                     
                             <AccordionItem value={`item-${1}`} 
-                            className="border-gray-600 bg-gray-800 border-none text-white pt-1 pb-5 px-5 mt-2 rounded-xl"
+                            className="border-[#343434] bg-[#232323] border text-white pt-1 pb-5 px-5 mt-2 rounded-xl"
                             >
                                 <AccordionTrigger className='pb-2'>
                                     <span className="font-semibold text-lg">{questionGroup.title}</span>
@@ -143,7 +147,7 @@ const UserSummary = () => {
                                     ))}
                                 </div>
                                 
-                                <AccordionContent className="py-4 px-5 text-xs mt-7 bg-[#3F4447] rounded-xl">
+                                <AccordionContent className="py-4 px-5 text-xs mt-7 bg-[#212121] border-[#343434] border rounded-xl">
                                     <p className="font-bold mb-2 text-md">Answer</p>
                                     {questionGroup.answer}
                                 </AccordionContent>
@@ -156,7 +160,7 @@ const UserSummary = () => {
             </div>
 
             <div className="pb-10" onClick={submitStoryData}>
-                <Button variant="secondary">Proceed</Button>
+                <Button variant="secondary" className="bg-[#222d28] border border-[#155a3c] text-[#85e0b7] hover:bg-[#389a6b] hover:text-white hover:border-[#3ed08e]">Proceed</Button>
             </div>
 
             <ScrollToTopBottom />

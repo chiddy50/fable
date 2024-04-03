@@ -177,8 +177,8 @@ const NewStory = () => {
             <div className="relative mt-10">
                 {
                     focusedQuestion && 
-                    <div className=" bg-gray-800 border border-gray-600 text-gray-200 p-5 rounded-lg shadow-sm drop-shadow-sm col-span-3">
-                        <div className=" flex justify-between font-mono text-sm font-semibold  mb-4 tracking-widest text-gray-500 ">
+                    <div className=" bg-[#232323] border border-[#343434] text-gray-200 p-5 rounded-lg shadow-sm drop-shadow-sm col-span-3">
+                        <div className=" flex justify-between font-mono text-sm font-semibold  mb-4 tracking-widest text-gray-200 ">
                             <p className='xs:text-xs sm:text-xs md:text-sm'>
                                 <span className='text-xl font-bold'>0{focusedQuestion?.index}:</span> <span>{focusedQuestion?.title}</span>
                             </p>
@@ -254,7 +254,7 @@ const NewStory = () => {
         
                         {allQuestions.map((question, index) => (
 
-                            <div key={index}  className="flex flex-col justify-between ideaCard text-gray-200 bg-gray-800 border border-gray-600 p-5 rounded-xl shadow-sm drop-shadow-sm min-w-[360px] max-w-[360px]">
+                            <div key={index}  className="flex flex-col justify-between ideaCard text-gray-200 bg-[#232323] border border-[#343434] p-5 rounded-xl shadow-sm drop-shadow-sm min-w-[360px] max-w-[360px]">
                                 <div className=" top_description flex justify-between w-full mx-auto mt-4">
                                     <p className="text-clip uppercase text-sm tracking-wide font-bold ">{question?.title}</p>                                                
                                 </div>
@@ -271,7 +271,7 @@ const NewStory = () => {
                                 onFocus={() => textAreaFocused(question)} 
                                 onBlur={() => textAreaBlured(question)}  
                                 onKeyUp={(e) => updateAnswer(e, question)}
-                                className="story-input resize-none mt-4 w-full pb-9 px-3 pt-4 text-xs appearance-none outline-none rounded-xl bg-[#3F4447] flex items-center justify-center">                                
+                                className="story-input resize-none mt-4 w-full pb-9 px-3 pt-4 text-xs appearance-none outline-none rounded-xl bg-[#212121] border-[#343434] border flex items-center justify-center">                                
                                 </textarea>
 
 

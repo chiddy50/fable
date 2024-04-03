@@ -226,7 +226,7 @@ const SubmissionSummary  = () => {
                                         
                                         <AccordionContent className="text-xs mt-7">
                                             <p className="font-bold mb-2 text-md">Answer</p>
-                                            <p className='bg-[#3F4447] p-4 rounded-xl'>                                            
+                                            <p className='bg-[#232323] p-4 rounded-xl'>                                            
                                                 {questionGroup.answer}
                                             </p>
                                         </AccordionContent>

@@ -197,7 +197,7 @@ const AdminChallenges = () => {
             }
             
             <div id="submissions-modal" className="sidenav-background">
-                <div className="sidenav bg-[#151515] text-gray-200 shadow-xl z-20 p-7 xs:w-[100%] sm:w-[95%] md:w-[70%] lg:w-[40%]">
+                <div className="sidenav bg-[#1c1c1c] text-gray-200 shadow-xl z-20 p-7 xs:w-[100%] sm:w-[95%] md:w-[70%] lg:w-[40%]">
                     <div onClick={hideModal} className="flex items-center gap-2 cursor-pointer">
                         <i className='bx bx-arrow-back text-2xl' ></i>
                         <p className='text-xs'>Back</p>
@@ -222,7 +222,7 @@ const AdminChallenges = () => {
                         }
 
                         {   (submissions.length < 1 && !loadingSubmission)  &&
-                            <div className="flex flex-col text-center mt-10 justify-center bg-gray-800 p-5 rounded-xl">
+                            <div className="flex flex-col text-center mt-10 justify-center border-[#343434] bg-[#232323] border p-5 rounded-xl">
                                 <i className='bx bxs-user-x text-6xl'></i>
                                 <p className="text-center text-xs font-semibold">No submissions yet</p>
                             </div>

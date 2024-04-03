@@ -86,7 +86,7 @@ const UserStories = () => {
             <div className="py-10 ">
                 <h1 className='text-white xs:text-lg sm:text-lg md:text-3xl mb-4 font-bold'>Here are your stories:</h1>
 
-                <div className="mb-7 bg-[#0c0d0f] py-3 px-5 rounded-xl grid 
+                <div className="mb-7 border-[#343434] bg-[#232323] border py-3 px-5 rounded-xl grid 
                 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5
                 xs:gap-4 sm:gap-4 md:gap-4
                 ">                    
@@ -122,7 +122,7 @@ const UserStories = () => {
                 {
                     !loading && (
                         (stories.length > 0) &&
-                        <div className='gap-5 p-5 bg-[#0c0d0f] rounded-xl'>
+                        <div className='gap-5 p-5 border-[#343434] bg-[#232323] border rounded-xl'>
                             {
                                 stories.map((story, index) => (
                                     <UserStory key={index} story={story} clickEvent={() => viewStory(story)} />

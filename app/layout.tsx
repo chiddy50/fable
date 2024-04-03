@@ -36,7 +36,7 @@ export default function RootLayout({
         <link rel="icon" href="/images/fable_black.png" sizes="any" />
       </head>
       <body className={cn(
-        "bg-[#151515] h-screen",
+        "bg-[#1c1c1c] h-screen",
         poppins.className
         )}>
           {/* 2f3d47 */}
@@ -44,8 +44,8 @@ export default function RootLayout({
         <CustomContext>
 
           <NavbarComponent />
-
-              <div className="main_content bg-[#151515]">
+          
+              <div className="main_content bg-[#1c1c1c]">
                 {children}
               </div>
 

@@ -94,7 +94,7 @@ export default function Challenge({ challenge, clickEvent, type }){
         <div className="responsive h-full " >
             
             {/* <div className='flex h-full flex-col rounded-xl bg-white border-none shadow-sm border-gray-200 border cursor-pointer transition-all hover:shadow-2xl'> */}
-            <div className='flex relative h-full flex-col shadow-xl border overflow-y-clip rounded-xl bg-white border-gray-500'>
+            <div className='flex relative h-full flex-col shadow-xl border overflow-y-clip rounded-xl bg-white border-[#282828]'>
                 <div className='relative overflow-hidden h-[300px]'>                    
                     <Image
                         fill={true}
@@ -105,7 +105,7 @@ export default function Challenge({ challenge, clickEvent, type }){
                         sizes="(max-width: 768px) 100%, (max-width: 1200px) 100%, 100%"
                     />
                 </div>
-                <div className="h-1/2 p-4 flex flex-col  bg-[#3F4447] justify-between">
+                <div className="h-1/2 p-4 flex flex-col  bg-[#232323] justify-between">
                     <h2 className='font-semibold text-lg text-white mb-2'>{challenge.title}</h2>
                     <p className='text-md text-gray-300 mb-1'>Bounty: {challenge.symbol}{challenge.price}</p>
                     <p className='text-[12px] text-gray-300'>Posted: { formatDate(challenge.createdAt) }</p>
@@ -126,7 +126,7 @@ export default function Challenge({ challenge, clickEvent, type }){
                     }
                     
                     { type === 'user' && !challengeExpired(challenge.date) && 
-                        <Button onClick={clickEvent} className='bg-green-600 w-full mt-2'>Start</Button>
+                        <Button onClick={clickEvent} className='bg-[#222d28] border border-[#155a3c] text-[#85e0b7] hover:bg-[#389a6b] hover:text-white hover:border-[#3ed08e] w-full mt-2'>Start</Button>
                     }
 
                     {  type === 'admin' && 

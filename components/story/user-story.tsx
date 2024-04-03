@@ -13,7 +13,7 @@ const UserStory = ({ clickEvent, story }) => {
     }
 
     return (
-        <div onClick={clickEvent} className="relative flex items-center cursor-pointer gap-4 mb-3 border rounded-xl transition-all bg-gray-800 py-3 xs:px-4 sm:px-5 md:px-7 border-gray-400 hover:border-white">
+        <div onClick={clickEvent} className="relative flex items-center cursor-pointer gap-4 mb-3 rounded-xl transition-all bg-[#212121] border-[#343434] border py-3 xs:px-4 sm:px-5 md:px-7  hover:border-gray-500">
             <div className="flex items-center justify-center rounded-full bg-white 
             xs:w-16 xs:h-16 sm:w-16 sm:h-16 md:w-20 md:h-20">
                 {story.award === 'FIRST' && 

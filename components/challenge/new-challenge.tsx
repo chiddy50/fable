@@ -459,7 +459,7 @@ const NewChallenge = () => {
     }
 
     return (
-        <div className=" h-screen bg-[#151515]">
+        <div className=" h-screen bg-[#1c1c1c]">
             <div className=" "></div>
 
             <div className=" w-11/12 flex justify-center items-center mx-auto pt-5">
@@ -484,7 +484,7 @@ const NewChallenge = () => {
 
             </div>
 
-            <div className=" fixed bottom-0 pb-4 inset-x-0 bg-gray-800 border border-gray-600 space-y-3 mx-auto rounded-t-xl w-11/12 pt-2">
+            <div className=" fixed bottom-0 pb-4 inset-x-0 bg-[#2e2e2e] border border-[#343434] space-y-3 mx-auto rounded-t-xl w-11/12 pt-2">
             
                 <div className=" flex items-end w-11/12 mx-auto">
                     <div className="flex items-center w-5/12 justify-between mx-auto">
@@ -503,18 +503,18 @@ const NewChallenge = () => {
                     </div>
                 
                     <div className=" w-7/12 mx-auto mt-4">
-                        <input type="text" placeholder="Title" onChange={updateTitle} value={challengeTitle} className=" bg-gray-600 text-gray-100 outline-none w-full h-10 px-4 rounded "  />
+                        <input type="text" placeholder="Title" onChange={updateTitle} value={challengeTitle} className=" bg-[#212121] border-[#343434] border text-gray-100 outline-none w-full h-10 px-4 rounded "  />
                     </div>
                 </div>
 
                 <div className=" flex w-11/12 mx-auto">
-                    <textarea name="" onChange={updateDescription} value={challengeDescription} placeholder=" Describe your challenge..." id="" cols={30} rows={2} className=" bg-gray-600 text-gray-100 outline-none w-full rounded-md p-2"></textarea>
+                    <textarea name="" onChange={updateDescription} value={challengeDescription} placeholder=" Describe your challenge..." id="" cols={30} rows={2} className=" bg-[#212121] border-[#343434] border text-gray-100 outline-none w-full rounded-md p-2"></textarea>
                 </div>
 
                 <div className="grid w-11/12 mx-auto gap-3 xs:grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
                     <div className="flex col-span-1 gap-2 items-center">
-                        <div className="w-[22%] h-10 bg-gray-600 flex items-center justify-center rounded px-1">
-                            <select onChange={updateCurrency} defaultValue={currencies.length > 0 ? currencies[0].symbol : ""} className=" bg-gray-600 text-gray-100 outline-none h-8 w-11/12 text-xs uppercase tracking-widest font-medium">
+                        <div className="w-[22%] h-10 bg-[#212121] border-[#343434] border flex items-center justify-center rounded px-1">
+                            <select onChange={updateCurrency} defaultValue={currencies.length > 0 ? currencies[0].symbol : ""} className=" bg-[#212121] text-gray-100 outline-none h-8 w-11/12 text-xs uppercase tracking-widest font-medium">
                                 <option disabled value="">Currency</option>
                                 {currencies.map((currency, key) => (
                                     <option key={key} value={currency.symbol}>
@@ -525,19 +525,19 @@ const NewChallenge = () => {
                         </div>
 
                         <div className="w-[78%]">
-                            <input type="number" value={challengePrice} onChange={(e: ChangeEvent<HTMLInputElement>) => setChallengePrice(e.target.value)} placeholder="Price" className=" bg-gray-600 text-gray-100 outline-none w-full h-10 px-4 rounded "  />                   
+                            <input type="number" value={challengePrice} onChange={(e: ChangeEvent<HTMLInputElement>) => setChallengePrice(e.target.value)} placeholder="Price" className=" bg-[#212121] border-[#343434] border text-gray-100 outline-none w-full h-10 px-4 rounded "  />                   
                         </div>
 
                     </div>
 
                     <div className=" col-span-1">
-                        <input type="datetime-local" onChange={updateDate} value={challengeDate} id="datetimeInput" onClick={openDatetimePicker} placeholder="dd/mm/aaaa hh:mm" className=" bg-gray-600 text-gray-100 cursor-pointer outline-none w-full h-10 px-4 rounded "  />                   
+                        <input type="datetime-local" onChange={updateDate} value={challengeDate} id="datetimeInput" onClick={openDatetimePicker} placeholder="dd/mm/aaaa hh:mm" className=" bg-[#212121] border-[#343434] border text-gray-100 cursor-pointer outline-none w-full h-10 px-4 rounded "  />                   
                     </div>
 
                 </div>           
 
                 <div className=" w-11/12 flex mx-auto mb-5">
-                    <button onClick={submitMetaData} className=" bg-gray-300 rounded w-full p-3 uppercase text-sm font-bold tracking-widest">create</button>
+                    <button onClick={submitMetaData} className=" bg-[#222d28] border border-[#155a3c] text-[#85e0b7] rounded w-full p-3 uppercase text-sm font-bold tracking-widest">create</button>
                 </div>
 
             </div>

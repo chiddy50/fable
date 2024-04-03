@@ -11,8 +11,8 @@ const ChallengeSubmission = ({ moveToSummary, submission }) => {
         
         <div 
         onClick={() => moveToSummary(submission)}
-        className="p-4 bg-gray-800 flex items-center 
-        gap-3 border border-gray-600 
+        className="p-4 border-[#343434] bg-[#232323] border flex items-center 
+        gap-3 
         transition-all cursor-pointer rounded-xl 
         hover:border 
         hover:border-gray-400

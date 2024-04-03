@@ -33,14 +33,14 @@ const MostWinsRanking = () => {
     
     return (
         <div>                   
-            <div className='bg-[#3F4447] text-gray-300 rounded-2xl p-5 mb-10 border border-gray-500'>
+            <div className='bg-[#232323] text-gray-300 rounded-2xl p-5 mb-10 border border-[#282828]'>
                 <h1 className='font-semibold text-center mb-3 text-gray-300 text-2xl'>Rankings</h1>
             
                 {
                     userRankings.map((user: any, index: number) => (
                 
                         <div key={index} className={cn(
-                            "p-4 flex items-center border border-gray-500 rounded-xl mb-3 xs:gap-4 sm:gap-10 xs:flex-col sm:flex-row",
+                            "p-4 flex items-center border border-[#282828] rounded-xl mb-3 xs:gap-4 sm:gap-10 xs:flex-col sm:flex-row",
                             index == 0 ? "border-orange-400  border-2" : ""
                             )}>
                             <h2 className="font-bold text-4xl">#{index+1}</h2>

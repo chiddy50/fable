@@ -131,7 +131,7 @@ const NavbarComponent = () => {
 
     return (
         <div style={{ height: "80px" }} className="
-        flex items-center gap-5 w-full py-2 bg-[#1b1c1d] px-7 fixed top-0 z-10
+        flex items-center gap-5 w-full py-2 bg-[#232323] px-7 fixed top-0 z-10 border-b border-b-[#2e2e2e]
         xs:justify-between sm:justify-between md:justify-between lg:justify-between xl:justify-between 2xl:justify-between
         ">
             
