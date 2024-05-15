@@ -1,17 +1,10 @@
 "use client"
 
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import Challenge from '@/components/challenge/challenge'
-import ConfirmStart from '@/components/challenge/confirm-start';
-import ConfirmStartChallenge from '@/components/challenge/confirm-start';
 import UserChallenges from '@/components/challenge/user-challenges';
-import { cn } from "@/lib/utils"
 import MostWinsRanking from '@/components/rankings/most-wins-ranking';
 
 
 export default function ChallengesPage() {
-    const count = [1,2,3,4,5];
 
     return (
         <div className='layout-width '>

@@ -185,18 +185,13 @@ const NewChallenge = () => {
 
     const proceedAfterConfirmation = async () => {
         try {
-            // input send-balance-form__field
             
             const validate = validateMetaData();
-            if (!validate) {
-               return; 
-            } 
+            if (!validate)  return;   
 
             let result: FeeCalculationResult | boolean = calculateFees();
 
-            if (typeof result === 'boolean') {                
-                return;
-            } 
+            if (typeof result === 'boolean')  return;
 
             // Handle the case when calculateFees() returns false
             let { percentage, tenPercentFee, tenPercentFeeInSol, totalChargeInSol, totalChargePlusFeeInSol, totalCharge, totalChargePlusFee } = result;
@@ -205,6 +200,7 @@ const NewChallenge = () => {
             console.log({ normal:totalChargePlusFeeInSol, sol:paymentAmount, rounded_sol: Math.floor(paymentAmount) });
             
             showTransferLoader()
+            
             const tx: any = await debitWallet(Math.floor(paymentAmount))
             if (!tx) {  
                 hideTransferLoader()
@@ -236,12 +232,7 @@ const NewChallenge = () => {
             let publicKey = user?.verifiedCredentials[0].address
             const underdogNft = await createUnderdogNft(payload, projectId, publicKey)
             console.log(underdogNft);
-            
-            if (!underdogNft) {
-                // hideTransferLoader()
-                // return;
-            }
-    
+
             if (payload && 'type' in payload) {
                 delete payload.type;
             }
@@ -258,10 +249,12 @@ const NewChallenge = () => {
             if (!challengeCreated?.challenge) {
                 console.log("could not save to db");                
             }
+
+            let successModal = document.getElementById("success-modal")
             
-            document.getElementById("success-modal").style.display = "block"
+            successModal.style.display = "block"
             setTimeout(() => {
-                document.getElementById("success-modal").style.display = "none"                
+                successModal.style.display = "none"                
                 router.push("/admin/challenges")
             }, 5000);
         } catch (error) {
@@ -463,10 +456,10 @@ const NewChallenge = () => {
             <div className=" "></div>
 
             <div className=" w-11/12 flex justify-center items-center mx-auto pt-5">
-                <div className=" bg-gray-800 w-[400px] h-[280px] rounded-lg overflow-hidden">
+                <div className=" bg-[#343434] w-[400px] h-[280px] rounded-lg overflow-hidden">
                     <img id='preview'
                         src={ imagePlaceholder ? imagePlaceholder : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAACUCAMAAADLemePAAAAMFBMVEXx8/XCy9L09ve/yNDGztXN1Nrs7/HT2d/o6+7Z3uPh5enJ0dfk6Ovc4eXQ19zV299BB7LwAAAEOElEQVR4nO2a2baDIAwAkU0Utf//t9e17gUCgtyTea7LNBgSgBT/GpL6BZ4F9XIG9XIG9XIG9XIG9XIG9XIG9XIG9XIG9XIG9XIG9XIG9XIG9XIG9XIG9XIG9XIG9XIG9eLDgt3pXXq84KKsqupTdpqHuOF79BgXn0YRukBUW2rO/CL5Fj3Gq0GNbKFUqkp4Cb5Dj+lakr3bbEikKj0E36DHivZKbVWswLdOr9cPy8vA7QU1LILJ9ZhQBrlRUFYcIphaj1XSwm4U/AD8Uus1dnKjoHIPYFI9pi1Dtwg6j9CUeky42Q0BFG5+CfVYJ93kBj/i9gUm1Cud5UZql4o7nV7pODC/AZQOAzSVHgPGjowD1PoxifRYB7YbaG2fk0hPeNkR2lg+x1ePQcp5xv3shg/Qrtv10us70LLshPviget8d+VnlWA89Jhuxw5UNqXjlQ6V2D2ys3gSXI99vx9KbD+FiZ/dnQOdOX5gPbadt6jLbapAdoSWRj+oHtvnPqqAF/r5GSs0cPSaw6PM/+RkFyCtbDD5QfVOMbANX5C0Yu0H1TulB7tEzdqgcsbvD6jHjmPTPE5G/Goxdz+o3qlVo5WFHrdZNnLl1/wH1VMQPRb4w5sR4fXOg9OcOhm0xTOhQ+sVn1NquX/Ggn5Grud2hQmqd3pVi7rsHPFQ3C4Rgqf1+hA+cwFYPWbX9383/RFYT+9yJ22Nds8NzR/Ph5fUfONHa3NecV/1C+Dn0RDxZt7ZodI8KbBQXdCt32VZ4dWtd+0w/SmL3amQfcIdV1+/32JEwXusfnoqA8IjL/7lSCtlTw/NAarO/3QcvQhDc/BrTuGLo/dEJX3ld0qfMfRYsNUVI8fC91ovyImgLzqa3amp3umxQnftdDCoz/f1R/Agx7siZM2FY3rZ6LGiq+XmYNBw7qkuQQcSdjxYa1747eunVW+tQra/JrL2PNf1aK154bf7/FY9cXt4pgGemRm5aHwfZvu2ix479acbqAJsk8z3jZc1F7abR4ueqayoHY8kLHaRh+b0ric94/IjlU5b9l8iZs2Vdcdq1LMbQdJiR+YYvKhZc+U7PAc9216MuuaYGG3QJXJ5TzJs49t+/VQ6blRGqjXPL7oUn2Q4+uRwYf3bZx+843JTRObZjxTcaRHE4VgeE+nsyFycEecdKYs90YkUc8L6llPvR35N5zdXtlYNBU8yJ6xvOS4tga5UNhk09E6eM8NLAi811jCPbZdYM273Q681bVZGbGFv6WcH6KX096k1/eyatCUCrDfsWtwHMHFamemHp8fV6r7GfmYX1hnqVfJeLQuPaSVVLRYWer2px18SuwBcJFD9P2I3cdz6gpzefzP7Jv7xbbzYUCmKaaWQFbwMeh7uFVBSf4TmXIvqP311K5RIqZSS9F/aIQiCIAiCIAiCIAiCIAiCIAiCIAiCIAiCICn4A49MS2/QrYSCAAAAAElFTkSuQmCC' }
-                        className='w-full border border-gray-700 h-full object-cover object-center'                     
+                        className='w-full border border-[#343434] h-full object-cover object-center'                     
                         alt="Picture of the image"
                     />
                 </div>
@@ -552,7 +545,7 @@ const NewChallenge = () => {
             />
 
             <SuccessModal animation={animationData} title="Challenge created" />
-            <Toaster />
+            {/* <Toaster /> */}
 
 
         </div>

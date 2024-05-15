@@ -21,9 +21,13 @@ const ConfirmModalComponent = ({ confirmProcess, openConfirmModal, setOpenConfir
                         {subtitle}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
-                <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={confirmProcess}>{buttonText}</AlertDialogAction>
+                <AlertDialogFooter className="flex flex-col">
+                    <div>
+                        <AlertDialogCancel className="w-full">Cancel</AlertDialogCancel>
+                    </div>
+                    <div>
+                        <AlertDialogAction className="w-full" onClick={confirmProcess}>{buttonText}</AlertDialogAction>
+                    </div>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>

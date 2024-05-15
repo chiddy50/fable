@@ -17,6 +17,9 @@ import {
 import { Button } from '@/components/ui/button';
 import PaginationComponent from '@/components/general/pagination-component';
 import { scrollToTop } from '@/lib/helper';
+import { DatePickerWithRange } from '@/components/general/date-range-picker';
+import { DateRange } from "react-day-picker"
+import { addDays, format } from "date-fns"
   
 
 const UserChallenges = () => {
@@ -25,10 +28,16 @@ const UserChallenges = () => {
     const [challengesData, setChallengesData] = useState([])
     const [loading, setLoading] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
-    const [limit, setLimit] = useState(10)
+    const [limit, setLimit] = useState(5)
     const [hasNextPage, setHasNextPage] = useState(false)
     const [hasPrevPage, setHasPrevPage] = useState(false)
     const [totalPages, setTotalPages] = useState(false)
+    const [date, setDate] = useState<DateRange | undefined>({
+        // from: new Date(2024, 0, 20),
+        // to: addDays(new Date(2024, 0, 20), 20),
+        from: undefined,
+        to: undefined,
+      })
 
     const [selectedChallenge, setSelectedChallenge] = useState(false)
     
@@ -72,23 +81,46 @@ const UserChallenges = () => {
         fetchChallenges()
     }, [])
 
-    const filterChallenges = (page: number) => {
+
+    useEffect(() => {
+        filterChallengesByDateRange(date)
+    }, [date])
+
+    const paginateChallenges = (page: number) => {
         let set_next_page = currentPage + page
         setCurrentPage(set_next_page)
                    
         fetchChallenges(set_next_page)
     }
 
+    const filterChallengesByDateRange = (date: object|undefined) => {
+        if (!date) {
+            return
+        }
+
+        let { from, to } = date
+        if (from && to) {
+            console.log(date);
+            // fetchChallenges()
+        }
+    }
+
     const fetchChallenges = async (page = 1, filter:null|string = "active") => {        
         try {   
             setLoading(true)     
             scrollToTop()
+            
 
             let params = {
                 page: page,
                 limit: limit,
                 type: filter
             }
+
+            // let { from, to } = date
+            // if (from && to) {
+            //     params  = { ...params, to, form}
+            // }
 
             let response = await axiosInterceptorInstance.get(`challenges/all`, {
                 params: params
@@ -109,6 +141,11 @@ const UserChallenges = () => {
         
     }
 
+    const filterChallenges = (value: string) => {
+        setCurrentPage(1)
+        fetchChallenges(1, value)
+    }
+
     const loaders = [1,2,3];
 
     return (
@@ -116,15 +153,29 @@ const UserChallenges = () => {
             <div className="flex items-center justify-between mb-7 xs:flex-col sm:flex-col md:flex-row xs:gap-4 sm:gap-4" 
             style={{ marginTop: "5rem" }}>
                 <h1 className='text-white xs:text-xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-3xl  font-bold '>Choose Your Challenge</h1>
+            </div> 
+
+            <div className="flex items-center justify-between mb-5 xs:flex-col sm:flex-col md:flex-row xs:gap-4 sm:gap-4">
                 <div className=" pr-3 bg-white border border-gray-300 rounded-lg">
-                    <select id="countries" onChange={(e) => fetchChallenges(1, e.target.value)} className="border-none bg-white rounded-lg text-gray-900 text-xs block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white outline-none">
-                        <option selected disabled>Filter</option>
+                    <select id="countries" 
+                    defaultValue="default"
+                    onChange={(e) => filterChallenges(e.target.value)} 
+                    className="border-none bg-white rounded-lg text-gray-900 text-xs block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white outline-none">
+                        <option value="default" disabled>Filter</option>
                         <option value="all">All</option>
                         <option value="expired">Expired</option>
                         <option value="active">Active</option>
                     </select>
                 </div>
-            </div> 
+
+                <div className="flex items-center gap-2">
+                    <Button className='bg-white text-black hover:text-white'>
+                        <i className='bx bx-search text-xl'></i>
+                    </Button>
+                    <DatePickerWithRange date={date} setDate={setDate} />
+                </div>
+
+            </div>
             { 
             loading && 
             <div className='grid md:grid-cols-1 lg:grid-cols-3 gap-5'>
@@ -186,7 +237,7 @@ const UserChallenges = () => {
                         <PaginationComponent 
                             hasPrevPage={hasPrevPage} 
                             hasNextPage={hasNextPage} 
-                            triggerPagination={filterChallenges} 
+                            triggerPagination={paginateChallenges} 
                             currentPage={currentPage} 
                             totalPages={totalPages}
                             textColor="text-black"

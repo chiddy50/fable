@@ -16,6 +16,7 @@ import { DynamicWidget, getAuthToken, useEmbeddedWallet, useUserWallets, useUser
 // import { toast } from "@/components/ui/use-toast";
 import Link from "next/link";
 import toast, { Toaster } from 'react-hot-toast';
+import WalletButtonComponent from "./wallet-button-component";
 
 const bangers = Bangers({
     subsets: ["latin"],
@@ -40,93 +41,14 @@ const NavbarComponent = () => {
     useEffect(() => {
         console.log({primaryWallet});
         setIsClient(true)
-        
-        if (user && primaryWallet) {
-          console.log("The authenticated user has a connected wallet.");
-          if (primaryWallet.connector?.isEmbeddedWallet) {
-            console.log("The user's wallet is an embedded wallet.");
-          } else {
-            console.log("The user's wallet is not an embedded wallet.");
-          }
-        } else if (!user) {
-          console.log("No authenticated user found.");
-        } else {
-            setHasEmbeddedWallet(false)
-            console.log("The authenticated user does not have a connected wallet.");
-        }
     }, [])
 
-    
     const pathname = usePathname();
 
     const dynamicJwtToken = getAuthToken();
-    
-    const challengeMenu = [ 
-        { label: "Create Challenge", href: "/admin/challenge/create", show: true } ,
-        { label: "My Challenges", href: "/admin/challenges", show: user ? true : false }, 
-    ];
-    
-    const storyMenu = [ 
-        { label: "Tell a Story", href: "/user/challenges", show: true } ,
-        { label: "My Stories", href: "/user/stories", show: user ? true : false }, 
-    ];
 
     function checkURL(url: string) {
         return url.startsWith("/user/start");
-    }
-
-    const copyToClipboard = () => {
-        let address:string = primaryWallet?.address ?? ''
-
-        if (address) {            
-            navigator.clipboard.writeText(address);
-            toast.custom((t) => (
-                <div
-                  className={`${
-                    t.visible ? 'animate-enter' : 'animate-leave'
-                  } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
-                >
-                  <div className="flex-1 items-center w-0 p-3">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 pt-0.5">
-                        <img
-                          className="h-4 w-4"
-                          src="/images/solana-sol-logo.svg"                          
-                          alt="Solana logo"
-                        />
-                      </div>
-                      <div className="ml-3 flex-1">
-                        <p className="text-sm font-medium text-gray-900">
-                            Wallet address copied!
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  {/* <div className="flex border-l border-gray-200">
-                    <button
-                      onClick={() => toast.dismiss(t.id)}
-                      className="w-full outline-none border-none rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500"
-                    >
-                      Close
-                    </button>
-                  </div> */}
-                </div>
-            ))
-        }
-        
-      };
-
-    const bringUpDynamicUserProfile = () => {
-        setShowDynamicUserProfile(true)
-    }
-
-    function truncateString(inputString: string) {
-        if (inputString.length <= 8) {
-            return inputString; // If the string is already 8 characters or less, return it unchanged
-        } else {
-            const truncatedString = inputString.slice(0, 4) + '...' + inputString.slice(-4);
-            return truncatedString;
-        }
     }
 
     return (
@@ -134,7 +56,6 @@ const NavbarComponent = () => {
         flex items-center gap-5 w-full py-2 bg-[#232323] px-7 fixed top-0 z-10 border-b border-b-[#2e2e2e]
         xs:justify-between sm:justify-between md:justify-between lg:justify-between xl:justify-between 2xl:justify-between
         ">
-            
 
             {
                 !checkURL(pathname) &&
@@ -169,49 +90,30 @@ const NavbarComponent = () => {
             {/* <div className="flex items-center justify-center gap-5 xs:hidden sm:hidden md:flex lg:flex xl:flex 2xl:flex"> */}
             <div className="flex items-center justify-center gap-5">
                 
-                
-
-                {/* <GeneralMenuComponent label="CHALLENGE" options={challengeMenu} />
-                <GeneralMenuComponent label="STORY" options={storyMenu} />                             */}
-                {
-                primaryWallet && <div className="flex items-center bg-white py-2 px-3  gap-2 rounded-3xl">
-                    {/* <div className=" cursor-pointer  h-5 w-5 rounded-full flex items-center justify-center">
-                        <img src="/images/solana-sol-logo.svg" alt="" />
-                    </div> */}
-                    <div onClick={copyToClipboard} className="border cursor-pointer flex items-center border-gray-700 rounded-full hover:bg-gray-700 hover:text-white hover:border-white pr-2">                        
-                        <div className="h-6 w-6 rounded-full flex items-center justify-center ">
-                            <i className='bx bx-copy text-xs'></i>
-                        </div>
-                        <p className="text-[9px]" ref={copyTextRef} id="primary-wallet-address">
-                            {truncateString(primaryWallet?.address)}
-                        </p>
-                    </div>
-                    <div onClick={bringUpDynamicUserProfile} className="border cursor-pointer border-gray-700 h-6 w-6 rounded-full flex items-center justify-center hover:bg-gray-700 hover:text-white hover:border-white">
-                        <i className="bx bx-user text-xs"></i>
-                    </div>
-
-                </div>
-                }
+                { primaryWallet && <WalletButtonComponent /> }
                 
                 <div className=" hidden">
                     <DynamicWidget />
                 </div>
 
                 <div className="dropdown">
+                    
                     <button className="dropbtn flex items-center text-gray-800 tracking-widest uppercase bg-gray-200 px-3 py-2 text-sm border-none">
                         Menu
                         <i className='bx bx-menu-alt-right text-lg'></i>
                     </button>
+
                     {isClient && 
-                        <div className="dropdown-content text-sm uppercase right-0">
-                            <Link className="px-3 py-3 tracking-wider" href="/">Home</Link>
-                            <Link className="px-3 py-3 tracking-wider" href="/admin/challenge/create">Add challenge</Link>
-                            <Link className="px-3 py-3 tracking-wider" href="/user/challenges">Take a challenge</Link>
-                            { user && <Link className="px-3 py-3 tracking-wider" href="/admin/challenges">My challenges</Link> }
-                            { user && <Link className="px-3 py-3 tracking-wider" href="/user/stories">My stories</Link>  }
-                            { !user && <p className="px-3 py-3 tracking-wider cursor-pointer" onClick={() => setShowAuthFlow(true)}>Register/Login</p> }
-                            { user && <p className="px-3 py-3 tracking-wider cursor-pointer" onClick={() => handleLogOut()}>Logout</p> }
-                        </div>
+                    <div className="dropdown-content text-sm uppercase right-0">
+                        <Link className="px-3 py-3 tracking-wider" href="/">Home</Link>
+                        <Link className="px-3 py-3 tracking-wider" href="/admin/challenge/create">Add challenge</Link>
+                        <Link className="px-3 py-3 tracking-wider" href="/user/challenges">Take a challenge</Link>
+                        { user && <Link className="px-3 py-3 tracking-wider" href="/admin/challenges">My challenges</Link> }
+                        { user && <Link className="px-3 py-3 tracking-wider" href="/user/stories">My stories</Link>  }
+                        { !user && <p className="px-3 py-3 tracking-wider cursor-pointer" onClick={() => setShowAuthFlow(true)}>Register/Login</p> }
+                        { user && <p className="px-3 py-3 tracking-wider cursor-pointer" onClick={() => handleLogOut()}>Logout</p> }
+                    </div>
+
                     }
                 </div>
 
@@ -236,7 +138,7 @@ const NavbarComponent = () => {
                 </div>}
                 <MobileMenuComponent/>
             </div> */}
-            <Toaster toastOptions={{ duration: 2000 }} />
+            {/* <Toaster position="top-center" toastOptions={{ duration: 2000 }} /> */}
         </div>
     )
 }
